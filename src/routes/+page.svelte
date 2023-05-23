@@ -7,6 +7,9 @@
 	import Sidebar from './Sidebar.svelte';
 	import Home from './Home.svelte';
 	import Education from './resume/Education.svelte';
+	import { PORTFOLIO_ITEMS } from './portfolio/portfolio-items';
+	import { each } from 'svelte/internal';
+	import PortfolioItem from './portfolio/PortfolioItem.svelte';
 
 	let open = false;
 </script>
@@ -31,7 +34,12 @@
 		<div class="section">
 			<Education />
 		</div>
-	</FullPageWrapper>
+		<div class="section">
+			{#each PORTFOLIO_ITEMS as portfolioItem, i}
+				<PortfolioItem slideIndex={i} {portfolioItem} />
+			{/each}
+		</div></FullPageWrapper
+	>
 </div>
 
 <style>

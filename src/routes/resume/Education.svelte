@@ -33,7 +33,7 @@
 
 		<EducationItem
 			title="Solace Simply Stunning Award"
-			subTitle="Global award for leading the Systems Engineering team in the Americas to hit quota"
+			subTitle="Global award for leading the Systems Engineering team in the Americas to hit targets"
 			imgSrc="images/resume/solace.png"
 		/>
 

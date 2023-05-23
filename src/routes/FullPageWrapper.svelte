@@ -15,7 +15,6 @@
 				console.log('Hit');
 			},
 			anchors: Array.from(siteMap.keys()),
-			continuousVertical: true,
 			licenseKey: 'gplv3-license'
 		});
 	});
