@@ -16,7 +16,7 @@
 
 {#if open}
 	<aside
-		class="absolute w-full sm:w-1/6 h-full bg-gray-950 border-r-2 shadow-lg {open
+		class="absolute w-full md:w-1/5 h-full bg-gray-950 border-r-2 shadow-lg {open
 			? 'visible'
 			: 'invisible'}"
 		out:fade
@@ -32,11 +32,16 @@
 		</div>
 
 		<nav class="p-12 text-xl bg-gray-950" in:fade>
-			<a class="block" href="#Home">{page == 'Home' ? '> ' : ''}Home</a>
-			<a class="block" href="#Resume">{page == 'Resume' ? '> ' : ''}Resume</a>
-			<a class="block" href="#Blog">{page == 'Blog' ? '> ' : ''}Blog</a>
-			<a class="block" href="#Portfolio">{page == 'Portfolio' ? '> ' : ''}Portfolio</a>
-			<a class="block" href="#Contact">{page == 'Contact' ? '> ' : ''}Contact</a>
+			<a class="block" href="#Home"><span class="text-lg">{page == 'Home' ? '>' : ''}</span>Home</a>
+			<a class="block" href="#Resume"
+				><span class="text-lg">{page == 'Experience' ? '>' : ''}</span>Resume</a
+			>
+			<a class="block" href="#Portfolio"
+				><span class="text-lg">{page == 'Portfolio' ? '>' : ''}</span>Portfolio</a
+			>
+			<a class="block" href="#Contact"
+				><span class="text-lg">{page == 'Contact' ? '>' : ''}</span>Blog</a
+			>
 		</nav>
 		<SocialBar />
 	</aside>

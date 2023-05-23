@@ -1,5 +1,6 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
+	import { siteMap } from '../stores';
 	// @ts-ignore
 	import * as fullpage from 'fullpage.js';
 
@@ -8,11 +9,12 @@
 
 	onMount(() => {
 		console.log('mounted');
+
 		fp = new fullpage('#fullpage', {
 			onSlideLeave: (section, origin, destination, direction, trigger) => {
 				console.log('Hit');
 			},
-			anchors: ['Home', 'Resume', 'Blog'],
+			anchors: Array.from(siteMap.keys()),
 			continuousVertical: true,
 			licenseKey: 'gplv3-license'
 		});
@@ -30,9 +32,3 @@
 <div id="fullpage">
 	<slot />
 </div>
-
-<style>
-	#fullpage {
-		height: 100vh;
-	}
-</style>

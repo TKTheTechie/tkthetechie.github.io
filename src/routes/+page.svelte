@@ -1,15 +1,17 @@
 <script>
 	import './css/fullpage.css';
 	import FullPageWrapper from './FullPageWrapper.svelte';
-	import Main from './Main.svelte';
-	import Resume from './Resume.svelte';
+	import Experience from './resume/Experience.svelte';
+	import Proficiency from './resume/Proficiency.svelte';
 	import Header from './Header.svelte';
 	import Sidebar from './Sidebar.svelte';
+	import Home from './Home.svelte';
+	import Education from './resume/Education.svelte';
 
 	let open = false;
 </script>
 
-<div class="main app">
+<div class="main app h-fit xl:h-screen">
 	<div class="header">
 		<Header bind:open />
 	</div>
@@ -18,16 +20,16 @@
 
 	<FullPageWrapper>
 		<div class="section">
-			<Main />
+			<Home />
 		</div>
 		<div class="section">
-			<Resume />
+			<Experience />
 		</div>
 		<div class="section">
-			<div class="intro">
-				<h1>Scroll Down</h1>
-				<p>And it will animate down to the first section</p>
-			</div>
+			<Proficiency />
+		</div>
+		<div class="section">
+			<Education />
 		</div>
 	</FullPageWrapper>
 </div>
