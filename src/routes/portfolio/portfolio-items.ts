@@ -17,13 +17,18 @@ export class PortfolioItem  {
 
 export const PORTFOLIO_ITEMS : PortfolioItem[] = 
   [
+    new PortfolioItem('Open Source Project - Solace Plugin for DAPR',
+    'images/portfolio/solace-dapr.png',
+    'https://docs.dapr.io/reference/components-reference/supported-pubsub/setup-solace-amqp/',
+    'I authored the Solace PubSub+ plugin into DAPR'),
+
     new PortfolioItem('AWS re:Invent - How to Build a Kafka Mesh',
       'images/portfolio/AWSKafkaMesh.png',
-      'https://podcasts.apple.com/no/podcast/event-driven-elixir-with-thomas-kunnumpurath-emx-166/id1379029137?i=1000553643549',
+      'https://www.youtube.com/watch?v=8KibI-OoE0I',
       'I presented on stage at AWS:ReInvent 2022 on how to implement a Kafka Mesh topology using Solace PubSub+'),
     new PortfolioItem('Podcast - Event Driven Elixir',
       'images/portfolio/ElixirMixPodcast.png',
-      'https://www.youtube.com/watch?v=8KibI-OoE0I',
+      'https://podcasts.apple.com/no/podcast/event-driven-elixir-with-thomas-kunnumpurath-emx-166/id1379029137?i=1000553643549',
       'I was invited to speak on a podcast for Elixir Lang based on a blog post I wrote integrating Solace PubSub+ with Elixir'),
     new PortfolioItem('Open Source Project - Solace Redelivery Delayer',
       'images/portfolio/SolaceRedeliveryDelayer.png',

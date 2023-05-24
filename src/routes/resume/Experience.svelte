@@ -4,7 +4,11 @@
 	import Resume from './Resume.svelte';
 </script>
 
-<Resume configuredPage={'Experience'} reloadOnShow={true}>
+<Resume
+	configuredPage={'Experience'}
+	reloadOnShow={true}
+	--background-image="url(images/laptop-background.jpeg)"
+>
 	<div class="flex flex-col sm:flex-row w-3/4 text-center items-center mt-5 h-fit xl:h-screen">
 		<div class="w-full sm:w-auto">
 			<div class="heading-title mb-5 text-center">
@@ -46,7 +50,7 @@
 				</div>
 				<div class="w-full sm:w-1/3">
 					<div class="experience-company">
-						Capital One <br /> Vice President - Americas, Systems Engineering
+						Capital One <br /> Manager, Card Tech
 					</div>
 				</div>
 				<div class="w-full sm:w-1/3">

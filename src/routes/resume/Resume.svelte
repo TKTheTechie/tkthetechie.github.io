@@ -27,7 +27,10 @@
 	.plain-background {
 		width: 100%;
 		height: 100%;
-		background-image: url('images/code-background.png'); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
+		background-image: var(
+			--background-image,
+			url('images/code-background.png')
+		); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
 	}
 
 	.zoom-background {
@@ -46,7 +49,10 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background-image: url('images/code-background.png'); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
+		background-image: var(
+			--background-image,
+			url('images/code-background.png')
+		); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center;

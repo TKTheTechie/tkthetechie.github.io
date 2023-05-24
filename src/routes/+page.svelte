@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import './css/fullpage.css';
 	import FullPageWrapper from './FullPageWrapper.svelte';
 	import Experience from './resume/Experience.svelte';
@@ -12,6 +12,32 @@
 	import PortfolioItem from './portfolio/PortfolioItem.svelte';
 
 	let open = false;
+
+	import { currentPage } from '../stores';
+	import { get } from 'svelte/store';
+	import { onMount } from 'svelte';
+	import { siteMap } from '../stores';
+
+	let pageNumber = 0;
+
+	function sitePageChange(): void {
+		let href = window.location.href;
+		if (/^(https?:\/\/)?[\w.-]+(:\d+)?(\/)?$/.test(href)) currentPage.set('Home');
+		else currentPage.set(href.substring(href.lastIndexOf('#') + 1, href.length));
+		if (get(currentPage).includes('Portfolio')) {
+			pageNumber = siteMap.get('Portfolio') ?? -1;
+		} else {
+			pageNumber = (siteMap.has(get(currentPage)) ? siteMap.get(get(currentPage)) : -1) ?? -1;
+		}
+	}
+
+	onMount(() => {
+		sitePageChange();
+
+		window.addEventListener('hashchange', () => {
+			sitePageChange();
+		});
+	});
 </script>
 
 <div class="main app h-fit xl:h-screen">
@@ -41,15 +67,33 @@
 		</div></FullPageWrapper
 	>
 </div>
+<div
+	class="mr-5 mb-2 fixed bottom-0 right-0 w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center md: visible"
+>
+	{#if pageNumber >= 0}
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			width="24"
+			height="24"
+			viewBox="0 0 24 24"
+			fill="none"
+			stroke="currentColor"
+			stroke-width="2"
+			stroke-linecap="square"
+			stroke-linejoin="round"
+		>
+			{#if pageNumber == 0}
+				<line x1="12" y1="5" x2="12" y2="19" />
+				<polyline points="19 12 12 19 5 12" />
+			{:else}
+				<text x="3" y="18">0{pageNumber}</text>
+			{/if}
+		</svg>
+	{/if}
+</div>
 
 <style>
-	.header {
-		position: sticky;
-		padding: 10px;
-		top: 0;
-		background: black;
-		z-index: 50;
-	}
+	
 
 	.main {
 		flex: 1;
@@ -59,9 +103,5 @@
 		margin: 0 auto;
 		box-sizing: border-box;
 		height: 100%;
-	}
-
-	.sidebar {
-		transition: right 0.5s ease-in-out;
 	}
 </style>

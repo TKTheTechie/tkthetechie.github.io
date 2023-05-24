@@ -1,6 +1,6 @@
 <script lang="ts">
-	import '../app.postcss';
-	import './styles.css';
+	import '../../app.postcss';
+	import '../styles.css';
 </script>
 
 <div class="app">

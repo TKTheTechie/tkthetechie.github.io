@@ -6,6 +6,7 @@
 	import logo from '$lib/images/header-logo.png';
 
 	export let open: boolean;
+	export let sidebar = true;
 </script>
 
 <header>
@@ -19,7 +20,7 @@
 		<SocialBar />
 	</nav>
 
-	<div class="hamburger">
+	<div class="hamburger {sidebar==false?'invisible':''}">
 		<Hamburger bind:open />
 	</div>
 </header>

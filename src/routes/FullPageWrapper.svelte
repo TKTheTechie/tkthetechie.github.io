@@ -15,7 +15,9 @@
 				console.log('Hit');
 			},
 			anchors: Array.from(siteMap.keys()),
-			licenseKey: 'gplv3-license'
+			licenseKey: 'gplv3-license',
+			controlArrows: true,
+			controlArrowsHTML: ['<div class="fp-arrow" ></div>', '<div class="fp-arrow" ></div>']
 		});
 	});
 
@@ -31,3 +33,10 @@
 <div id="fullpage">
 	<slot />
 </div>
+
+<style>
+	.fp-arrow.fp-next {
+		border-width: 38.5px 0 38.5px 34px;
+		border-color: transparent transparent transparent #039c5f;
+	}
+</style>

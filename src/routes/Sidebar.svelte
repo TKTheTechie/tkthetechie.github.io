@@ -7,7 +7,9 @@
 
 	export let open = false;
 
-	let page = '';
+	export let page;
+
+	export let relativeDirectory='';
 
 	currentPage.subscribe((value) => {
 		page = value;
@@ -32,17 +34,17 @@
 		</div>
 
 		<nav class="p-12 text-xl bg-gray-950" in:fade>
-			<a class="block" href="#Home"><span class="text-lg">{page == 'Home' ? '>' : ''}</span>Home</a>
-			<a class="block" href="#Resume"
+			<a class="block" href="{relativeDirectory}#Home"><span class="text-lg">{page == 'Home' ? '>' : ''}</span>Home</a>
+			<a class="block" href="{relativeDirectory}#Experience"
 				><span class="text-lg"
 					>{page == 'Experience' || page == 'Education' || page == 'Proficiency' ? '>' : ''}</span
 				>Resume</a
 			>
-			<a class="block" href="#Portfolio"
+			<a class="block" href="{relativeDirectory}#Portfolio"
 				><span class="text-lg">{page.includes('Portfolio') ? '>' : ''}</span>Portfolio</a
 			>
-			<a class="block" href="#Contact"
-				><span class="text-lg">{page == 'Contact' ? '>' : ''}</span>Blog</a
+			<a class="block" href="{relativeDirectory}#Contact"
+				><span class="text-lg">{page=='Blog' ? '>' : ''}</span>Blog</a
 			>
 		</nav>
 		<SocialBar />
