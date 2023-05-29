@@ -1,7 +1,7 @@
 ---
 author: TKTheTechie
 title: OpenFin Apps Need More Than Just REST
-date: 05/02/2019
+date: 5/2/2019
 category: Dev
 headerImage: openfin-rest-blog.png
 ---

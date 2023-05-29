@@ -1,7 +1,7 @@
 ---
 author: TKTheTechie
 title: Event Driven Elixir
-date: 01/17/2022
+date: 1/17/2022
 category: Dev
 headerImage: event-driven-elixir.png
 ---

@@ -1,7 +1,7 @@
 ---
 author: TKTheTechie
 title: Event Driven Machine Learning
-date: 02/28/2022
+date: 2/28/2022
 category: Dev
 headerImage: event-driven-machine-learning.png
 ---

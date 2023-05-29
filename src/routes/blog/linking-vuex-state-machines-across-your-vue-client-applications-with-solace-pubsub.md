@@ -1,7 +1,7 @@
 ---
 author: TKTheTechie
 title: Linking Vuex State Machines Across Your Vue Client Applications with Solace PubSub+
-date: 04/30/2020
+date: 4/30/2020
 category: Dev
 headerImage: linking-vuex-blog.png
 ---
