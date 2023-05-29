@@ -7,7 +7,7 @@
 <Resume
 	configuredPage={'Experience'}
 	reloadOnShow={true}
-	--background-image="url(images/laptop-background.jpeg)"
+	--background-image="url(/images/laptop-background.jpeg)"
 >
 	<div class="flex flex-col sm:flex-row w-3/4 text-center items-center mt-5 h-fit xl:h-screen">
 		<div class="w-full sm:w-auto">

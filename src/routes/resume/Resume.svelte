@@ -29,7 +29,7 @@
 		height: 100%;
 		background-image: var(
 			--background-image,
-			url('images/code-background.png')
+			url('/images/code-background.png')
 		); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
 	}
 
@@ -51,7 +51,7 @@
 		height: 100%;
 		background-image: var(
 			--background-image,
-			url('images/code-background.png')
+			url('/images/code-background.png')
 		); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
 		background-size: cover;
 		background-repeat: no-repeat;

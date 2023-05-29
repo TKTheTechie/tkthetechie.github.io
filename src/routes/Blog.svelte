@@ -85,7 +85,7 @@
 		height: 100%;
 		background-image: var(
 			--background-image,
-			url('images/blog-background.png')
+			url('/images/blog-background.png')
 		); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
 		background-size: cover;
 		background-repeat: no-repeat;

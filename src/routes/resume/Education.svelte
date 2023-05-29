@@ -3,7 +3,7 @@
 	import EducationItem from './EducationItem.svelte';
 </script>
 
-<Resume configuredPage={'Education'} --background-image="url(images/education-background.png)">
+<Resume configuredPage={'Education'} --background-image="url(/images/education-background.png)">
 	<div class="flex flex-wrap justify-center mt-5 h-fit xl:h-screen w-2/3">
 		<div class="w-full">
 			<div class="heading-title mb-5 text-center">
