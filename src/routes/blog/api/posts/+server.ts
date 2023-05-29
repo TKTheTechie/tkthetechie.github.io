@@ -1,5 +1,7 @@
 import { json } from '@sveltejs/kit'
 
+export const prerender = true;
+
 const fetchMarkdownPosts = async () => {
   const allPostFiles = import.meta.glob('/src/routes/blog/*.md')
   const iterablePostFiles = Object.entries(allPostFiles)
