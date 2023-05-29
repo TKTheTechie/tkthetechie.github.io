@@ -2,7 +2,7 @@
 	import tkthetechie from '$lib/images/TKTheTechie-main.png';
 </script>
 
-<div class="flex justify-center items-center">
+<div class="flex justify-center items-center mt-10 mb-10">
 	<div class="grid grid-cols-1">
 		<div class="text-center">
 			<h1>Thomas Kunnumpurath</h1>

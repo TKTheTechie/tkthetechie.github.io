@@ -47,7 +47,9 @@
 
 	<Sidebar bind:open />
 
+	
 	<FullPageWrapper>
+		
 		<div class="section">
 			<Home />
 		</div>
