@@ -16,7 +16,7 @@
 <div class="header bg-gray-950">
 	<Header bind:open sidebar={false} />
 </div>
-<div class="w-2/3 mt-10 flex flex-col items-start mx-auto max-w-screen-md">
+<div class="w-2/3 sm:w-full mt-10 flex flex-col items-start mx-auto max-w-screen-md">
 	<h1 class="post-title justify-between">{title}</h1>
 	<div class="post-meta mb-5" id="post-meta">{author} / <Time timestamp="{date}" format="MMMM DD, YYYY" /> / {category}</div>
 
