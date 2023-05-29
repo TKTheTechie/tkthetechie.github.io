@@ -1,28 +1,32 @@
 <script lang="ts">
-	import Header from '../../Header.svelte';
-	import Sidebar from '../../Sidebar.svelte';
+    import '../../app.postcss';
+	import './styles.css';
+	import Header from '../Header.svelte';
+	import Sidebar from '../Sidebar.svelte';
 	import Time from 'svelte-time';
 
 	let open = false;
 
-	export let data;
+	export let title;
+    export let author;
+    export let headerImage;
+    export let date;
+    export let category;
 </script>
 <div class="header bg-gray-950">
 	<Header bind:open sidebar={false} />
 </div>
 <div class="w-2/3 mt-10 flex flex-col items-start mx-auto max-w-screen-md">
-	<h1 class="post-title justify-between">{data.title}</h1>
-	<div class="post-meta mb-5" id="post-meta">{data.author} / <Time timestamp="{data.date}" format="MMMM DD, YYYY" /> / {data.category}</div>
+	<h1 class="post-title justify-between">{title}</h1>
+	<div class="post-meta mb-5" id="post-meta">{author} / <Time timestamp="{date}" format="MMMM DD, YYYY" /> / {category}</div>
 
 	<div class="header-image mb-20">
-		<img src="../images/blog/headers/{data.headerImage}" width="880" height="418">
+		<img src="/images/blog/headers/{headerImage}" width="880" height="418">
 	</div>
 
 
 	<div class="flex flex-wrap text-left w-full">
-		<svelte:component this={data.content} class="post-content"/>
-	
-		
+        <slot />
 	</div>
 	<hr class="m-5 text-gray-500 w-full" >
 </div>

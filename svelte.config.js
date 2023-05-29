@@ -19,9 +19,11 @@ const config = {
 			postcss: true
 		}),
 		mdsvex({
-			extensions:['.md'],
-			
-		}),
+			extensions: ['.md'],
+			layout: {
+			  blog: 'src/routes/blog/post.svelte'
+			},
+		  })
 		
 	],
 	kit: {
@@ -37,8 +39,9 @@ const config = {
             precompress: false,
             strict: true,
 			paths: {
-				base: dev ? '' : process.env.BASE_PATH,
-			}
+				base: dev ? ',' : process.env.BASE_PATH,
+			},
+			
         })
 	}
 };
