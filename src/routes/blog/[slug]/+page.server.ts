@@ -10,6 +10,8 @@ export function entries() {
     slugs.push({ slug: path.substring(path.lastIndexOf("/") + 1, path.length) });
   }
 
+  return slugs;
+
   // return [
   //   { slug: 'a-scalable-websocket-fanout-solution-for-your-high-performance-kafka-deployment' },
   //   { slug: 'build-a-proximity-detection-system-with-a-raspberry-pi-solace-pubsub-and-javascript' },
