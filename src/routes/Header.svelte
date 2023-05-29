@@ -12,7 +12,7 @@
 <header>
 	<div class="corner">
 		<a href="https://tkthetechie.io">
-			<img src={logo} alt="SvelteKit" width="110px" height="15px" />
+			<img src={logo} alt="tkthetechie.io" width="100%" height="15px" />
 		</a>
 	</div>
 
@@ -26,10 +26,19 @@
 </header>
 
 <style>
+
+
+
+
 	header {
 		display: flex;
 		justify-content: space-between;
 		height: 50px;
+		position: sticky;
+		padding: 10px;
+		top: 0;
+		background: black;
+		z-index: 50;
 	}
 
 	.corner a {

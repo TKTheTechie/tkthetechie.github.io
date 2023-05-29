@@ -7,7 +7,7 @@
 </script>
 
 <div
-	class="flex flex-col items-center w-full md:w-1/2 l:w-1/2 xl:w-1/2 p-2 {lastItem ? 'mb-16' : ''}"
+	class="flex flex-col items-center w-full md:w-1/2 l:w-1/3 xl:w-1/3 p-2 {lastItem ? 'mb-16' : ''}"
 >
 	<div class="h-auto bg-black rounded-lg shadow-lg shadow-gray-950 w-full max-w-md">
 		<div class="flex items-center">

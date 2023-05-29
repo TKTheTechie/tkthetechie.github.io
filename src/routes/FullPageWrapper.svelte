@@ -6,28 +6,30 @@
 
 	// @ts-ignore
 	let fp;
+  let init = false;
 
 	onMount(() => {
-		console.log('mounted');
 
+    if(!init) {
 		fp = new fullpage('#fullpage', {
-			onSlideLeave: (section, origin, destination, direction, trigger) => {
-				console.log('Hit');
-			},
-			anchors: Array.from(siteMap.keys()),
-			licenseKey: 'gplv3-license',
-			controlArrows: true,
-			controlArrowsHTML: ['<div class="fp-arrow" ></div>', '<div class="fp-arrow" ></div>']
-		});
+        anchors: Array.from(siteMap.keys()),
+        licenseKey: 'gplv3-license',
+        controlArrows: true,
+        controlArrowsHTML: ['<div class="tk-arrow" ></div>', '<div class="tk-arrow" ></div>']
+		  });
+    init=true;
+  }else {
+      fp.reBuild();
+  }
+
+
 	});
 
-	onDestroy(() => {
-		console.log('destroyed');
-		// @ts-ignore
-		if (fp) {
-			fp.destroy();
-		}
-	});
+  onDestroy(()=>{
+    console.log('Destroyed')
+  })
+
+	
 </script>
 
 <div id="fullpage">
@@ -35,8 +37,5 @@
 </div>
 
 <style>
-	.fp-arrow.fp-next {
-		border-width: 38.5px 0 38.5px 34px;
-		border-color: transparent transparent transparent #039c5f;
-	}
+
 </style>

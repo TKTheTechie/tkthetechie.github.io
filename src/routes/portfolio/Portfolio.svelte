@@ -16,7 +16,6 @@
 		if (slideIndex == 0) configuredPage = 'Portfolio';
 		else configuredPage = 'Portfolio/' + slideIndex;
 
-		console.log(configuredPage);
 	});
 </script>
 

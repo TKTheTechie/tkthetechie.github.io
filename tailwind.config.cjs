@@ -1,11 +1,14 @@
-const config = {
-	content: ['./src/**/*.{html,js,svelte,ts}'],
+const defaultTheme = require('tailwindcss/defaultTheme');
 
-	theme: {
-		extend: {}
-	},
-
-	plugins: []
+module.exports = {
+    content: ['./src/**/*.{html,js,svelte,ts}'],
+    theme: {
+        extend: {
+            fontFamily: {
+                sans: ['uncut-sans', ...defaultTheme.fontFamily.sans],
+                serif: ['sprat', ...defaultTheme.fontFamily.serif]
+            }
+        }
+    },
+    plugins: [require('@tailwindcss/typography')]
 };
-
-module.exports = config;

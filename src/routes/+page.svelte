@@ -6,9 +6,9 @@
 	import Header from './Header.svelte';
 	import Sidebar from './Sidebar.svelte';
 	import Home from './Home.svelte';
+	import Blog from './Blog.svelte';
 	import Education from './resume/Education.svelte';
 	import { PORTFOLIO_ITEMS } from './portfolio/portfolio-items';
-	import { each } from 'svelte/internal';
 	import PortfolioItem from './portfolio/PortfolioItem.svelte';
 
 	let open = false;
@@ -64,8 +64,11 @@
 			{#each PORTFOLIO_ITEMS as portfolioItem, i}
 				<PortfolioItem slideIndex={i} {portfolioItem} />
 			{/each}
-		</div></FullPageWrapper
-	>
+		</div>
+		<div class="section">
+			<Blog />
+		</div>
+		</FullPageWrapper>
 </div>
 <div
 	class="mr-5 mb-2 fixed bottom-0 right-0 w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center md: visible"

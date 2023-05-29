@@ -24,7 +24,6 @@ body {
 	background-size: 100vw 100vh;
 }
 
-
 	
 h1,
 h2,
@@ -110,13 +109,37 @@ button:focus:not(:focus-visible) {
 	letter-spacing: -0.02em;
 }
 
-.fp-arrow.fp-next {
+.tk-arrow.fp-next {
 	border-width: 38.5px 0 38.5px 34px;
 	border-color: transparent transparent transparent #039c5f;
 }
 
-.fp-arrow.fp-prev {
+.tk-arrow.fp-prev {
     border-width: 38.5px 34px 38.5px 0;
     border-color: transparent #039c5f transparent transparent;
+}
+
+.tk-arrow {
+	width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.fp-prev {
+	left: 15px;
+}
+
+
+.fp-controlArrow {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -ms-user-select: none;
+    position: absolute;
+    z-index: 4;
+    top: 50%;
+    cursor: pointer;
+    margin-top: -38px;
+    transform: translate3d(0,0,0);
 }
 
