@@ -1,7 +1,7 @@
 ---
 author: TKTheTechie
 title: A scalable WebSocket fanout solution for your High Performance Kafka deployment
-date: 02/21/2021
+date: 2/21/2021
 category: Dev
 headerImage: websocket-fanout-kafka-blog.png
 ---

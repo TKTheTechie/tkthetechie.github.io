@@ -1,7 +1,7 @@
 ---
 author: TKTheTechie
 title: The importance of message settlement for Event Driven Architectures
-date: 08/04/2022
+date: 8/4/2022
 category: Dev
 headerImage: message-settle-blog.png
 ---

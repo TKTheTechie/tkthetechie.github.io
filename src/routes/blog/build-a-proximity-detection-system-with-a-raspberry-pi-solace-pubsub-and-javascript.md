@@ -1,7 +1,7 @@
 ---
 author: TKTheTechie
 title: Build a Proximity Detection System with a Raspberry Pi, Solace PubSub+, and JavaScript
-date: 03/31/2022
+date: 3/31/2022
 category: Dev
 headerImage: proximity-detection-blog.png
 ---
