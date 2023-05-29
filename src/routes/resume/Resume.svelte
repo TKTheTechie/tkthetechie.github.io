@@ -19,8 +19,8 @@
 	{#if reloadOnShow && configuredPage != page}
 		<!--Do nothing//-->
 	{:else}
-		<slot />
-	{/if}
+    	<slot />
+    {/if}
 </div>
 
 <style>

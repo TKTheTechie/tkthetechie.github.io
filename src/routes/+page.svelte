@@ -40,8 +40,8 @@
 	});
 </script>
 
-<div class="main app h-fit xl:h-screen">
-	<div class="header">
+<div class="main w-full app h-fit xl:h-screen">
+	<div class="header w-screen">
 		<Header bind:open />
 	</div>
 

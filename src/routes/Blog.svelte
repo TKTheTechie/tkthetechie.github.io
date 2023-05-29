@@ -25,7 +25,7 @@
 </script>
 
 
-<h1>Blog</h1>
+
 
 {#await postPromise}
     Loading posts...
@@ -34,14 +34,18 @@
 <div
 	class="{page == configuredPage
 		? 'zoom-background'
-		: 'plain-background'} flex justify-center items-center"
+		: 'plain-background'} flex flex-col justify-center items-center " 
 >
+
 	{#if reloadOnShow && configuredPage != page}
 		<!--Do nothing//-->
 	{:else}
-    <div id="posts" class="w-2/3 mx-auto">
+    <div class="heading-title mb-5 w-full text-center mt-16 ">
+        <span style="color:#039c5f">Blog</span>
+    </div>
+    <div id="posts" class="w-2/3 mx-auto mb-16">
         <div class="flex flex-col">
-            <div class="flex flex-wrap justify-center mb-10">
+            <div class="flex flex-wrap justify-center">
                 {#each posts.data as post}
                     <PostCard {post} />
                 {/each}
@@ -85,7 +89,7 @@
 		height: 100%;
 		background-image: var(
 			--background-image,
-			url('/images/blog-background.png')
+			url('images/blog-background.png')
 		); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
 		background-size: cover;
 		background-repeat: no-repeat;

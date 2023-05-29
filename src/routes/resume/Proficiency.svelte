@@ -12,7 +12,7 @@
 
 <Resume configuredPage={'Proficiency'} reloadOnShow={true}>
 	<div
-		class="flex flex-col sm:flex-row w-2/3 justify-center text-center items-center mt-5 h-fit xl:h-screen"
+		class="flex flex-col sm:flex-row w-2/3 justify-center text-center items-center mt-16 mb-16 h-fit xl:h-screen"
 	>
 		<div class="w-full">
 			<div class="heading-title mb-5 text-center">
