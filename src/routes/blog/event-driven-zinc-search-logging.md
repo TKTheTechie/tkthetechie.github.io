@@ -1,7 +1,7 @@
 ---
 author: TKTheTechie
 title: Event Driven Zinc Search Logging
-date: 08/23/2022
+date: 8/23/2022
 category: Dev
 headerImage: event-driven-zinc-search.png
 ---

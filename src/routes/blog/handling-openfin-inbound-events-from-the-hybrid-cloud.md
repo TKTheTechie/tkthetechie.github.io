@@ -1,7 +1,7 @@
 ---
 author: TKTheTechie
 title: Handling OpenFin Inbound Events from the Hybrid Cloud
-date: 05/02/2019
+date: 5/02/2019
 category: Dev
 headerImage: openfin-inbound-blog.png
 ---

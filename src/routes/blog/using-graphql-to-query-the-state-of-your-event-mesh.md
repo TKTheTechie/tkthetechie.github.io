@@ -1,7 +1,7 @@
 ---
 author: TKTheTechie
 title: Using GraphQL to query the state of your event mesh
-date: 02/21/2021
+date: 2/21/2021
 category: Dev
 headerImage: graph-ql-blog.png
 ---

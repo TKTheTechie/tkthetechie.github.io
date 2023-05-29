@@ -1,7 +1,7 @@
 ---
 author: TKTheTechie
 title: Solace PubSub+ Queue Redelivery Delayer
-date: 02/01/2022
+date: 2/1/2022
 category: Dev
 headerImage: redelivery-delayer-blog.png
 ---
