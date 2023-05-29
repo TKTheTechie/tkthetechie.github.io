@@ -37,7 +37,27 @@ const config = {
             precompress: false,
             strict: true,
 			paths: {
-				base: dev ? '' : process.env.BASE_PATH,
+				base: dev ? ',' : process.env.BASE_PATH,
+			},
+			prerender: {
+				entries:  [
+					"blog/a-scalable-websocket-fanout-solution-for-your-high-performance-kafka-deployment",
+					"blog/build-a-proximity-detection-system-with-a-raspberry-pi-solace-pubsub-and-javascript",
+					"blog/creating-an-openfin-event-mesh-across-the-hybrid-cloud",
+					"blog/dapr-with-solace-pubsub",
+					"blog/event-driven-elixir",
+					"blog/event-driven-machine-learning",
+					"blog/event-driven-zinc-search-logging",
+					"blog/handling-openfin-inbound-events-from-the-hybrid-cloud",
+					"blog/how-to-use-rust-webassembly-javascript-and-pubsub-to-run-native-apps-in-your-browser",
+					"blog/linking-vuex-state-machines-across-your-vue-client-applications-with-solace-pubsub",
+					"blog/openfin-apps-need-more-than-just-rest",
+					"blog/rainbow-wallet-bringing-ethereum-to-the-masses",
+					"blog/solace-pubsub-queue-redelivery-delayer",
+					"blog/the-importance-of-message-settlement-for-event-driven-architectures",
+					"blog/using-graphql-to-query-the-state-of-your-event-mesh",
+					"blog/why-the-pyth-network-needs-an-event-mesh"
+				  ]
 			}
         })
 	}
