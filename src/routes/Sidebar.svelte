@@ -9,7 +9,7 @@
 
 	export let page;
 
-	export let relativeDirectory='';
+	export let relativeDirectory = '';
 
 	currentPage.subscribe((value) => {
 		page = value;
@@ -34,17 +34,36 @@
 		</div>
 
 		<nav class="p-12 text-xl bg-gray-950" in:fade>
-			<a class="block" href="{relativeDirectory}#Home" on:click={()=>{open=false;}}><span class="text-lg">{page == 'Home' ? '>' : ''}</span>Home</a>
-			<a class="block" href="{relativeDirectory}#Experience" on:click={()=>{open=false;}}
+			<a
+				class="block"
+				href="{relativeDirectory}#Home"
+				on:click={() => {
+					open = false;
+				}}><span class="text-lg">{page == 'Home' ? '>' : ''}</span>Home</a
+			>
+			<a
+				class="block"
+				href="{relativeDirectory}#Experience"
+				on:click={() => {
+					open = false;
+				}}
 				><span class="text-lg"
 					>{page == 'Experience' || page == 'Education' || page == 'Proficiency' ? '>' : ''}</span
 				>Resume</a
 			>
-			<a class="block" href="{relativeDirectory}#Portfolio" on:click={()=>{open=false;}}
-				><span class="text-lg">{page.includes('Portfolio') ? '>' : ''}</span>Portfolio</a
+			<a
+				class="block"
+				href="{relativeDirectory}#Portfolio"
+				on:click={() => {
+					open = false;
+				}}><span class="text-lg">{page.includes('Portfolio') ? '>' : ''}</span>Portfolio</a
 			>
-			<a class="block" href="{relativeDirectory}#Blog" on:click={()=>{open=false;}}
-				><span class="text-lg">{page=='Blog' ? '>' : ''}</span>Blog</a
+			<a
+				class="block"
+				href="{relativeDirectory}#Blog"
+				on:click={() => {
+					open = false;
+				}}><span class="text-lg">{page == 'Blog' ? '>' : ''}</span>Blog</a
 			>
 		</nav>
 		<SocialBar />

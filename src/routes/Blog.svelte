@@ -1,16 +1,16 @@
 <script lang="ts">
-  	import { currentPage } from '../stores';
-    import PostCard from './blog/PostCard.svelte';
-    import { fade } from 'svelte/transition';
-    let postPromise = getPosts();
+	import { currentPage } from '../stores';
+	import PostCard from './blog/PostCard.svelte';
+	import { fade } from 'svelte/transition';
+	let postPromise = getPosts();
 
-    async function getPosts() {
-        const response = await fetch('blog/api/posts');
-        const data = await response.json()
-        return {
-            data
-        }
-    };
+	async function getPosts() {
+		const response = await fetch('blog/api/posts');
+		const data = await response.json();
+		return {
+			data
+		};
+	}
 
 	let page = '';
 
@@ -20,46 +20,36 @@
 
 	export let configuredPage = 'Blog';
 	export let reloadOnShow = false;
-
-
 </script>
 
-
-
-
 {#await postPromise}
-    Loading posts...
+	Loading posts...
 {:then posts}
-
-<div
-	class="{page == configuredPage
-		? 'zoom-background'
-		: 'plain-background'} flex flex-col justify-center items-center " 
->
-
-	{#if reloadOnShow && configuredPage != page}
-		<!--Do nothing//-->
-	{:else}
-    <div class="heading-title mb-5 w-full text-center mt-16 ">
-        <span style="color:#039c5f">Blog</span>
-    </div>
-    <div id="posts" class="w-2/3 mx-auto mb-16">
-        <div class="flex flex-col">
-            <div class="flex flex-wrap justify-center">
-                {#each posts.data as post}
-                    <PostCard {post} />
-                {/each}
-            </div>
-        </div>
-    </div>
-    
-	{/if}
-</div>
-
+	<div
+		class="{page == configuredPage
+			? 'zoom-background'
+			: 'plain-background'} flex flex-col justify-center items-center"
+	>
+		{#if reloadOnShow && configuredPage != page}
+			<!--Do nothing//-->
+		{:else}
+			<div class="heading-title mb-5 w-full text-center mt-16">
+				<span style="color:#039c5f">Blog</span>
+			</div>
+			<div id="posts" class="w-2/3 mx-auto mb-16">
+				<div class="flex flex-col">
+					<div class="flex flex-wrap justify-center">
+						{#each posts.data as post}
+							<PostCard {post} />
+						{/each}
+					</div>
+				</div>
+			</div>
+		{/if}
+	</div>
 {:catch someError}
-<div class="error">Unable to load posts</div>
+	<div class="error">Unable to load posts</div>
 {/await}
-
 
 <style>
 	.plain-background {

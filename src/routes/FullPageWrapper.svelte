@@ -8,21 +8,17 @@
 	let fp;
 
 	onMount(() => {
-
 		fp = new fullpage('#fullpage', {
-        anchors: Array.from(siteMap.keys()),
-        licenseKey: 'gplv3-license',
-        controlArrows: true,
-        controlArrowsHTML: ['<div class="tk-arrow" ></div>', '<div class="tk-arrow" ></div>']
-		  });
-
+			anchors: Array.from(siteMap.keys()),
+			licenseKey: 'gplv3-license',
+			controlArrows: true,
+			controlArrowsHTML: ['<div class="tk-arrow" ></div>', '<div class="tk-arrow" ></div>']
+		});
 	});
 
-  onDestroy(()=>{
-    fp.destroy();
-  })
-
-	
+	onDestroy(() => {
+		fp.destroy();
+	});
 </script>
 
 <div id="fullpage">
@@ -30,5 +26,4 @@
 </div>
 
 <style>
-
 </style>

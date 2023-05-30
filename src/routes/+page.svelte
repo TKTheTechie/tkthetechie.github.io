@@ -47,9 +47,7 @@
 
 	<Sidebar bind:open />
 
-	
 	<FullPageWrapper>
-		
 		<div class="section">
 			<Home />
 		</div>
@@ -70,7 +68,7 @@
 		<div class="section">
 			<Blog />
 		</div>
-		</FullPageWrapper>
+	</FullPageWrapper>
 </div>
 <div
 	class="mr-5 mb-2 fixed bottom-0 right-0 w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center md: visible"
@@ -98,8 +96,6 @@
 </div>
 
 <style>
-	
-
 	.main {
 		flex: 1;
 		display: flex;

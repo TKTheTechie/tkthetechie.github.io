@@ -20,16 +20,12 @@
 		<SocialBar />
 	</nav>
 
-	<div class="hamburger {sidebar==false?'invisible':''}">
+	<div class="hamburger {sidebar == false ? 'invisible' : ''}">
 		<Hamburger bind:open />
 	</div>
 </header>
 
 <style>
-
-
-
-
 	header {
 		display: flex;
 		justify-content: space-between;
