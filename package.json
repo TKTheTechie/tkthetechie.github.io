@@ -41,8 +41,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"fullpage.js": "^4.0.19",
-		"pagepiling.js": "^1.5.6",
+		"fullpage.js": "^4.0.20",
 		"svelte-carousel": "^1.0.25",
 		"svelte-countup": "^0.2.6",
 		"svelte-time": "^0.7.1",
