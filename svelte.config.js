@@ -35,7 +35,7 @@ const config = {
             // these options are set automatically — see below
             pages: 'build',
             assets: 'build',
-            fallback: undefined,
+            fallback: 'index.html#Blog',
             precompress: false,
             strict: true,
 			paths: {
