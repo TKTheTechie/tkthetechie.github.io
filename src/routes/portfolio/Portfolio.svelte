@@ -7,7 +7,6 @@
 
 	currentPage.subscribe((value) => {
 		page = value;
-		console.log(configuredPage + ',' + page);
 	});
 
 	export let slideIndex: number;
