@@ -25,13 +25,14 @@
 	</div>
 
 
-	<div class="flex flex-wrap text-left w-full">
+	<div class="flex flex-wrap text-left w-full ">
         <slot />
 	</div>
 	<hr class="m-5 text-gray-500 w-full" >
 </div>
 
 <style>
+
 
 
 
