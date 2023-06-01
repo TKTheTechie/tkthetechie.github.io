@@ -34,8 +34,23 @@ p {
 p {
 	line-height: 1.5;
 	color: #e8e8e8;
-	font-size: 0.9rem;;
 }
+
+@media screen and (max-width : 320px)
+{
+  p
+  {
+    font-size:1.1em;
+  }
+}
+@media screen and (max-width : 1204px)
+{
+  p
+  {
+    font-size:0.9em;
+  }
+}
+
 
 h1 {
 	font-size: 2rem;
