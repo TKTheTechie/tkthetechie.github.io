@@ -9,8 +9,6 @@
 	export let headerImage;
 	export let date;
 	export let category;
-
-	let counter = 0;
 </script>
 
 <svelte:head>
@@ -27,14 +25,13 @@
 	</div>
 
 	<div class="header-image mb-20">
-		<img src="/images/blog/headers/{headerImage}" width="880" height="418" />
+		<img src="/images/blog/headers/{headerImage}" width="880" height="418" alt="header" />
 	</div>
 
 	<div class="flex flex-wrap text-left w-full">
 		<slot />
 	</div>
 	<hr class="m-5 text-gray-500 w-full" />
-	<div class="counter">This post has been viewed {counter} times</div>
 </div>
 
 <style>
