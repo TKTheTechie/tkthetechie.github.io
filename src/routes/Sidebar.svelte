@@ -1,6 +1,4 @@
 <script>
-	import close from '$lib/images/close.svg';
-
 	import SocialBar from './SocialBar.svelte';
 	import { fade } from 'svelte/transition';
 	import { currentPage } from '../stores';
@@ -27,7 +25,7 @@
 					open = !open;
 				}}
 			>
-				<img src={close} alt="close" />
+				<img src="/images/close.svg" alt="close" />
 			</button>
 		</div>
 
