@@ -28,7 +28,7 @@
 		<img src="/images/blog/headers/{headerImage}" width="880" height="418" alt="header" />
 	</div>
 
-	<div class="flex flex-wrap text-left w-full">
+	<div class="flex flex-wrap w-2/3 md:w-full items-center ml-10 md:ml-1">
 		<slot />
 	</div>
 	<hr class="m-5 text-gray-500 w-full" />
