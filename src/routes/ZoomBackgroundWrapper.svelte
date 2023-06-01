@@ -1,22 +1,17 @@
 <script lang="ts">
-	import { currentPage } from '../../stores';
+	import { currentPage } from '../stores';
 
-	let page = '';
+	let page: string;
 
-	currentPage.subscribe((value) => {
+	export let configuredPage: string;
+
+	currentPage.subscribe((value: string) => {
 		page = value;
 	});
-
-	export let configuredPage = '';
-	export let reloadOnShow = false;
 </script>
 
-<div
-	class="{page == configuredPage
-		? 'zoom-background'
-		: 'plain-background'} flex justify-center items-center"
->
-	{#if reloadOnShow && configuredPage != page}
+<div class="{page == configuredPage ? 'zoom-background' : 'plain-background'} ">
+	{#if configuredPage != page}
 		<!--Do nothing//-->
 	{:else}
 		<slot />
@@ -27,10 +22,7 @@
 	.plain-background {
 		width: 100%;
 		height: 100%;
-		background-image: var(
-			--background-image,
-			url('/images/code-background.png')
-		); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
+		background-image: var(--background-image);
 	}
 
 	.zoom-background {
@@ -49,10 +41,7 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background-image: var(
-			--background-image,
-			url('/images/code-background.png')
-		); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
+		background-image: var(--background-image);
 		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center;

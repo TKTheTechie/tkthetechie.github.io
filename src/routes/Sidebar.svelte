@@ -7,9 +7,7 @@
 
 	export let open = false;
 
-	export let page;
-
-	export let relativeDirectory = '';
+	let page;
 
 	currentPage.subscribe((value) => {
 		page = value;
@@ -36,14 +34,14 @@
 		<nav class="p-12 text-xl bg-gray-950" in:fade>
 			<a
 				class="block"
-				href="{relativeDirectory}#Home"
+				href="#Home"
 				on:click={() => {
 					open = false;
 				}}><span class="text-lg">{page == 'Home' ? '>' : ''}</span>Home</a
 			>
 			<a
 				class="block"
-				href="{relativeDirectory}#Experience"
+				href="#Experience"
 				on:click={() => {
 					open = false;
 				}}
@@ -53,14 +51,14 @@
 			>
 			<a
 				class="block"
-				href="{relativeDirectory}#Portfolio"
+				href="#Portfolio"
 				on:click={() => {
 					open = false;
 				}}><span class="text-lg">{page.includes('Portfolio') ? '>' : ''}</span>Portfolio</a
 			>
 			<a
 				class="block"
-				href="{relativeDirectory}#Blog"
+				href="#Blog"
 				on:click={() => {
 					open = false;
 				}}><span class="text-lg">{page == 'Blog' ? '>' : ''}</span>Blog</a

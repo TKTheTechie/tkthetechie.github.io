@@ -1,12 +1,11 @@
 <script lang="ts">
 	import Countup from 'svelte-countup';
 
-	import Resume from './Resume.svelte';
+	import ZoomBackgroundWrapper from '../ZoomBackgroundWrapper.svelte';
 </script>
 
-<Resume
+<ZoomBackgroundWrapper
 	configuredPage={'Experience'}
-	reloadOnShow={true}
 	--background-image="url(/images/laptop-background.jpeg)"
 >
 	<div
@@ -93,7 +92,7 @@
 			</div>
 		</div>
 	</div>
-</Resume>
+</ZoomBackgroundWrapper>
 
 <style>
 	.counter {

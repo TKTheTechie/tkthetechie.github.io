@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { siteMap } from '../stores';
+
 	// @ts-ignore
 	import fullpage from 'fullpage.js';
 

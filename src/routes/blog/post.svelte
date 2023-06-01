@@ -1,21 +1,24 @@
-<script lang="ts">
+<script>
 	import '../../app.postcss';
 	import './styles.css';
 	import Header from '../Header.svelte';
-	import Sidebar from '../Sidebar.svelte';
 	import Time from 'svelte-time';
-
-	let open = false;
 
 	export let title;
 	export let author;
 	export let headerImage;
 	export let date;
 	export let category;
+
+	let counter = 0;
 </script>
 
+<svelte:head>
+	<title>TkTheTechie.io - {title}</title>
+</svelte:head>
+
 <div class="header bg-gray-950">
-	<Header bind:open sidebar={false} />
+	<Header open={false} sidebar={false} />
 </div>
 <div class="sm:w-full md:w-2/3 mt-10 flex flex-col items-start mx-auto max-w-screen-md">
 	<h1 class="post-title">{title}</h1>
@@ -31,6 +34,7 @@
 		<slot />
 	</div>
 	<hr class="m-5 text-gray-500 w-full" />
+	<div class="counter">This post has been viewed {counter} times</div>
 </div>
 
 <style>

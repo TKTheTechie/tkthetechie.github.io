@@ -1,9 +1,12 @@
 <script lang="ts">
-	import Resume from './Resume.svelte';
 	import EducationItem from './EducationItem.svelte';
+	import ZoomBackgroundWrapper from '../ZoomBackgroundWrapper.svelte';
 </script>
 
-<Resume configuredPage={'Education'} --background-image="url(/images/education-background.png)">
+<ZoomBackgroundWrapper
+	configuredPage={'Education'}
+	--background-image="url(/images/education-background.png)"
+>
 	<div class="flex flex-wrap justify-center mt-16 mb-16 h-fit xl:h-screen w-2/3">
 		<div class="w-full">
 			<div class="heading-title mb-5 text-center">
@@ -49,5 +52,5 @@
 			imgSrc="images/resume/c1.png"
 			lastItem={true}
 		/>
-	</div></Resume
+	</div></ZoomBackgroundWrapper
 >

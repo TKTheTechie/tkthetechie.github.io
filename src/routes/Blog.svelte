@@ -1,4 +1,6 @@
 <script lang="ts">
+	import ZoomBackgroundWrapper from './ZoomBackgroundWrapper.svelte';
+
 	import { currentPage } from '../stores';
 	import PostCard from './blog/PostCard.svelte';
 	import { fade } from 'svelte/transition';
@@ -19,21 +21,14 @@
 	});
 
 	export let configuredPage = 'Blog';
-	export let reloadOnShow = false;
 </script>
 
 {#await postPromise}
 	Loading posts...
 {:then posts}
-	<div
-		class="{page == configuredPage
-			? 'zoom-background'
-			: 'plain-background'} flex flex-col justify-center items-center"
-	>
-		{#if reloadOnShow && configuredPage != page}
-			<!--Do nothing//-->
-		{:else}
-			<div class="heading-title mb-5 w-full text-center mt-16">
+	<ZoomBackgroundWrapper {configuredPage} --background-image="url(/images/blog-background.png)">
+		<div class="flex flex-col justify-center items-center">
+			<div class="heading-title w-full text-center">
 				<span style="color:#039c5f">Blog</span>
 			</div>
 			<div id="posts" class="w-2/3 mx-auto mb-16">
@@ -45,58 +40,8 @@
 					</div>
 				</div>
 			</div>
-		{/if}
-	</div>
+		</div>
+	</ZoomBackgroundWrapper>
 {:catch someError}
 	<div class="error">Unable to load posts</div>
 {/await}
-
-<style>
-	.plain-background {
-		width: 100%;
-		height: 100%;
-		background-image: var(
-			--background-image,
-			url('/images/blog-background.png')
-		); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
-	}
-
-	.zoom-background {
-		position: relative;
-
-		overflow: hidden;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.zoom-background::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-image: var(
-			--background-image,
-			url('/images/blog-background.png')
-		); /* Replace 'path/to/your/image.jpg' with the actual path to your image */
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: center;
-		transform: scale(1);
-		opacity: 0;
-		animation: zoomAnimation 3s forwards 0.3s;
-		z-index: -1;
-	}
-	@keyframes zoomAnimation {
-		0% {
-			transform: scale(1.5);
-			opacity: 0;
-		}
-		100% {
-			transform: scale(1); /* Adjust the zoom level (e.g., 1.2 for 20% zoom) */
-			opacity: 1;
-		}
-	}
-</style>

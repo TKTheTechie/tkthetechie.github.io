@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { currentPage } from '../../stores';
-	import Resume from './Resume.svelte';
+	import ZoomBackgroundWrapper from '../ZoomBackgroundWrapper.svelte';
 	import SkillBar from './SkillBar.svelte';
 
 	let page = '';
@@ -10,7 +10,10 @@
 	});
 </script>
 
-<Resume configuredPage={'Proficiency'} reloadOnShow={true}>
+<ZoomBackgroundWrapper
+	configuredPage={'Proficiency'}
+	--background-image="url(/images/code-background.png)"
+>
 	<div
 		class="flex flex-col sm:flex-row w-2/3 justify-center text-center items-center mt-16 mb-16 h-fit xl:h-screen"
 	>
@@ -92,7 +95,7 @@
 				</div>
 			</div>
 		</div>
-	</div></Resume
+	</div></ZoomBackgroundWrapper
 >
 
 <style>

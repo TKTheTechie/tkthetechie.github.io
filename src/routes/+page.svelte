@@ -11,14 +11,15 @@
 	import { PORTFOLIO_ITEMS } from './portfolio/portfolio-items';
 	import PortfolioItem from './portfolio/PortfolioItem.svelte';
 
-	let open = false;
-
 	import { currentPage } from '../stores';
 	import { get } from 'svelte/store';
 	import { onMount } from 'svelte';
 	import { siteMap } from '../stores';
 
 	let pageNumber = 0;
+	let open = false;
+
+	let pageTitle = '';
 
 	function sitePageChange(): void {
 		let href = window.location.href;
@@ -29,6 +30,8 @@
 		} else {
 			pageNumber = (siteMap.has(get(currentPage)) ? siteMap.get(get(currentPage)) : -1) ?? -1;
 		}
+
+		pageTitle = get(currentPage);
 	}
 
 	onMount(() => {
@@ -39,6 +42,10 @@
 		});
 	});
 </script>
+
+<svelte:head>
+	<title>TKTheTechie.io - {pageTitle}</title>
+</svelte:head>
 
 <div class="main w-full app h-fit xl:h-screen">
 	<div class="header w-screen">
