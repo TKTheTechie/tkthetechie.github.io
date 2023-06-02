@@ -1,0 +1,27 @@
+<html>
+ <head>
+   <title>TKTheTechie.io - Error</title>
+   <script>
+     var redirectLink = window.location.href.substring(
+	  	window.location.href.lastIndexOf('/'),
+	  	window.location.href.length
+	  );
+     
+     function populateLink() {
+       document.querySelector("blog-link").innerHTML="Are you looking for a blog entry on my site? Try this <a
+		href='https://tkthetechie.io/blog"+redirectLink+"'>Link</a>";
+     }
+   </script>
+  </head>
+  
+  <body onLoad="populateLink()">
+    
+    <div id="blog-link">
+	
+    </div>
+    
+  </body>
+</html>
+
+      
+  
