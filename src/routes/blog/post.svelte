@@ -12,7 +12,7 @@
 </script>
 
 <svelte:head>
-	<title>TkTheTechie.io - {title}</title>
+	<title>TKTheTechie.io - {title}</title>
 </svelte:head>
 
 <div class="header bg-gray-950">
