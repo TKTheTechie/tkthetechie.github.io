@@ -1,7 +1,9 @@
 <html>
  <head>
    <title>TKTheTechie.io - Error</title>
-   <script>
+ 
+  </head>
+  <script>
     var blogLink = window.location.href.substring(0, window.location.href.length-2);
 
      var redirectLink = blogLink.substring(
@@ -10,17 +12,13 @@
 	  );
      
      function populateLink() {
-       document.querySelector("blog-link").innerHTML="Are you looking for a blog entry on my site? Try this <a href='https://tkthetechie.io/blog"+redirectLink+"'>Link</a>";
+       document.getElementById("blog-link").innerHTML="Are you looking for a blog entry on my site? Try this <a href='https://tkthetechie.io/blog"+redirectLink+"'>Link</a>";
      }
    </script>
-  </head>
   
   <body onload="populateLink()">
-    
     <div id="blog-link">
-	
     </div>
-    
   </body>
 </html>
 
