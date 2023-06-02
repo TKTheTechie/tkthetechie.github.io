@@ -5,6 +5,10 @@
 	);
 </script>
 
+<svelte:head>
+	<title>TKTheTechie.io Error</title>
+</svelte:head>
+
 <div class="blogLink text-center justify-center align-middle mt-52">
 	Are you looking for a blog entry on my site? Try this <a
 		href="https://tkthetechie.io/blog{redirectLink}">Link</a
