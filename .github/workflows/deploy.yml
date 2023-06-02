@@ -39,12 +39,6 @@ jobs:
           # this should match the `pages` option in your adapter-static options
           path: 'build/'
 
-      - name: Upload 404
-        uses: actions/upload-pages-artifact@v1
-        with:
-          # this should match the `pages` option in your adapter-static options
-          path: '404.html'
-
   deploy:
     needs: build_site
     runs-on: ubuntu-latest
