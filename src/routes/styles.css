@@ -53,6 +53,7 @@ pre {
 	padding: 0.5em;
 	overflow-x: auto;
 	color: var(--color-text);
+	width: 100%;
 }
 
 .text-column {
