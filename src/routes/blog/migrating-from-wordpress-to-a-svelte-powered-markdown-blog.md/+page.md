@@ -14,7 +14,7 @@ I initially designed my site on wordpress because it offered a quick and easy wa
 
 * Usability - Since word-press is a very WYSIWIG tool, adding a blog meant that I would have to login to the word press administrative panel and use an editor to write up the blog and then publish it. Formatting the blog was likewise somewhat tedious. I feel writing a blog in markdown is far more straightforward.
 
-* Inefficiency - My wordpress site made over 150 requestsfor backend resources (scripts, images, stylesheets etc) vs the number of requests made for the current static site. This was because wordpress and its associated plugins offer a lot of generic customization which leads to a bloat in static resources required to run the site.
+* Inefficiency - On page load, my wordpress site made over 150 requests for backend resources (scripts, images, stylesheets etc) vs 35 requests made for the current static site. This was because wordpress and its associated plugins offer a lot of generic customization which leads to a bloat in static resources required to run the site.
 
 * Responsiveness - I would periodically notice odd issues here and there with regards to responsiveness of the website on mobile phones. Sometimes these issues would result in inifinte redirect loops or odd alignment issues. Not having direct control of the scripts/styling made my ability to troubleshoot these issues rather difficult.
 
@@ -32,11 +32,12 @@ Here is the stack I settled on
 
 * [mdsvex](https://mdsvex.com) - A svelte library that offers the ability to render markdown into HTML. This would allow me to use markdown as the source for my blogging system.
 
-* [github pages][https://github.com] - Finally, I needed a hosting solution that would update my site whenever I added/edited a markdown blog. Github Pages was a perfect solution for this - not only is it a reliable static web host but provides workflows to allow for automated builds whenever a change is detected.
+* [github pages](https://github.com) - Finally, I needed a hosting solution that would update my site whenever I added/edited a markdown blog. Github Pages was a perfect solution for this - not only is it a reliable static web host but provides workflows to allow for automated builds whenever a change is detected.
 
 ## Digging deeper into the stack 
 
 Now lets dig a bit deeper into what I think are the interesting aspects of the stack.
+
 
 ### Blog structure
 
@@ -112,7 +113,7 @@ In addition, in the `svelte.config.js` I've added a mapping of the layout of the
 
 ### Static Site Generation
 
-My entire site resolves to a number of static pages that don't have a dynamic aspect to it, luckily SvelteKit offers static site generation quite easy to implement. All you have to do is add the following config to `svelt.config.js`:
+My entire site resolves to a number of static pages that don't have a dynamic aspect to it, luckily SvelteKit offers static site generation quite easy to implement. All you have to do is add the following config to `svelte.config.js`:
 
 ```
 kit: {
