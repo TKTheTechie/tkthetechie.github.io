@@ -24,8 +24,8 @@
 		{author} / <Time timestamp={date} format="MMMM DD, YYYY" /> / {category}
 	</div>
 
-	<div class="header-image mb-20">
-		<img src="/images/blog/headers/{headerImage}" width="880" height="418" alt="header" />
+	<div class=" mb-20">
+		<img src="/images/blog/headers/{headerImage}" alt="header" class="header-image" />
 	</div>
 
 	<div class="flex flex-wrap w-2/3 md:w-full items-center ml-10 md:ml-1">
@@ -57,5 +57,10 @@
 		font-size: 0.6rem;
 		font-weight: 500;
 		color: white;
+	}
+
+	.header-image {
+		max-width: 880px;
+		max-height: 418px;
 	}
 </style>

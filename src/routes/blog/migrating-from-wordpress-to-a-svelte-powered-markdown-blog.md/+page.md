@@ -1,6 +1,6 @@
 ---
 author: TKTheTechie
-title: Migrating From wordpress to a Svelte powered Markdown blog
+title: Migrating from Wordpress to a Svelte powered Markdown blog
 date: 6/14/2023
 category: Dev
 headerImage: migrating-from-wordpress-blog.png
