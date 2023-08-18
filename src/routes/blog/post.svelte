@@ -62,5 +62,6 @@
 	.header-image {
 		max-width: 880px;
 		max-height: 418px;
+		width: 100%;
 	}
 </style>
