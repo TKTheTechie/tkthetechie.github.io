@@ -34,22 +34,10 @@ p {
 p {
 	line-height: 1.5;
 	color: #e8e8e8;
+	font-size: 12pt;
 }
 
-@media screen and (max-width : 320px)
-{
-  p
-  {
-    font-size:1.5em;
-  }
-}
-@media screen and (max-width : 1204px)
-{
-  p
-  {
-    font-size:1.0em;
-  }
-}
+
 
 
 h1 {
