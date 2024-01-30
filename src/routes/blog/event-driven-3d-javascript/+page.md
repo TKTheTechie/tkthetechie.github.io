@@ -18,7 +18,9 @@ JavaScript is an enormously versatile language with a rich library of frameworks
 
 Here is the main part of the stack I used to build this application:  
 • [**Svelte**](https://svelte.dev/) – The Svelte Javascript framework has become my goto framework for programming interactive UIs. Among many other things, whats great about this framework is that a Svelte App compiles down to pure Javascript and your resultant web-apps become less bloated.  
+
 • [**Threlte**](https://threlte.xyz) – A Svelte library for svelte heavily inspired by [react-three-fiber](https://github.com/pmndrs/react-three-fiber) that allows you to easily build interactive 3D applications using [Three.js](https://threejs.org)
+
 • [**Solace PubSub+**](https://solace.com/) – An enterprise grade event broker that has many unique features such as multi-protocol support with a variety of SDKs (such as Java, JavaScript, .NET, Python, GoLang, and C)
 
 ## Using Solace PubSub+ Topics to enable multi-session play
