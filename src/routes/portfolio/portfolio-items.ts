@@ -17,6 +17,23 @@ export class PortfolioItem  {
 
 export const PORTFOLIO_ITEMS : PortfolioItem[] = 
   [
+
+    new PortfolioItem('EDA Summit Talk - Jet Streams & Market Streams: Navigating EDA in Aviation and Proprietary Trading',
+    '/images/portfolio/EDA-Summit-2024-Talk.jpeg',
+    'https://edasummit.com/videos/jet-streams-market-streams/',
+    'I was the moderator for a panel discussion at the EDA Summit 2024 conference where we discussed the challenges and solutions of EDA with CTC and United Airlines.'),
+
+    new PortfolioItem('AWS FSI - Podcast - Innovation in Capital Markets',
+    '/images/portfolio/aws-fsi-podcast.png',
+    'https://pages.awscloud.com/FSI-Episode-Landing-Pages_Ep-2.html',
+    'I was invited to speak on the AWS FSI podcast about how Solace is helping financial institutions innovate in capital markets.'),
+    
+    new PortfolioItem('Open Source Project - Solace PubSub+ Plugin for GraphQL',
+    '/images/blog/headers/graphql-with-solace.png',
+    'https://tkthetechie.io/blog/graphql-with-solace-pubsub',
+    'I authored an open source plugin from GraphQL into Solace PubSub+'),
+
+
     new PortfolioItem('Open Source Project - Solace Plugin for DAPR',
     '/images/portfolio/solace-dapr.png',
     'https://docs.dapr.io/reference/components-reference/supported-pubsub/setup-solace-amqp/',

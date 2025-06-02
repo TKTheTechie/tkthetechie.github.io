@@ -35,7 +35,7 @@
 		<EducationItem title="GCP" subTitle="Certified Developer" imgSrc="images/resume/gcp.png" />
 
 		<EducationItem
-			title="Solace Simply Stunning Award"
+			title="Solace Simply Stunning Award 2021,2022,2024"
 			subTitle="Global award for leading the Systems Engineering team in the Americas to hit targets"
 			imgSrc="images/resume/solace.png"
 		/>

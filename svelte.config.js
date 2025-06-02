@@ -1,7 +1,8 @@
 import preprocess from 'svelte-preprocess';
-import { vitePreprocess } from '@sveltejs/kit/vite';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import {mdsvex} from "mdsvex";
 import adapter from '@sveltejs/adapter-static';
+import path from 'path';
 
 const dev = process.argv.includes('dev');
 
@@ -21,8 +22,11 @@ const config = {
 		mdsvex({
 			extensions: ['.md'],
 			layout: {
-			  blog: 'src/routes/blog/post.svelte'
+			  blog: path.resolve('src/routes/blog/post.svelte')
 			},
+			 smartypants: {
+    			dashes: 'oldschool'
+  		   	},
 		  })
 		
 	],
