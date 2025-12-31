@@ -151,15 +151,24 @@
     }
   }
   
-  /* Disable scroll snap on mobile for better touch experience */
+  /* Scroll snapping adjustments for mobile */
   @media (max-width: 768px) {
     .scroll-snap-container {
-      scroll-snap-type: none;
+      scroll-snap-type: y proximity; /* Enable gentle snapping on mobile */
+      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
     }
     
     .scroll-snap-section {
-      scroll-snap-align: none;
-      min-height: auto;
+      scroll-snap-align: start;
+      min-height: auto; /* Allow natural content height */
+      scroll-snap-stop: normal; /* Allow natural scrolling through content */
+    }
+  }
+  
+  /* Enhanced mobile touch scrolling */
+  @media (max-width: 768px) and (pointer: coarse) {
+    .scroll-snap-container {
+      overscroll-behavior-y: contain; /* Prevent bounce scrolling */
     }
   }
   

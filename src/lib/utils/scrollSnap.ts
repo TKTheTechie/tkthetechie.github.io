@@ -45,10 +45,15 @@ export class ScrollSnapManager {
   private setupEventListeners(): void {
     if (!this.container) return;
 
-    // Enhanced wheel event handling for better snap detection
-    this.container.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
+    // Check if we're on a mobile device
+    const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
+
+    if (!isMobile) {
+      // Enhanced wheel event handling for desktop
+      this.container.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
+    }
     
-    // Touch events for mobile
+    // Touch events for mobile (always enabled)
     this.container.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
     this.container.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
     
@@ -114,25 +119,49 @@ export class ScrollSnapManager {
   }
 
   private handleTouchEnd(): void {
-    // Allow natural touch scrolling, only snap if we're close to a section boundary
-    window.setTimeout(() => {
-      if (!this.isScrolling) {
-        this.detectCurrentSection();
-        // Only snap if we're very close to a section boundary
-        const currentSectionElement = this.sections?.[this.currentSection];
-        if (!currentSectionElement) return;
+    // Check if we're on mobile
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+      // On mobile, allow CSS scroll-snap to handle most of the work
+      // Only intervene for fine-tuning
+      window.setTimeout(() => {
+        if (!this.isScrolling) {
+          this.detectCurrentSection();
+          
+          const currentSectionElement = this.sections?.[this.currentSection];
+          if (!currentSectionElement) return;
 
-        const container = this.container!;
-        const containerScrollTop = container.scrollTop;
-        const sectionTop = currentSectionElement.offsetTop - this.options.offset;
-        const distanceFromSectionTop = Math.abs(containerScrollTop - sectionTop);
+          const container = this.container!;
+          const containerScrollTop = container.scrollTop;
+          const sectionTop = currentSectionElement.offsetTop - this.options.offset;
+          const distanceFromSectionTop = Math.abs(containerScrollTop - sectionTop);
 
-        // Only snap if we're within 50px of the section start
-        if (distanceFromSectionTop < 50) {
-          this.snapToSection(this.currentSection);
+          // Only snap if we're very close to a section start (within 30px on mobile)
+          if (distanceFromSectionTop < 30) {
+            this.snapToSection(this.currentSection);
+          }
         }
-      }
-    }, 300); // Longer delay to allow natural scrolling to settle
+      }, 200); // Shorter delay for mobile responsiveness
+    } else {
+      // Desktop behavior - more aggressive snapping
+      window.setTimeout(() => {
+        if (!this.isScrolling) {
+          this.detectCurrentSection();
+          const currentSectionElement = this.sections?.[this.currentSection];
+          if (!currentSectionElement) return;
+
+          const container = this.container!;
+          const containerScrollTop = container.scrollTop;
+          const sectionTop = currentSectionElement.offsetTop - this.options.offset;
+          const distanceFromSectionTop = Math.abs(containerScrollTop - sectionTop);
+
+          if (distanceFromSectionTop < 50) {
+            this.snapToSection(this.currentSection);
+          }
+        }
+      }, 300);
+    }
   }
 
   private handleScroll(): void {
@@ -140,12 +169,16 @@ export class ScrollSnapManager {
       window.clearTimeout(this.scrollTimeout);
     }
 
+    // Shorter timeout on mobile for better responsiveness
+    const isMobile = window.innerWidth <= 768;
+    const timeout = isMobile ? 100 : 150;
+
     this.scrollTimeout = window.setTimeout(() => {
       if (!this.isScrolling) {
         this.detectCurrentSection();
-        // Don't auto-snap on scroll end - let CSS scroll-snap handle it naturally
+        // Let CSS scroll-snap handle the snapping naturally
       }
-    }, 150);
+    }, timeout);
   }
 
   private detectCurrentSection(): void {
@@ -229,7 +262,12 @@ export class ScrollSnapManager {
 
   public destroy(): void {
     if (this.container) {
-      this.container.removeEventListener('wheel', this.handleWheel.bind(this));
+      // Only remove wheel listener if it was added (non-mobile)
+      const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
+      if (!isMobile) {
+        this.container.removeEventListener('wheel', this.handleWheel.bind(this));
+      }
+      
       this.container.removeEventListener('touchstart', this.handleTouchStart.bind(this));
       this.container.removeEventListener('touchend', this.handleTouchEnd.bind(this));
       this.container.removeEventListener('scroll', this.handleScroll.bind(this));
