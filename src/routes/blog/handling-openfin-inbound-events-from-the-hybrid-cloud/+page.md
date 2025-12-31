@@ -4,6 +4,7 @@ title: Handling OpenFin Inbound Events from the Hybrid Cloud
 date: 5/2/2019
 category: Dev
 headerImage: openfin-inbound-blog.png
+layout: blog
 ---
 
 

@@ -4,6 +4,7 @@ title: Migrating from Wordpress to a Svelte powered Markdown blog
 date: 6/14/2023
 category: Dev
 headerImage: migrating-from-wordpress-blog.png
+layout: blog
 ---
 
 I recently migrated my personal website - [https://tkthetechie.io](TKTheTechie.io) - from a wordpress powered site to a static svelte markdown powered site. In this post, I will briefly go over the reasons why I did it and the tech stack used to accomplish it. Another point worth mentioning in this post is that apart from the domain - the hosting is completely free and I'll show you how you can take advantage of this too.

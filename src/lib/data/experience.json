@@ -1,0 +1,72 @@
+{
+  "title": "Professional Experience",
+  "subtitle": "Over 15 years of progressive leadership in systems engineering, from hands-on development to executive technical strategy.",
+  "experiences": [
+    {
+      "company": "Solace",
+      "position": "Vice President of Systems/PreSales Engineering, Americas",
+      "location": "Remote",
+      "period": "2018 - Present",
+      "description": "Promoted to VP role with mandate to scale team, increase technical wins, contribute to product strategy, build product, lead partnership efforts and be a technical evangelist.",
+      "achievements": [
+        "Scaled Systems Engineering team 3x from 5 to 15 engineerss",
+        "Opened new vertical markets: SaaS providers, Airlines, Manufacturing",
+        "Implemented integrations: Snowflake connector, DAPR framework, GraphQL",
+        "Executive sponsor for engagements between Solace and Oracle, AWS, GCP, Azure, Databricks and Snowflake",
+        "Regular speaker at AWS Re:Invent, Current Summit, EDA Summit",
+        "Achieved regional team targets and also received individual recognition"
+      ],
+      "technologies": [
+        "Event Driven Architecture",
+        "AWS",
+        "Snowflake",
+        "DAPR",
+        "GraphQL",
+        "Microservices"
+      ]
+    },
+    {
+      "company": "CapitalOne",
+      "position": "Software Development Manager",
+      "location": "New York",
+      "period": "2017 - 2018",
+      "description": "Manager for a new team of engineers building microservices in AWS using agile methodologies for the upmarket credit card business.",
+      "achievements": [
+        "Led design and development of microservices in GoLang for startup integration",
+        "Built Java Spring Boot REST-ful microservice for credit card restrictions",
+        "Designed microservice for batched events triggering identity verification",
+        "Managed first batch of three interns, delivered working SNS/Slack integration"
+      ],
+      "technologies": [
+        "GoLang",
+        "Java",
+        "Spring Boot",
+        "AWS",
+        "Jenkins",
+        "Microservices",
+        "REST APIs"
+      ]
+    },
+    {
+      "company": "Deutsche Bank",
+      "position": "Vice President, Lead Messaging Middleware Specialist",
+      "location": "New York",
+      "period": "2008 - 2017",
+      "description": "Lead for enterprise messaging middleware group supporting mission critical real-time trading systems. Multi-disciplinary role encompassing client management, technical expertise, and application development.",
+      "achievements": [
+        "Spearheaded firm-wide migration from TIBCO Rendezvous to Solace messaging",
+        "Architected innovative applications for middleware environment management",
+        "Front office technology lead for graduate and intern recruiting",
+        "Developed solutions using Core Java, KDB, and Aurelia JS"
+      ],
+      "technologies": [
+        "TIBCO Rendezvous",
+        "Solace",
+        "Core Java",
+        "KDB",
+        "Aurelia JS",
+        "Informatica UltraMessaging"
+      ]
+    }
+  ]
+}

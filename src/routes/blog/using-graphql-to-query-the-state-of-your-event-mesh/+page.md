@@ -4,6 +4,7 @@ title: Using GraphQL to query the state of your event mesh
 date: 2/21/2021
 category: Dev
 headerImage: graph-ql-blog.png
+layout: blog
 ---
 
 In this blog post, I will explain how you can leverage the power of GraphQL’s extensible API model to better understand the architecture and state of your event mesh. An [event mesh](https://solace.com/what-is-an-event-mesh/) is an interconnected network of event brokers that distributes events among decoupled applications, cloud services, and devices, anywhere in the world and running in any cloud, edge, or on-premises environment.

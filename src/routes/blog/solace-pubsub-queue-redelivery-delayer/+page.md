@@ -4,6 +4,7 @@ title: Solace PubSub+ Queue Redelivery Delayer
 date: 2/1/2022
 category: Dev
 headerImage: redelivery-delayer-blog.png
+layout: blog
 ---
 
 

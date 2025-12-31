@@ -4,6 +4,7 @@ title: Event Driven Zinc Search Logging
 date: 8/23/2022
 category: Dev
 headerImage: event-driven-zinc-search.png
+layout: blog
 ---
 
 

@@ -4,6 +4,7 @@ title: Event Driven Machine Learning
 date: 2/28/2022
 category: Dev
 headerImage: event-driven-machine-learning.png
+layout: blog
 ---
 
 

@@ -4,6 +4,7 @@ title: Linking Vuex State Machines Across Your Vue Client Applications with Sola
 date: 4/30/2020
 category: Dev
 headerImage: linking-vuex-blog.png
+layout: blog
 ---
 
 [Vue.js](https://vuejs.org/) is a JavaScript framework developed by Evan You that’s making significant inroads as the framework of choice for modern single-page applications. One reason it has become so popular is that it comes with components any single-page-application is expected to have, such as a router, a developer UI to manage your application, and a state management library called Vuex. To learn more about Vue.js, visit the [Getting Started with Vue](https://vuejs.org/v2/guide/) site.

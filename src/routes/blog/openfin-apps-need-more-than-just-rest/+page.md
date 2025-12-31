@@ -4,6 +4,7 @@ title: OpenFin Apps Need More Than Just REST
 date: 5/2/2019
 category: Dev
 headerImage: openfin-rest-blog.png
+layout: blog
 ---
 
 

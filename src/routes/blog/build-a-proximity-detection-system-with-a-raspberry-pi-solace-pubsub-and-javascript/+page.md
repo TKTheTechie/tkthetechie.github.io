@@ -4,6 +4,7 @@ title: Build a Proximity Detection System with a Raspberry Pi, Solace PubSub+, a
 date: 3/31/2022
 category: Dev
 headerImage: proximity-detection-blog.png
+layout: blog
 ---
 
 

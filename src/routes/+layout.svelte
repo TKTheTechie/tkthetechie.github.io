@@ -1,28 +1,14 @@
 <script lang="ts">
-	import '../app.postcss';
-	import './styles.css';
+  import '../app.css';
+  import { darkMode } from '$lib/stores/theme';
+  import { onMount } from 'svelte';
+  
+  onMount(() => {
+    // Initialize dark mode
+    darkMode.init();
+  });
 </script>
 
-<div class="app">
-	<main>
-		<slot />
-	</main>
-</div>
-
-<style>
-	.app {
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-	}
-
-	main {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		margin: 0 auto;
-		box-sizing: border-box;
-		height: 100%;
-		width: 100%;
-	}
-</style>
+<main class="min-h-screen transition-colors duration-300">
+  <slot />
+</main>

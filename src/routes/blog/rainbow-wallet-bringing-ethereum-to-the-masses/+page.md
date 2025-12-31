@@ -4,6 +4,7 @@ title: Rainbow Wallet - Bringing Ethereum to the masses
 date: 1/12/2022
 category: Crypto, Personal
 headerImage: rainbow-wallet-blog.png
+layout: blog
 ---
 
 

@@ -4,6 +4,7 @@ title: Event Driven 3d JavaScript
 date: 1/29/2024
 category: Dev
 headerImage: event-driven-3d-javascript-logo.png
+layout: blog
 ---
 
 

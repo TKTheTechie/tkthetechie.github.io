@@ -4,6 +4,7 @@ title: Event Driven Elixir
 date: 1/17/2022
 category: Dev
 headerImage: event-driven-elixir.png
+layout: blog
 ---
 
 

@@ -4,6 +4,7 @@ title: Why the Pyth Network needs an Event Mesh
 date: 3/24/2022
 category: Crypto
 headerImage: pyth-network-event-mesh-blog.png
+layout: blog
 ---
 
 

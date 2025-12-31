@@ -4,6 +4,7 @@ title: How to Use Rust, WebAssembly, JavaScript, and PubSub+ to Run Native Apps 
 date: 10/15/2020
 category: Dev
 headerImage: rest-web-assembly-solace-blog.jpeg
+layout: blog
 ---
 
 

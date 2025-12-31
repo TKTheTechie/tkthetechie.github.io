@@ -1,0 +1,257 @@
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { page } from '$app/stores';
+  import { darkMode } from '$lib/stores/theme';
+  
+  let posts: any[] = [];
+  let loading = true;
+  let searchTerm = '';
+  let selectedCategory = 'all';
+  let categories: string[] = [];
+  let isDark = false;
+  
+  // Subscribe to dark mode changes
+  darkMode.subscribe(value => {
+    isDark = value;
+  });
+  
+  onMount(() => {
+    fetchPosts();
+  });
+  
+  const fetchPosts = async () => {
+    try {
+      const response = await fetch('/blog/api/posts');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      
+      // Ensure we have an array
+      if (Array.isArray(data)) {
+        posts = data;
+        
+        // Extract unique categories
+        const uniqueCategories = [...new Set(posts.map(post => post.meta?.category).filter(Boolean))];
+        categories = ['all', ...uniqueCategories];
+      } else {
+        console.error('API did not return an array:', data);
+        posts = [];
+        categories = ['all'];
+      }
+      
+      loading = false;
+    } catch (error) {
+      console.error('Error fetching blog posts:', error);
+      posts = [];
+      categories = ['all'];
+      loading = false;
+    }
+  };
+  
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+  
+  const getCategoryColor = (category: string) => {
+    const colors = {
+      'Dev': 'from-blue-500 to-blue-600',
+      'Tech': 'from-green-500 to-green-600',
+      'Architecture': 'from-purple-500 to-purple-600',
+      'Tutorial': 'from-orange-500 to-orange-600',
+      'default': 'from-gray-500 to-gray-600'
+    };
+    return colors[category] || colors.default;
+  };
+  
+  $: filteredPosts = (posts || []).filter(post => {
+    const matchesSearch = post.meta?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (post.meta?.category && post.meta.category.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesCategory = selectedCategory === 'all' || post.meta?.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
+</script>
+
+<svelte:head>
+  <title>Blog - Thomas Kunnumpurath | Technical Insights & Tutorials</title>
+  <meta name="description" content="Technical blog posts on event-driven architecture, modern development practices, and emerging technologies by Thomas Kunnumpurath." />
+</svelte:head>
+
+<div 
+  class="min-h-screen transition-colors duration-300 {isDark ? 'bg-gray-900' : 'bg-gray-50'}"
+  style="background-color: {isDark ? 'rgb(17, 24, 39)' : 'rgb(249, 250, 251)'}"
+>
+  <!-- Header -->
+  <div class="bg-gradient-to-br from-gray-900 via-blue-900 to-green-900 text-white py-20">
+    <div class="container-max section-padding">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">
+          Technical <span class="gradient-text">Blog</span>
+        </h1>
+        <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
+        <p class="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
+          Insights on event-driven architecture, modern development practices, and emerging technologies.
+          Real-world implementations and industry experience shared through detailed tutorials and analysis.
+        </p>
+        
+        <!-- Back to Home -->
+        <div class="mt-8">
+          <a 
+            href="/"
+            class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium transition-colors duration-200"
+          >
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Main Content -->
+  <div class="py-16">
+    <div class="container-max section-padding">
+      <div class="max-w-6xl mx-auto">
+        
+        {#if loading}
+          <!-- Loading State -->
+          <div class="flex justify-center items-center py-20">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
+          </div>
+        {:else}
+          <!-- Search and Filter -->
+          <div class="mb-12">
+            <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
+              <!-- Search -->
+              <div class="relative flex-1 max-w-md">
+                <input
+                  type="text"
+                  bind:value={searchTerm}
+                  placeholder="Search posts..."
+                  class="w-full px-4 py-3 pl-10 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+                />
+                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              
+              <!-- Category Filter -->
+              <div class="flex flex-wrap gap-2">
+                {#each categories as category}
+                  <button
+                    on:click={() => selectedCategory = category}
+                    class="px-4 py-2 rounded-full font-medium transition-all duration-200 {selectedCategory === category 
+                      ? 'bg-gradient-to-r from-primary-500 to-accent-600 text-white' 
+                      : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}"
+                  >
+                    {category === 'all' ? 'All Posts' : category}
+                  </button>
+                {/each}
+              </div>
+            </div>
+            
+            <!-- Results Count -->
+            <div class="mt-4 text-gray-600 dark:text-gray-400">
+              {filteredPosts.length} {filteredPosts.length === 1 ? 'post' : 'posts'} found
+            </div>
+          </div>
+          
+          {#if filteredPosts.length === 0}
+            <!-- No Results -->
+            <div class="text-center py-20">
+              <div class="w-24 h-24 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
+              <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">No Posts Found</h3>
+              <p class="text-gray-600 dark:text-gray-300">Try adjusting your search or filter criteria.</p>
+            </div>
+          {:else}
+            <!-- Blog Posts Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {#each filteredPosts as post, index}
+                <article class="glass-effect rounded-2xl overflow-hidden hover-lift card-hover transition-all duration-300">
+                  <!-- Header Image Placeholder -->
+                  <div class="h-48 bg-gradient-to-br from-primary-500/20 to-accent-600/20 flex items-center justify-center">
+                    {#if post.meta?.headerImage}
+                      <img 
+                        src="/images/blog/headers/{post.meta.headerImage}" 
+                        alt={post.meta?.title || 'Blog post'}
+                        class="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    {:else}
+                      <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                      </div>
+                    {/if}
+                  </div>
+                  
+                  <!-- Content -->
+                  <div class="p-6">
+                    <!-- Category and Date -->
+                    <div class="flex items-center justify-between mb-4">
+                      <span class="px-3 py-1 bg-gradient-to-r {getCategoryColor(post.meta?.category)} text-white text-sm font-medium rounded-full">
+                        {post.meta?.category || 'Blog'}
+                      </span>
+                      <span class="text-sm text-gray-500 dark:text-gray-400">
+                        {formatDate(post.meta?.date || new Date().toISOString())}
+                      </span>
+                    </div>
+                    
+                    <!-- Title -->
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2">
+                      {post.meta?.title || 'Untitled'}
+                    </h2>
+                    
+                    <!-- Author and Read More -->
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center">
+                          <span class="text-white text-sm font-bold">TK</span>
+                        </div>
+                        <span class="text-sm text-gray-600 dark:text-gray-300">
+                          {post.meta?.author || 'Thomas Kunnumpurath'}
+                        </span>
+                      </div>
+                      
+                      <!-- Read More Link -->
+                      <a 
+                        href={post.path}
+                        class="inline-flex items-center text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 font-medium text-sm transition-colors duration-200"
+                      >
+                        Read More
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              {/each}
+            </div>
+          {/if}
+        {/if}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

@@ -4,6 +4,7 @@ title: Creating an OpenFin Event Mesh Across the Hybrid Cloud
 date: 5/2/2019
 category: Dev
 headerImage: openfin-event-mesh-blog.png
+layout: blog
 ---
 
 

@@ -4,6 +4,7 @@ title: The importance of message settlement for Event Driven Architectures
 date: 8/4/2022
 category: Dev
 headerImage: message-settle-blog.png
+layout: blog
 ---
 
 

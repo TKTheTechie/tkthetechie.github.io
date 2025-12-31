@@ -1,0 +1,431 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@theme {
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #0ea5e9;
+  --color-primary-600: #0284c7;
+  --color-primary-700: #0369a1;
+  --color-primary-800: #075985;
+  --color-primary-900: #0c4a6e;
+  
+  --color-accent-50: #f0fdf4;
+  --color-accent-100: #dcfce7;
+  --color-accent-200: #bbf7d0;
+  --color-accent-300: #86efac;
+  --color-accent-400: #4ade80;
+  --color-accent-500: #22c55e;
+  --color-accent-600: #16924f;
+  --color-accent-700: #15803d;
+  --color-accent-800: #166534;
+  --color-accent-900: #14532d;
+  
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', monospace;
+  
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+  --animate-slide-up: slideUp 0.5s ease-out;
+  --animate-fade-in: fadeIn 0.6s ease-out;
+  
+  --default-transition-duration: 300ms;
+}
+
+/* Dark mode configuration */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+  }
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px #0ea5e9, 0 0 10px #0ea5e9, 0 0 15px #0ea5e9; }
+  100% { box-shadow: 0 0 10px #0ea5e9, 0 0 20px #0ea5e9, 0 0 30px #0ea5e9; }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(100px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply font-sans antialiased transition-colors duration-300;
+  }
+  
+  /* Light mode styles */
+  :root {
+    --bg-primary: white;
+    --bg-secondary: rgb(249, 250, 251);
+    --text-primary: rgb(17, 24, 39);
+    --text-secondary: rgb(75, 85, 99);
+    --text-muted: rgb(107, 114, 128);
+  }
+  
+  /* Dark mode styles */
+  .dark {
+    --bg-primary: rgb(15, 23, 42);
+    --bg-secondary: rgb(30, 41, 59);
+    --text-primary: rgb(255, 255, 255);
+    --text-secondary: rgb(226, 232, 240);
+    --text-muted: rgb(148, 163, 184);
+  }
+  
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  .container-max {
+    @apply max-w-7xl mx-auto;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-500 to-accent-600 bg-clip-text text-transparent;
+  }
+  
+  /* Ensure gradient text stays gradient in dark mode */
+  .dark .gradient-text {
+    background: linear-gradient(to right, rgb(14, 165, 233), rgb(22, 146, 79)) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+  }
+  
+  .glass-effect {
+    @apply backdrop-blur-md border transition-all duration-300;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .dark .glass-effect {
+    background-color: rgba(15, 23, 42, 0.8);
+    border-color: rgba(71, 85, 105, 0.5);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  }
+  
+  .neon-border {
+    @apply border border-primary-500/50;
+    box-shadow: 0 0 10px rgba(14, 165, 233, 0.3);
+  }
+  
+  .hover-lift {
+    @apply transition-transform duration-300 hover:-translate-y-2;
+  }
+  
+  /* CSS-based matrix background pattern */
+  .matrix-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(22, 146, 79, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(22, 146, 79, 0.05) 0%, transparent 50%);
+    opacity: 0.6;
+  }
+  
+  .matrix-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      linear-gradient(90deg, transparent 98%, rgba(22, 146, 79, 0.1) 100%),
+      linear-gradient(0deg, transparent 98%, rgba(14, 165, 233, 0.1) 100%);
+    background-size: 50px 50px;
+    animation: matrixGrid 20s linear infinite;
+  }
+  
+  @keyframes matrixGrid {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+  }
+  
+  /* Card styles for better definition */
+  .card-light {
+    @apply bg-white border border-gray-200 shadow-md;
+  }
+  
+  .dark .card-light {
+    @apply bg-gray-800 border-gray-700 shadow-lg;
+  }
+  
+  /* Enhanced hover effects */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  .dark .card-hover:hover {
+    @apply shadow-2xl;
+  }
+  
+  /* Section backgrounds */
+  .section-light {
+    background-color: var(--bg-secondary);
+  }
+  
+  .section-dark {
+    background-color: var(--bg-primary);
+  }
+  
+  /* Dark mode section overrides */
+  .dark .section-light {
+    background-color: rgb(30, 41, 59) !important;
+  }
+  
+  .dark .section-dark {
+    background-color: rgb(15, 23, 42) !important;
+  }
+  
+  /* Text colors */
+  .text-primary {
+    color: var(--text-primary);
+  }
+  
+  .text-secondary {
+    color: var(--text-secondary);
+  }
+  
+  .text-muted {
+    color: var(--text-muted);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary-500 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary-600;
+}
+
+/* Blog prose enhancements */
+.prose {
+  @apply text-gray-700 dark:text-gray-300;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  @apply text-gray-900 dark:text-white font-bold;
+}
+
+.prose a {
+  @apply text-primary-600 dark:text-primary-400 no-underline hover:underline;
+}
+
+.prose code {
+  @apply text-primary-600 dark:text-primary-400 bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded text-sm;
+}
+
+.prose pre {
+  @apply bg-gray-900 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg;
+}
+
+.prose pre code {
+  @apply text-gray-100 bg-transparent p-0;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-primary-500 bg-gray-50 dark:bg-gray-800 py-4 px-6 rounded-r-lg italic;
+}
+
+.prose img {
+  @apply rounded-lg shadow-lg;
+}
+
+.prose table {
+  @apply border-collapse border border-gray-300 dark:border-gray-600;
+}
+
+.prose th, .prose td {
+  @apply border border-gray-300 dark:border-gray-600 px-4 py-2;
+}
+
+.prose th {
+  @apply bg-gray-100 dark:bg-gray-800 font-semibold;
+}
+
+/* Form elements dark mode */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: rgb(31, 41, 55) !important;
+  border-color: rgb(75, 85, 99) !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: rgb(14, 165, 233) !important;
+  box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2) !important;
+}
+
+/* Dark mode text overrides for better contrast */
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: rgb(255, 255, 255) !important;
+  font-weight: 700 !important;
+}
+
+.dark p,
+.dark span:not(.gradient-text),
+.dark div {
+  color: rgb(226, 232, 240) !important;
+}
+
+.dark .text-primary {
+  color: rgb(255, 255, 255) !important;
+}
+
+.dark .text-secondary {
+  color: rgb(226, 232, 240) !important;
+}
+
+.dark .text-muted {
+  color: rgb(148, 163, 184) !important;
+}
+
+/* Labels and form labels should be much more visible */
+.dark label,
+.dark .font-semibold,
+.dark .font-medium,
+.dark .font-bold {
+  color: rgb(255, 255, 255) !important;
+  font-weight: 700 !important;
+}
+
+/* Navigation text in dark mode */
+.dark nav button,
+.dark nav a {
+  color: rgb(156, 163, 175) !important;
+  font-weight: 700 !important;
+}
+
+.dark nav button:hover,
+.dark nav a:hover {
+  color: rgb(147, 197, 253) !important;
+}
+
+/* Specific overrides for better readability */
+.dark .glass-effect h3,
+.dark .glass-effect h4,
+.dark .glass-effect .font-semibold {
+  color: rgb(255, 255, 255) !important;
+  font-weight: 700 !important;
+}
+
+/* Contact form labels - make them stand out much more */
+.dark .contact-form,
+.dark label {
+  color: rgb(255, 255, 255) !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Skills section labels */
+.dark .skill-item .font-medium,
+.dark .skill-item span {
+  color: rgb(255, 255, 255) !important;
+  font-weight: 600 !important;
+}
+
+/* Experience section labels */
+.dark .experience-card h3,
+.dark .experience-card h4 {
+  color: rgb(255, 255, 255) !important;
+  font-weight: 700 !important;
+}
+
+/* Make all cards darker in dark mode */
+.dark .glass-effect,
+.dark .bg-white {
+  background-color: rgb(30, 41, 59) !important;
+  border-color: rgb(71, 85, 105) !important;
+}
+
+/* Form inputs darker background */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: rgb(15, 23, 42) !important;
+  border-color: rgb(71, 85, 105) !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+/* Stats and important numbers */
+.dark .text-3xl,
+.dark .text-4xl,
+.dark .gradient-text + .text-gray-600 {
+  color: rgb(255, 255, 255) !important;
+  font-weight: 700 !important;
+}
+
+/* Technology badges in dark mode */
+.dark .bg-accent-100 {
+  background-color: rgb(22, 146, 79) !important;
+  color: rgb(255, 255, 255) !important;
+  font-weight: 600 !important;
+}
+
+.dark .text-accent-700 {
+  color: rgb(255, 255, 255) !important;
+}
+
+/* Primary skill badges */
+.dark .bg-primary-100 {
+  background-color: rgb(7, 89, 133) !important;
+  color: rgb(255, 255, 255) !important;
+  font-weight: 600 !important;
+}
+
+.dark .text-primary-700 {
+  color: rgb(255, 255, 255) !important;
+}

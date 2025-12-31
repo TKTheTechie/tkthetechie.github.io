@@ -4,6 +4,7 @@ title: GraphQL Subscriptions With Solace PubSub+
 date: 8/18/2023
 category: Dev
 headerImage: graphql-with-solace.png
+layout: blog
 ---
 
 GraphQL is technology that is extremely popular for quickly building out fast and expansive APIs. The benefit of GraphQL as oppposed to traditional API Gateways is that it enables declarative data fetching where a client can specify only the data it needs from an API. This also enables it to effectively serve as a query layer for multiple datasources and presents the data in a unified graph.

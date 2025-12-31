@@ -4,6 +4,7 @@ title: DAPR with Solace PubSub+
 date: 12/29/2022
 category: Dev
 headerImage: dapr-solace-post-logo.png
+layout: blog
 ---
 
 
