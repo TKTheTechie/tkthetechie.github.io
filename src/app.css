@@ -151,24 +151,29 @@
     }
   }
   
-  /* Scroll snapping adjustments for mobile */
+  /* Mobile scroll snapping - rely more on JavaScript */
   @media (max-width: 768px) {
     .scroll-snap-container {
-      scroll-snap-type: y proximity; /* Enable gentle snapping on mobile */
+      scroll-snap-type: none; /* Disable CSS snap, use JS instead */
       -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      overscroll-behavior-y: contain; /* Prevent bounce scrolling */
+    }
+    
+    .scroll-snap-section {
+      scroll-snap-align: none; /* Let JavaScript handle snapping */
+      min-height: auto; /* Allow natural content height */
+    }
+  }
+  
+  /* Desktop keeps CSS scroll snap as backup */
+  @media (min-width: 769px) {
+    .scroll-snap-container {
+      scroll-snap-type: y proximity;
     }
     
     .scroll-snap-section {
       scroll-snap-align: start;
-      min-height: auto; /* Allow natural content height */
-      scroll-snap-stop: normal; /* Allow natural scrolling through content */
-    }
-  }
-  
-  /* Enhanced mobile touch scrolling */
-  @media (max-width: 768px) and (pointer: coarse) {
-    .scroll-snap-container {
-      overscroll-behavior-y: contain; /* Prevent bounce scrolling */
+      scroll-snap-stop: normal;
     }
   }
   
