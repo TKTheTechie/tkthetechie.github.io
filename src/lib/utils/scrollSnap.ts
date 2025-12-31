@@ -97,12 +97,12 @@ export class ScrollSnapManager {
     const touchDistance = this.touchStartY - touchEndY; // Positive = scroll down
     const touchDuration = Date.now() - this.touchStartTime;
     
-    // Detect swipe gestures
-    const isSwipe = Math.abs(touchDistance) > 50 && touchDuration < 300;
+    // Detect significant swipe gestures (more restrictive)
+    const isSignificantSwipe = Math.abs(touchDistance) > 80 && touchDuration < 250;
     const swipeDirection = touchDistance > 0 ? 1 : -1; // 1 = down, -1 = up
     
-    if (isSwipe) {
-      // For swipe gestures, try to snap to next/previous section
+    if (isSignificantSwipe) {
+      // For clear swipe gestures, snap to next/previous section
       const targetSection = this.currentSection + swipeDirection;
       if (targetSection >= 0 && targetSection < (this.sections?.length || 0)) {
         window.setTimeout(() => {
@@ -110,13 +110,13 @@ export class ScrollSnapManager {
         }, 100);
       }
     } else {
-      // For normal scrolling, wait and check if we need to snap
+      // For normal scrolling, wait longer and be more conservative
       window.setTimeout(() => {
         if (!this.isScrolling) {
           this.detectCurrentSection();
           this.checkMobileSnap();
         }
-      }, 300);
+      }, 500); // Longer delay to let users finish reading
     }
   }
 
@@ -132,23 +132,47 @@ export class ScrollSnapManager {
     const sectionHeight = currentSectionElement.offsetHeight;
     const sectionBottom = sectionTop + sectionHeight;
 
-    // Check if we're at the boundaries of the current section
-    const atSectionTop = containerScrollTop <= sectionTop + 50;
-    const atSectionBottom = containerScrollTop + containerHeight >= sectionBottom - 50;
+    // Much more conservative boundary detection
+    const isAtVeryTop = containerScrollTop <= sectionTop + 10; // Only 10px threshold
+    const isAtVeryBottom = containerScrollTop + containerHeight >= sectionBottom - 10; // Only 10px threshold
     
-    // If we're at the bottom of a section, try to snap to next section
-    if (atSectionBottom && this.currentSection < this.sections.length - 1) {
-      this.snapToSection(this.currentSection + 1);
-    }
-    // If we're at the top of a section and not the first, try to snap to previous
-    else if (atSectionTop && this.currentSection > 0) {
-      this.snapToSection(this.currentSection - 1);
-    }
-    // Otherwise, snap to current section start if we're not close
-    else {
-      const distanceFromSectionTop = Math.abs(containerScrollTop - sectionTop);
-      if (distanceFromSectionTop > 100) {
-        this.snapToSection(this.currentSection);
+    // Check if section has overflowing content
+    const hasOverflowingContent = sectionHeight > containerHeight * 1.2;
+    
+    if (hasOverflowingContent) {
+      // For sections with overflowing content, be even more conservative
+      const isAtAbsoluteBottom = containerScrollTop + containerHeight >= sectionBottom - 5;
+      const isAtAbsoluteTop = containerScrollTop <= sectionTop + 5;
+      
+      // Only snap if we're at the absolute edge AND trying to scroll further
+      if (isAtAbsoluteBottom && this.currentSection < this.sections.length - 1) {
+        // Only snap if we've been at the bottom for a moment (user really wants to continue)
+        window.setTimeout(() => {
+          const stillAtBottom = this.container!.scrollTop + this.container!.clientHeight >= sectionBottom - 5;
+          if (stillAtBottom && !this.isScrolling) {
+            this.snapToSection(this.currentSection + 1);
+          }
+        }, 200);
+      } else if (isAtAbsoluteTop && this.currentSection > 0) {
+        window.setTimeout(() => {
+          const stillAtTop = this.container!.scrollTop <= sectionTop + 5;
+          if (stillAtTop && !this.isScrolling) {
+            this.snapToSection(this.currentSection - 1);
+          }
+        }, 200);
+      }
+    } else {
+      // For normal sections, use regular boundary detection
+      if (isAtVeryBottom && this.currentSection < this.sections.length - 1) {
+        this.snapToSection(this.currentSection + 1);
+      } else if (isAtVeryTop && this.currentSection > 0) {
+        this.snapToSection(this.currentSection - 1);
+      } else {
+        // Only align to section start if we're very far off (more than 150px)
+        const distanceFromSectionTop = Math.abs(containerScrollTop - sectionTop);
+        if (distanceFromSectionTop > 150) {
+          this.snapToSection(this.currentSection);
+        }
       }
     }
   }
