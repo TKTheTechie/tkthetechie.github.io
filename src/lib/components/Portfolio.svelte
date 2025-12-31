@@ -115,7 +115,7 @@
   };
 </script>
 
-<section id="portfolio" bind:this={portfolioRef} class="py-20">
+<section id="portfolio" bind:this={portfolioRef} class="scroll-snap-section py-20">
   <div class="container-max section-padding">
     <div class="max-w-6xl mx-auto">
       <!-- Section Header -->

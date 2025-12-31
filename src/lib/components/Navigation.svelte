@@ -5,6 +5,7 @@
   let isScrolled = false;
   let isMobileMenuOpen = false;
   let isDark = false;
+  let currentSection = 'home';
   
   // Subscribe to dark mode changes
   darkMode.subscribe(value => {
@@ -12,14 +13,14 @@
   });
   
   const navItems = [
-    { name: 'Home', href: '/#home' },
-    { name: 'About', href: '/#about' },
-    { name: 'Experience', href: '/#experience' },
-    { name: 'Skills', href: '/#skills' },
-    { name: 'Portfolio', href: '/#portfolio' },
-    { name: 'Education', href: '/#education' },
-    { name: 'Blog', href: '/#blog' },
-    { name: 'Contact', href: '/#contact' }
+    { name: 'Home', href: '/#home', id: 'home' },
+    { name: 'About', href: '/#about', id: 'about' },
+    { name: 'Experience', href: '/#experience', id: 'experience' },
+    { name: 'Skills', href: '/#skills', id: 'skills' },
+    { name: 'Portfolio', href: '/#portfolio', id: 'portfolio' },
+    { name: 'Education', href: '/#education', id: 'education' },
+    { name: 'Blog', href: '/#blog', id: 'blog' },
+    { name: 'Contact', href: '/#contact', id: 'contact' }
   ];
   
   onMount(() => {
@@ -27,8 +28,49 @@
       isScrolled = window.scrollY > 50;
     };
     
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Track current section for highlighting
+    const container = document.querySelector('.scroll-snap-container');
+    if (container) {
+      const updateCurrentSection = () => {
+        const viewportTop = container.scrollTop + 80; // Account for navigation offset
+        const sectionElements = document.querySelectorAll('.scroll-snap-section');
+
+        let detectedSection = 'home';
+
+        sectionElements.forEach((section) => {
+          const sectionTop = (section as HTMLElement).offsetTop;
+          const sectionBottom = sectionTop + section.clientHeight;
+
+          if (viewportTop >= sectionTop && viewportTop < sectionBottom) {
+            detectedSection = section.id;
+          }
+        });
+
+        // If we're past all sections, we're in the last one
+        if (viewportTop >= ((sectionElements[sectionElements.length - 1] as HTMLElement)?.offsetTop || 0)) {
+          detectedSection = sectionElements[sectionElements.length - 1]?.id || 'contact';
+        }
+
+        currentSection = detectedSection;
+      };
+
+      container.addEventListener('scroll', updateCurrentSection, { passive: true });
+      updateCurrentSection();
+      
+      // Cleanup function will handle container listener
+      const cleanup = () => {
+        container.removeEventListener('scroll', updateCurrentSection);
+      };
+      
+      window.addEventListener('scroll', handleScroll);
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+        cleanup();
+      };
+    } else {
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
   });
   
   const toggleDarkMode = () => {
@@ -47,7 +89,24 @@
     if (hash) {
       const element = document.querySelector(`#${hash}`);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        // Enhanced scroll behavior for snap sections
+        const container = document.querySelector('.scroll-snap-container');
+        if (container) {
+          // Calculate the offset position accounting for fixed navigation
+          const elementTop = element.offsetTop;
+          const navHeight = 80; // Account for fixed navigation height
+          
+          container.scrollTo({
+            top: elementTop - navHeight,
+            behavior: 'smooth'
+          });
+        } else {
+          // Fallback for mobile or when scroll snap is disabled
+          element.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
         isMobileMenuOpen = false;
       }
     }
@@ -73,10 +132,19 @@
         {#each navItems as item}
           <button
             on:click={() => scrollToSection(item.href)}
-            class="text-gray-700 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-colors duration-200 font-bold dark:font-extrabold"
+            class="relative text-gray-700 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold {
+              currentSection === item.id 
+                ? 'text-primary-500 dark:text-primary-400' 
+                : ''
+            }"
             style="text-shadow: {isDark ? '0 1px 2px rgba(0,0,0,0.8)' : 'none'}"
           >
             {item.name}
+            
+            <!-- Active indicator -->
+            {#if currentSection === item.id}
+              <div class="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-500 to-accent-600 rounded-full animate-fade-in"></div>
+            {/if}
           </button>
         {/each}
         
@@ -131,10 +199,19 @@
           {#each navItems as item}
             <button
               on:click={() => scrollToSection(item.href)}
-              class="text-left text-gray-700 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-colors duration-200 font-bold dark:font-extrabold py-2"
+              class="relative text-left text-gray-700 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold py-2 {
+                currentSection === item.id 
+                  ? 'text-primary-500 dark:text-primary-400' 
+                  : ''
+              }"
               style="text-shadow: {isDark ? '0 1px 2px rgba(0,0,0,0.8)' : 'none'}"
             >
               {item.name}
+              
+              <!-- Active indicator for mobile -->
+              {#if currentSection === item.id}
+                <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-primary-500 to-accent-600 rounded-full animate-fade-in"></div>
+              {/if}
             </button>
           {/each}
         </div>
