@@ -17,6 +17,8 @@ export class ScrollSnapManager {
   private scrollTimeout: number | null = null;
   private currentSection = 0;
   private options: Required<ScrollSnapOptions>;
+  private touchStartY = 0;
+  private touchStartTime = 0;
 
   constructor(options: ScrollSnapOptions = {}) {
     this.options = {
@@ -70,7 +72,8 @@ export class ScrollSnapManager {
       // Enhanced wheel events for desktop
       this.container.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
     } else {
-      // Add touch events for mobile to ensure snapping
+      // Enhanced touch events for mobile
+      this.container.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
       this.container.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
     }
     
@@ -81,54 +84,72 @@ export class ScrollSnapManager {
     window.addEventListener('resize', this.markOverflowingSections.bind(this), { passive: true });
   }
 
-  private handleTouchEnd(): void {
+  private handleTouchStart(event: TouchEvent): void {
+    this.touchStartY = event.touches[0].clientY;
+    this.touchStartTime = Date.now();
+  }
+
+  private handleTouchEnd(event: TouchEvent): void {
     const isMobile = window.innerWidth <= 768;
     if (!isMobile) return;
 
-    // Wait for momentum scrolling to settle, then provide gentle snapping assistance
-    window.setTimeout(() => {
-      if (!this.isScrolling) {
-        this.detectCurrentSection();
-        this.gentleMobileSnap();
+    const touchEndY = event.changedTouches[0].clientY;
+    const touchDistance = this.touchStartY - touchEndY; // Positive = scroll down
+    const touchDuration = Date.now() - this.touchStartTime;
+    
+    // Detect swipe gestures
+    const isSwipe = Math.abs(touchDistance) > 50 && touchDuration < 300;
+    const swipeDirection = touchDistance > 0 ? 1 : -1; // 1 = down, -1 = up
+    
+    if (isSwipe) {
+      // For swipe gestures, try to snap to next/previous section
+      const targetSection = this.currentSection + swipeDirection;
+      if (targetSection >= 0 && targetSection < (this.sections?.length || 0)) {
+        window.setTimeout(() => {
+          this.snapToSection(targetSection);
+        }, 100);
       }
-    }, 400); // Longer delay to let momentum finish
+    } else {
+      // For normal scrolling, wait and check if we need to snap
+      window.setTimeout(() => {
+        if (!this.isScrolling) {
+          this.detectCurrentSection();
+          this.checkMobileSnap();
+        }
+      }, 300);
+    }
   }
 
-  private gentleMobileSnap(): void {
+  private checkMobileSnap(): void {
     if (!this.container || !this.sections) return;
+
+    const currentSectionElement = this.sections[this.currentSection];
+    if (!currentSectionElement) return;
 
     const containerScrollTop = this.container.scrollTop;
     const containerHeight = this.container.clientHeight;
-    
-    // Find the section that's most visible in the viewport
-    let mostVisibleSection = this.currentSection;
-    let maxVisibleArea = 0;
-    
-    this.sections.forEach((section, index) => {
-      const sectionTop = section.offsetTop - this.options.offset;
-      const sectionBottom = sectionTop + section.offsetHeight;
-      const viewportTop = containerScrollTop;
-      const viewportBottom = containerScrollTop + containerHeight;
-      
-      // Calculate visible area of this section
-      const visibleTop = Math.max(sectionTop, viewportTop);
-      const visibleBottom = Math.min(sectionBottom, viewportBottom);
-      const visibleArea = Math.max(0, visibleBottom - visibleTop);
-      
-      if (visibleArea > maxVisibleArea) {
-        maxVisibleArea = visibleArea;
-        mostVisibleSection = index;
-      }
-    });
+    const sectionTop = currentSectionElement.offsetTop - this.options.offset;
+    const sectionHeight = currentSectionElement.offsetHeight;
+    const sectionBottom = sectionTop + sectionHeight;
 
-    // Only snap if we're close to a section boundary
-    const targetSection = this.sections[mostVisibleSection];
-    const targetTop = targetSection.offsetTop - this.options.offset;
-    const distance = Math.abs(containerScrollTop - targetTop);
+    // Check if we're at the boundaries of the current section
+    const atSectionTop = containerScrollTop <= sectionTop + 50;
+    const atSectionBottom = containerScrollTop + containerHeight >= sectionBottom - 50;
     
-    // Gentle snapping threshold - only snap if we're reasonably close
-    if (distance > 30 && distance < 200) {
-      this.snapToSection(mostVisibleSection);
+    // If we're at the bottom of a section, try to snap to next section
+    if (atSectionBottom && this.currentSection < this.sections.length - 1) {
+      this.snapToSection(this.currentSection + 1);
+    }
+    // If we're at the top of a section and not the first, try to snap to previous
+    else if (atSectionTop && this.currentSection > 0) {
+      this.snapToSection(this.currentSection - 1);
+    }
+    // Otherwise, snap to current section start if we're not close
+    else {
+      const distanceFromSectionTop = Math.abs(containerScrollTop - sectionTop);
+      if (distanceFromSectionTop > 100) {
+        this.snapToSection(this.currentSection);
+      }
     }
   }
 
@@ -271,6 +292,7 @@ export class ScrollSnapManager {
       if (!isMobile) {
         this.container.removeEventListener('wheel', this.handleWheel.bind(this));
       } else {
+        this.container.removeEventListener('touchstart', this.handleTouchStart.bind(this));
         this.container.removeEventListener('touchend', this.handleTouchEnd.bind(this));
       }
       this.container.removeEventListener('scroll', this.handleScroll.bind(this));
