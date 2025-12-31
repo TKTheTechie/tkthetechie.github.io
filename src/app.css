@@ -151,29 +151,23 @@
     }
   }
   
-  /* Mobile scroll snapping - balanced approach */
+  /* Mobile scroll snapping - pure CSS, very gentle */
   @media (max-width: 768px) {
     .scroll-snap-container {
-      scroll-snap-type: y proximity; /* Use proximity to be less aggressive */
+      scroll-snap-type: none; /* Disable scroll snap on mobile entirely */
       -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-      overscroll-behavior-y: contain; /* Prevent over-bounce */
+      overscroll-behavior-y: auto; /* Allow natural bounce behavior */
     }
     
     .scroll-snap-section {
-      scroll-snap-align: start;
-      scroll-snap-stop: normal; /* Allow scrolling through content */
-      min-height: 100vh; /* Ensure proper section heights */
-    }
-    
-    /* Sections with overflowing content get gentler handling */
-    .scroll-snap-section.has-overflow {
-      scroll-snap-align: start;
-      scroll-snap-stop: normal; /* Don't force stops - let users read */
+      scroll-snap-align: none; /* No snap alignment on mobile */
+      scroll-snap-stop: normal;
+      min-height: auto; /* Natural height on mobile */
     }
     
     .scroll-snap-section#footer {
       min-height: auto;
-      scroll-snap-align: end;
+      scroll-snap-align: none; /* No snapping for footer on mobile */
     }
   }
   

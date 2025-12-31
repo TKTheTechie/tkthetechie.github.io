@@ -89,23 +89,33 @@
     if (hash) {
       const element = document.querySelector(`#${hash}`);
       if (element) {
-        // Enhanced scroll behavior for snap sections
-        const container = document.querySelector('.scroll-snap-container');
-        if (container) {
-          // Calculate the offset position accounting for fixed navigation
-          const elementTop = element.offsetTop;
-          const navHeight = 80; // Account for fixed navigation height
-          
-          container.scrollTo({
-            top: elementTop - navHeight,
-            behavior: 'smooth'
-          });
-        } else {
-          // Fallback for mobile or when scroll snap is disabled
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+          // On mobile, use simple scrollIntoView
           element.scrollIntoView({ 
             behavior: 'smooth',
             block: 'start'
           });
+        } else {
+          // Enhanced scroll behavior for snap sections on desktop
+          const container = document.querySelector('.scroll-snap-container');
+          if (container) {
+            // Calculate the offset position accounting for fixed navigation
+            const elementTop = element.offsetTop;
+            const navHeight = 80; // Account for fixed navigation height
+            
+            container.scrollTo({
+              top: elementTop - navHeight,
+              behavior: 'smooth'
+            });
+          } else {
+            // Fallback
+            element.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
         }
         isMobileMenuOpen = false;
       }

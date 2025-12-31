@@ -65,21 +65,39 @@
       const element = document.querySelector(`#${nextSectionId}`);
       
       if (container && element) {
-        container.scrollTo({
-          top: (element as HTMLElement).offsetTop - 80,
-          behavior: 'smooth'
-        });
+        // On mobile, use smooth scrolling without snapping
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+          element.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        } else {
+          container.scrollTo({
+            top: (element as HTMLElement).offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
       }
     }
   };
 
   const scrollToTop = () => {
-    const container = document.querySelector('.scroll-snap-container');
-    if (container) {
-      container.scrollTo({
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+      // On mobile, scroll to top naturally
+      window.scrollTo({
         top: 0,
         behavior: 'smooth'
       });
+    } else {
+      const container = document.querySelector('.scroll-snap-container');
+      if (container) {
+        container.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }
     }
   };
 

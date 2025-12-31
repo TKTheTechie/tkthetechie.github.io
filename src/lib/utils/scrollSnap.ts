@@ -17,8 +17,6 @@ export class ScrollSnapManager {
   private scrollTimeout: number | null = null;
   private currentSection = 0;
   private options: Required<ScrollSnapOptions>;
-  private touchStartY = 0;
-  private touchStartTime = 0;
 
   constructor(options: ScrollSnapOptions = {}) {
     this.options = {
@@ -69,112 +67,16 @@ export class ScrollSnapManager {
     const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
     
     if (!isMobile) {
-      // Enhanced wheel events for desktop
+      // Enhanced wheel events for desktop only
       this.container.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
-    } else {
-      // Enhanced touch events for mobile
-      this.container.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: true });
-      this.container.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
     }
+    // Remove all touch event handling - let CSS handle mobile entirely
     
-    // Simple scroll tracking for section detection
+    // Simple scroll tracking for section detection only
     this.container.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
     
     // Re-mark overflowing sections on resize
     window.addEventListener('resize', this.markOverflowingSections.bind(this), { passive: true });
-  }
-
-  private handleTouchStart(event: TouchEvent): void {
-    this.touchStartY = event.touches[0].clientY;
-    this.touchStartTime = Date.now();
-  }
-
-  private handleTouchEnd(event: TouchEvent): void {
-    const isMobile = window.innerWidth <= 768;
-    if (!isMobile) return;
-
-    const touchEndY = event.changedTouches[0].clientY;
-    const touchDistance = this.touchStartY - touchEndY; // Positive = scroll down
-    const touchDuration = Date.now() - this.touchStartTime;
-    
-    // Detect significant swipe gestures (more restrictive)
-    const isSignificantSwipe = Math.abs(touchDistance) > 80 && touchDuration < 250;
-    const swipeDirection = touchDistance > 0 ? 1 : -1; // 1 = down, -1 = up
-    
-    if (isSignificantSwipe) {
-      // For clear swipe gestures, snap to next/previous section
-      const targetSection = this.currentSection + swipeDirection;
-      if (targetSection >= 0 && targetSection < (this.sections?.length || 0)) {
-        window.setTimeout(() => {
-          this.snapToSection(targetSection);
-        }, 100);
-      }
-    } else {
-      // For normal scrolling, wait longer and be more conservative
-      window.setTimeout(() => {
-        if (!this.isScrolling) {
-          this.detectCurrentSection();
-          this.checkMobileSnap();
-        }
-      }, 500); // Longer delay to let users finish reading
-    }
-  }
-
-  private checkMobileSnap(): void {
-    if (!this.container || !this.sections) return;
-
-    const currentSectionElement = this.sections[this.currentSection];
-    if (!currentSectionElement) return;
-
-    const containerScrollTop = this.container.scrollTop;
-    const containerHeight = this.container.clientHeight;
-    const sectionTop = currentSectionElement.offsetTop - this.options.offset;
-    const sectionHeight = currentSectionElement.offsetHeight;
-    const sectionBottom = sectionTop + sectionHeight;
-
-    // Much more conservative boundary detection
-    const isAtVeryTop = containerScrollTop <= sectionTop + 10; // Only 10px threshold
-    const isAtVeryBottom = containerScrollTop + containerHeight >= sectionBottom - 10; // Only 10px threshold
-    
-    // Check if section has overflowing content
-    const hasOverflowingContent = sectionHeight > containerHeight * 1.2;
-    
-    if (hasOverflowingContent) {
-      // For sections with overflowing content, be even more conservative
-      const isAtAbsoluteBottom = containerScrollTop + containerHeight >= sectionBottom - 5;
-      const isAtAbsoluteTop = containerScrollTop <= sectionTop + 5;
-      
-      // Only snap if we're at the absolute edge AND trying to scroll further
-      if (isAtAbsoluteBottom && this.currentSection < this.sections.length - 1) {
-        // Only snap if we've been at the bottom for a moment (user really wants to continue)
-        window.setTimeout(() => {
-          const stillAtBottom = this.container!.scrollTop + this.container!.clientHeight >= sectionBottom - 5;
-          if (stillAtBottom && !this.isScrolling) {
-            this.snapToSection(this.currentSection + 1);
-          }
-        }, 200);
-      } else if (isAtAbsoluteTop && this.currentSection > 0) {
-        window.setTimeout(() => {
-          const stillAtTop = this.container!.scrollTop <= sectionTop + 5;
-          if (stillAtTop && !this.isScrolling) {
-            this.snapToSection(this.currentSection - 1);
-          }
-        }, 200);
-      }
-    } else {
-      // For normal sections, use regular boundary detection
-      if (isAtVeryBottom && this.currentSection < this.sections.length - 1) {
-        this.snapToSection(this.currentSection + 1);
-      } else if (isAtVeryTop && this.currentSection > 0) {
-        this.snapToSection(this.currentSection - 1);
-      } else {
-        // Only align to section start if we're very far off (more than 150px)
-        const distanceFromSectionTop = Math.abs(containerScrollTop - sectionTop);
-        if (distanceFromSectionTop > 150) {
-          this.snapToSection(this.currentSection);
-        }
-      }
-    }
   }
 
   private isContentOverflowing(sectionElement: HTMLElement): boolean {
@@ -315,10 +217,8 @@ export class ScrollSnapManager {
       const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
       if (!isMobile) {
         this.container.removeEventListener('wheel', this.handleWheel.bind(this));
-      } else {
-        this.container.removeEventListener('touchstart', this.handleTouchStart.bind(this));
-        this.container.removeEventListener('touchend', this.handleTouchEnd.bind(this));
       }
+      // No touch event listeners to remove on mobile
       this.container.removeEventListener('scroll', this.handleScroll.bind(this));
     }
 
