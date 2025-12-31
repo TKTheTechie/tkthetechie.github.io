@@ -151,17 +151,28 @@
     }
   }
   
-  /* Mobile scroll snapping - allow natural scrolling within sections */
+  /* Mobile scroll snapping - gentler behavior */
   @media (max-width: 768px) {
     .scroll-snap-container {
-      scroll-snap-type: y mandatory; /* Mandatory for reliable mobile snapping */
+      scroll-snap-type: y proximity; /* Use proximity on mobile for gentler behavior */
       -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+      overscroll-behavior-y: auto; /* Allow natural bounce behavior */
     }
     
     .scroll-snap-section {
       scroll-snap-align: start;
       scroll-snap-stop: normal; /* Critical: allows scrolling through long content */
       min-height: auto; /* Allow sections to be their natural height */
+    }
+    
+    /* Make hero section less aggressive on mobile */
+    .scroll-snap-section#home {
+      scroll-snap-align: start;
+    }
+    
+    .scroll-snap-section#footer {
+      min-height: auto;
+      scroll-snap-align: end;
     }
   }
   
@@ -217,6 +228,14 @@
   .scroll-snap-section#home {
     padding-top: 100px; /* Extra top padding for mobile */
     padding-bottom: 40px;
+  }
+  
+  /* Make hero section less aggressive on mobile */
+  @media (max-width: 768px) {
+    .scroll-snap-section#home {
+      scroll-snap-align: start;
+      /* Less aggressive snapping for hero section */
+    }
   }
   
   /* Sections with long content get extra spacing */

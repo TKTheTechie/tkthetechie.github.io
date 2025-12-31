@@ -85,36 +85,51 @@ export class ScrollSnapManager {
     const isMobile = window.innerWidth <= 768;
     if (!isMobile) return;
 
-    // Wait for momentum scrolling to settle, then ensure we're snapped
+    // Wait for momentum scrolling to settle, then provide gentle snapping assistance
     window.setTimeout(() => {
       if (!this.isScrolling) {
         this.detectCurrentSection();
-        this.ensureMobileSnap();
+        this.gentleMobileSnap();
       }
-    }, 300);
+    }, 400); // Longer delay to let momentum finish
   }
 
-  private ensureMobileSnap(): void {
+  private gentleMobileSnap(): void {
     if (!this.container || !this.sections) return;
 
-    const currentSectionElement = this.sections[this.currentSection];
-    if (!currentSectionElement) return;
-
-    // Check if current section has overflow
-    const hasOverflow = currentSectionElement.classList.contains('has-overflow');
+    const containerScrollTop = this.container.scrollTop;
+    const containerHeight = this.container.clientHeight;
     
-    if (!hasOverflow) {
-      // For normal sections, ensure we're snapped to the section start
-      const containerScrollTop = this.container.scrollTop;
-      const sectionTop = currentSectionElement.offsetTop - this.options.offset;
-      const distance = Math.abs(containerScrollTop - sectionTop);
+    // Find the section that's most visible in the viewport
+    let mostVisibleSection = this.currentSection;
+    let maxVisibleArea = 0;
+    
+    this.sections.forEach((section, index) => {
+      const sectionTop = section.offsetTop - this.options.offset;
+      const sectionBottom = sectionTop + section.offsetHeight;
+      const viewportTop = containerScrollTop;
+      const viewportBottom = containerScrollTop + containerHeight;
       
-      // If we're not close to the section start, snap to it
-      if (distance > 50) {
-        this.snapToSection(this.currentSection);
+      // Calculate visible area of this section
+      const visibleTop = Math.max(sectionTop, viewportTop);
+      const visibleBottom = Math.min(sectionBottom, viewportBottom);
+      const visibleArea = Math.max(0, visibleBottom - visibleTop);
+      
+      if (visibleArea > maxVisibleArea) {
+        maxVisibleArea = visibleArea;
+        mostVisibleSection = index;
       }
+    });
+
+    // Only snap if we're close to a section boundary
+    const targetSection = this.sections[mostVisibleSection];
+    const targetTop = targetSection.offsetTop - this.options.offset;
+    const distance = Math.abs(containerScrollTop - targetTop);
+    
+    // Gentle snapping threshold - only snap if we're reasonably close
+    if (distance > 30 && distance < 200) {
+      this.snapToSection(mostVisibleSection);
     }
-    // For overflow sections, let CSS handle it naturally
   }
 
   private isContentOverflowing(sectionElement: HTMLElement): boolean {
