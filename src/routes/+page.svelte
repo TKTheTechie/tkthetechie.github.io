@@ -54,7 +54,7 @@
         scrollSnapManager.scrollToSection('home');
       } else if (event.key === 'End') {
         event.preventDefault();
-        scrollSnapManager.scrollToSection('contact');
+        scrollSnapManager.scrollToSection('footer');
       }
     };
 

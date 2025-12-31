@@ -8,7 +8,7 @@
 
   const sections = [
     'home', 'about', 'experience', 'skills', 
-    'portfolio', 'education', 'blog', 'contact'
+    'portfolio', 'education', 'blog', 'contact', 'footer'
   ];
 
   onMount(() => {

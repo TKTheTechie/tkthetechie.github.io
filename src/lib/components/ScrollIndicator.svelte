@@ -13,7 +13,8 @@
     { id: 'portfolio', name: 'Portfolio' },
     { id: 'education', name: 'Education' },
     { id: 'blog', name: 'Blog' },
-    { id: 'contact', name: 'Contact' }
+    { id: 'contact', name: 'Contact' },
+    { id: 'footer', name: 'Footer' }
   ];
 
   onMount(() => {

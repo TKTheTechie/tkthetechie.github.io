@@ -114,7 +114,7 @@
   
   /* Scroll Snap Container */
   .scroll-snap-container {
-    scroll-snap-type: y proximity; /* Use proximity to allow scrolling within sections */
+    scroll-snap-type: y mandatory; /* Back to mandatory for reliable snapping */
     scroll-padding-top: 80px; /* Account for fixed navigation */
     overflow-y: auto;
     height: 100vh;
@@ -154,7 +154,7 @@
   /* Mobile scroll snapping - allow natural scrolling within sections */
   @media (max-width: 768px) {
     .scroll-snap-container {
-      scroll-snap-type: y proximity; /* Proximity allows scrolling within sections */
+      scroll-snap-type: y mandatory; /* Mandatory for reliable mobile snapping */
       -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
     }
     
@@ -168,7 +168,7 @@
   /* Desktop also uses proximity for better content handling */
   @media (min-width: 769px) {
     .scroll-snap-container {
-      scroll-snap-type: y proximity;
+      scroll-snap-type: y mandatory;
     }
     
     .scroll-snap-section {
@@ -177,6 +177,30 @@
     }
   }
   
+  /* Sections with overflowing content get special treatment */
+  .scroll-snap-section.has-overflow {
+    scroll-snap-align: start; /* Keep alignment but allow natural scrolling */
+  }
+  
+  /* Footer section gets special treatment */
+  .scroll-snap-section#footer {
+    min-height: auto; /* Footer doesn't need full height */
+    scroll-snap-align: end; /* Snap to end so it's fully visible */
+  }
+  
+  /* On mobile, long sections need different snap behavior */
+  @media (max-width: 768px) {
+    .scroll-snap-section.has-overflow {
+      scroll-snap-align: start;
+      /* Let CSS mandatory handle the snapping, but allow scrolling within */
+    }
+    
+    .scroll-snap-section#footer {
+      min-height: auto;
+      scroll-snap-align: end; /* Ensure footer is fully visible on mobile */
+    }
+  }
+
   /* For sections with overflow content */
   .scroll-snap-section {
     overflow: visible; /* Allow content to overflow naturally */

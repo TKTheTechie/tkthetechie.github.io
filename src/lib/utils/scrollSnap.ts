@@ -40,20 +40,81 @@ export class ScrollSnapManager {
 
     this.setupEventListeners();
     this.detectCurrentSection();
+    this.markOverflowingSections();
+  }
+
+  private markOverflowingSections(): void {
+    if (!this.container || !this.sections) return;
+
+    const containerHeight = this.container.clientHeight;
+    
+    this.sections.forEach(section => {
+      const sectionHeight = section.offsetHeight;
+      const hasOverflow = sectionHeight > containerHeight * 1.3;
+      
+      if (hasOverflow) {
+        section.classList.add('has-overflow');
+      } else {
+        section.classList.remove('has-overflow');
+      }
+    });
   }
 
   private setupEventListeners(): void {
     if (!this.container) return;
 
-    // Only add wheel events for desktop
+    // Check if we're on a mobile device
     const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
     
     if (!isMobile) {
+      // Enhanced wheel events for desktop
       this.container.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
+    } else {
+      // Add touch events for mobile to ensure snapping
+      this.container.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: true });
     }
     
     // Simple scroll tracking for section detection
     this.container.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
+    
+    // Re-mark overflowing sections on resize
+    window.addEventListener('resize', this.markOverflowingSections.bind(this), { passive: true });
+  }
+
+  private handleTouchEnd(): void {
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile) return;
+
+    // Wait for momentum scrolling to settle, then ensure we're snapped
+    window.setTimeout(() => {
+      if (!this.isScrolling) {
+        this.detectCurrentSection();
+        this.ensureMobileSnap();
+      }
+    }, 300);
+  }
+
+  private ensureMobileSnap(): void {
+    if (!this.container || !this.sections) return;
+
+    const currentSectionElement = this.sections[this.currentSection];
+    if (!currentSectionElement) return;
+
+    // Check if current section has overflow
+    const hasOverflow = currentSectionElement.classList.contains('has-overflow');
+    
+    if (!hasOverflow) {
+      // For normal sections, ensure we're snapped to the section start
+      const containerScrollTop = this.container.scrollTop;
+      const sectionTop = currentSectionElement.offsetTop - this.options.offset;
+      const distance = Math.abs(containerScrollTop - sectionTop);
+      
+      // If we're not close to the section start, snap to it
+      if (distance > 50) {
+        this.snapToSection(this.currentSection);
+      }
+    }
+    // For overflow sections, let CSS handle it naturally
   }
 
   private isContentOverflowing(sectionElement: HTMLElement): boolean {
@@ -194,9 +255,13 @@ export class ScrollSnapManager {
       const isMobile = window.innerWidth <= 768 || 'ontouchstart' in window;
       if (!isMobile) {
         this.container.removeEventListener('wheel', this.handleWheel.bind(this));
+      } else {
+        this.container.removeEventListener('touchend', this.handleTouchEnd.bind(this));
       }
       this.container.removeEventListener('scroll', this.handleScroll.bind(this));
     }
+
+    window.removeEventListener('resize', this.markOverflowingSections.bind(this));
 
     if (this.scrollTimeout) {
       window.clearTimeout(this.scrollTimeout);
