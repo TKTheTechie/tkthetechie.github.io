@@ -114,7 +114,7 @@
   
   /* Scroll Snap Container */
   .scroll-snap-container {
-    scroll-snap-type: y proximity; /* Changed from mandatory to proximity */
+    scroll-snap-type: y mandatory;
     scroll-padding-top: 80px; /* Account for fixed navigation */
     overflow-y: auto;
     height: 100vh;
@@ -151,25 +151,24 @@
     }
   }
   
-  /* Mobile scroll snapping - gentle CSS approach */
+  /* Mobile scroll snapping - use mandatory for reliable snapping */
   @media (max-width: 768px) {
     .scroll-snap-container {
-      scroll-snap-type: y proximity; /* Gentle snapping */
+      scroll-snap-type: y mandatory; /* Mandatory for reliable mobile snapping */
       -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-      overscroll-behavior-y: auto; /* Allow natural bounce */
     }
     
     .scroll-snap-section {
       scroll-snap-align: start;
-      scroll-snap-stop: normal; /* Don't force stops */
-      min-height: auto; /* Allow natural content height */
+      scroll-snap-stop: normal;
+      min-height: 100vh; /* Ensure full height sections */
     }
   }
   
-  /* Desktop keeps more aggressive CSS scroll snap */
+  /* Desktop scroll snapping */
   @media (min-width: 769px) {
     .scroll-snap-container {
-      scroll-snap-type: y proximity;
+      scroll-snap-type: y mandatory;
     }
     
     .scroll-snap-section {

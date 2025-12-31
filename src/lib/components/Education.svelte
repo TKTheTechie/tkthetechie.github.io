@@ -113,8 +113,8 @@
               </svg>
             </div>
             <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Solace Simply Stunning Award</h4>
-            <p class="text-gray-600 dark:text-gray-300 text-sm mb-1">Quota Achievement</p>
-            <p class="text-gray-500 dark:text-gray-400 text-xs">2022, 2023</p>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mb-1">Target Achievement</p>
+            <p class="text-gray-500 dark:text-gray-400 text-xs">2022, 2023, 2025</p>
           </div>
           
           <div class="glass-effect rounded-xl p-6 text-center hover-lift card-hover">
