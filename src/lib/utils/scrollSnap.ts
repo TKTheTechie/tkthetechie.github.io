@@ -24,9 +24,15 @@ export class ScrollSnapManager {
       sections: '.scroll-snap-section',
       threshold: 0.5,
       offset: 80,
-      duration: 800,
+      duration: 600,
       ...options
     };
+    
+    // Adjust options for mobile
+    if (window.innerWidth <= 768) {
+      this.options.duration = 300; // Faster animations on mobile
+      this.options.threshold = 0.3; // Less sensitive threshold
+    }
   }
 
   init(): void {
@@ -151,45 +157,59 @@ export class ScrollSnapManager {
     const touchDistance = this.touchEndY - this.touchStartY;
     const touchDuration = Date.now() - this.touchStartTime;
     
-    // Calculate if this was a swipe gesture
-    const isSwipe = Math.abs(touchDistance) > 50 && touchDuration < 300;
-    const hasVelocity = Math.abs(this.touchVelocity) > 0.5;
+    // Only snap on significant gestures
+    const isSignificantSwipe = Math.abs(touchDistance) > 100 && touchDuration < 500;
+    const isSlowScroll = touchDuration > 500;
     
-    // Wait for momentum scrolling to settle, then snap
-    const snapDelay = isSwipe || hasVelocity ? 400 : 200;
+    // Don't snap on small movements or very fast flicks
+    if (Math.abs(touchDistance) < 30) return;
     
-    window.setTimeout(() => {
-      if (!this.isScrolling) {
-        this.detectCurrentSection();
-        this.snapToNearestSectionMobile();
-      }
-    }, snapDelay);
+    // Wait longer for momentum to settle
+    const snapDelay = isSignificantSwipe ? 600 : (isSlowScroll ? 400 : 0);
+    
+    if (snapDelay > 0) {
+      window.setTimeout(() => {
+        if (!this.isScrolling) {
+          this.detectCurrentSection();
+          this.gentleMobileSnap();
+        }
+      }, snapDelay);
+    }
   }
 
-  private snapToNearestSectionMobile(): void {
+  private gentleMobileSnap(): void {
     if (!this.container || !this.sections) return;
 
     const containerScrollTop = this.container.scrollTop;
-    const containerHeight = this.container.clientHeight;
+    const currentSectionElement = this.sections[this.currentSection];
     
-    // Find the section that should be snapped to
-    let targetSection = this.currentSection;
-    let minDistance = Infinity;
-    
-    this.sections.forEach((section, index) => {
-      const sectionTop = section.offsetTop - this.options.offset;
-      const sectionCenter = sectionTop + (section.offsetHeight / 2);
-      const viewportCenter = containerScrollTop + (containerHeight / 2);
-      const distance = Math.abs(sectionCenter - viewportCenter);
-      
-      if (distance < minDistance) {
-        minDistance = distance;
-        targetSection = index;
-      }
-    });
+    if (!currentSectionElement) return;
 
-    // Always snap to the nearest section on mobile
-    this.snapToSection(targetSection);
+    const sectionTop = currentSectionElement.offsetTop - this.options.offset;
+    const sectionHeight = currentSectionElement.offsetHeight;
+    const sectionBottom = sectionTop + sectionHeight;
+    
+    // Calculate position within the current section
+    const relativePosition = containerScrollTop - sectionTop;
+    const sectionProgress = relativePosition / sectionHeight;
+    
+    // Only snap if we're very close to section boundaries
+    const snapThreshold = 0.1; // 10% of section height
+    
+    if (sectionProgress < snapThreshold && this.currentSection > 0) {
+      // Close to top of section, might want to snap to previous section
+      const distanceToSectionTop = Math.abs(containerScrollTop - sectionTop);
+      if (distanceToSectionTop < 50) {
+        this.snapToSection(this.currentSection);
+      }
+    } else if (sectionProgress > (1 - snapThreshold) && this.currentSection < this.sections.length - 1) {
+      // Close to bottom of section, might want to snap to next section
+      const distanceToSectionBottom = Math.abs(containerScrollTop - sectionBottom + this.container.clientHeight);
+      if (distanceToSectionBottom < 50) {
+        this.snapToSection(this.currentSection + 1);
+      }
+    }
+    // Otherwise, don't snap - let user scroll naturally within the section
   }
 
   private handleScroll(): void {
@@ -198,15 +218,17 @@ export class ScrollSnapManager {
     }
 
     const isMobile = window.innerWidth <= 768;
-    const timeout = isMobile ? 150 : 200;
+    
+    // On mobile, only snap after a longer period of inactivity
+    const timeout = isMobile ? 800 : 200;
 
     this.scrollTimeout = window.setTimeout(() => {
       if (!this.isScrolling) {
         this.detectCurrentSection();
         
-        // On mobile, be more proactive about snapping
+        // On mobile, only snap if we're close to a section boundary
         if (isMobile) {
-          this.snapToNearestSectionMobile();
+          this.gentleMobileSnap();
         }
       }
     }, timeout);
@@ -249,17 +271,21 @@ export class ScrollSnapManager {
 
     if (!targetSection) return;
 
+    // Don't snap if we're already very close to the target
+    const currentScrollTop = this.container.scrollTop;
+    const targetPosition = targetSection.offsetTop - this.options.offset;
+    const distance = Math.abs(currentScrollTop - targetPosition);
+    
+    if (distance < 20) return; // Already close enough
+
     this.isScrolling = true;
     this.currentSection = targetIndex;
 
     // Add snap animation class
     targetSection.classList.add('snapping-in');
 
-    const targetPosition = targetSection.offsetTop - this.options.offset;
     const isMobile = window.innerWidth <= 768;
-
-    // Use different animation duration for mobile
-    const duration = isMobile ? 400 : this.options.duration;
+    const duration = isMobile ? 300 : this.options.duration; // Faster on mobile
 
     this.container.scrollTo({
       top: targetPosition,
@@ -270,23 +296,6 @@ export class ScrollSnapManager {
     window.setTimeout(() => {
       this.isScrolling = false;
       targetSection.classList.remove('snapping-in');
-      
-      // Double-check position on mobile and adjust if needed
-      if (isMobile) {
-        window.setTimeout(() => {
-          const currentTop = this.container!.scrollTop;
-          const expectedTop = targetPosition;
-          const diff = Math.abs(currentTop - expectedTop);
-          
-          // If we're off by more than 10px, snap again
-          if (diff > 10 && !this.isScrolling) {
-            this.container!.scrollTo({
-              top: expectedTop,
-              behavior: 'smooth'
-            });
-          }
-        }, 100);
-      }
     }, duration);
   }
 
