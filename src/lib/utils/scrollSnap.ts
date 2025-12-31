@@ -56,6 +56,15 @@ export class ScrollSnapManager {
     this.container.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
   }
 
+  private isContentOverflowing(sectionElement: HTMLElement): boolean {
+    const container = this.container!;
+    const containerHeight = container.clientHeight;
+    const sectionHeight = sectionElement.offsetHeight;
+    
+    // Consider content overflowing if section is significantly larger than viewport
+    return sectionHeight > containerHeight * 1.2;
+  }
+
   private handleWheel(event: WheelEvent): void {
     if (this.isScrolling) {
       event.preventDefault();
@@ -76,21 +85,28 @@ export class ScrollSnapManager {
     const sectionHeight = currentSectionElement.offsetHeight;
     const sectionBottom = sectionTop + sectionHeight;
 
+    // Check if section has overflowing content
+    const hasOverflowingContent = this.isContentOverflowing(currentSectionElement);
+
     // Calculate relative position within the current section
     const relativeScrollTop = containerScrollTop - sectionTop;
-    const isAtSectionTop = relativeScrollTop <= 50;
-    const isAtSectionBottom = containerScrollTop + containerHeight >= sectionBottom - 50;
+    const threshold = hasOverflowingContent ? 100 : 50; // Larger threshold for overflowing content
+    const isAtSectionTop = relativeScrollTop <= threshold;
+    const isAtSectionBottom = containerScrollTop + containerHeight >= sectionBottom - threshold;
 
     // Only snap if we're trying to scroll beyond the current section's boundaries
     const shouldSnapUp = direction < 0 && isAtSectionTop && this.currentSection > 0;
     const shouldSnapDown = direction > 0 && isAtSectionBottom && this.currentSection < (this.sections?.length || 0) - 1;
 
     if (shouldSnapUp || shouldSnapDown) {
-      if (Math.abs(delta) > 10) {
+      // Require more significant wheel movement for overflowing content
+      const wheelThreshold = hasOverflowingContent ? 50 : 15;
+      if (Math.abs(delta) > wheelThreshold) {
         event.preventDefault();
         this.snapToSection(this.currentSection + direction);
       }
     }
+    // Otherwise, allow natural scrolling within the section
   }
 
   private handleScroll(): void {

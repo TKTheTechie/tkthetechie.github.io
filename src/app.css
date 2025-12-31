@@ -114,7 +114,7 @@
   
   /* Scroll Snap Container */
   .scroll-snap-container {
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity; /* Use proximity to allow scrolling within sections */
     scroll-padding-top: 80px; /* Account for fixed navigation */
     overflow-y: auto;
     height: 100vh;
@@ -151,24 +151,24 @@
     }
   }
   
-  /* Mobile scroll snapping - use mandatory for reliable snapping */
+  /* Mobile scroll snapping - allow natural scrolling within sections */
   @media (max-width: 768px) {
     .scroll-snap-container {
-      scroll-snap-type: y mandatory; /* Mandatory for reliable mobile snapping */
+      scroll-snap-type: y proximity; /* Proximity allows scrolling within sections */
       -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
     }
     
     .scroll-snap-section {
       scroll-snap-align: start;
-      scroll-snap-stop: normal;
-      min-height: 100vh; /* Ensure full height sections */
+      scroll-snap-stop: normal; /* Critical: allows scrolling through long content */
+      min-height: auto; /* Allow sections to be their natural height */
     }
   }
   
-  /* Desktop scroll snapping */
+  /* Desktop also uses proximity for better content handling */
   @media (min-width: 769px) {
     .scroll-snap-container {
-      scroll-snap-type: y mandatory;
+      scroll-snap-type: y proximity;
     }
     
     .scroll-snap-section {
@@ -195,10 +195,19 @@
     padding-bottom: 40px;
   }
   
+  /* Sections with long content get extra spacing */
+  .scroll-snap-section:has(> div > div > div:nth-child(n+10)) {
+    padding-bottom: 60px; /* Extra bottom padding for sections with lots of content */
+  }
+  
   @media (min-width: 768px) {
     .scroll-snap-section#home {
       padding-top: 80px;
       padding-bottom: 20px;
+    }
+    
+    .scroll-snap-section:has(> div > div > div:nth-child(n+10)) {
+      padding-bottom: 40px;
     }
   }
   
