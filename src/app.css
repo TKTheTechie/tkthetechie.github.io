@@ -308,6 +308,19 @@
     color: transparent !important;
   }
   
+  /* Extra specificity for gradient text headings in dark mode */
+  .dark h1.gradient-text,
+  .dark h2.gradient-text,
+  .dark h3.gradient-text,
+  .dark h4.gradient-text,
+  .dark h5.gradient-text,
+  .dark h6.gradient-text {
+    background: linear-gradient(to right, rgb(14, 165, 233), rgb(22, 146, 79)) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+  }
+  
   .glass-effect {
     @apply backdrop-blur-md border transition-all duration-300;
     background-color: rgba(255, 255, 255, 0.8);
@@ -920,6 +933,215 @@
   color: rgb(255, 255, 255) !important; /* White icon for dark mode */
 }
 
+/* Skills items and badges - fix dark mode visibility */
+.dark .skill-item span {
+  color: rgb(243, 244, 246) !important; /* Light gray for better visibility */
+}
+
+/* Technology badges and skill badges in dark mode */
+.dark .bg-accent-100,
+.dark .bg-primary-100 {
+  background-color: rgb(55, 65, 81) !important; /* Dark background */
+  color: rgb(243, 244, 246) !important; /* Light text */
+}
+
+/* Skills section specific items */
+.dark #skills .skill-item span {
+  color: rgb(243, 244, 246) !important;
+}
+
+/* About section skill badges */
+.dark #about span.bg-primary-100 {
+  background-color: rgb(55, 65, 81) !important;
+  color: rgb(243, 244, 246) !important;
+}
+
+/* Experience section technology badges */
+.dark #experience span.bg-accent-100 {
+  background-color: rgb(55, 65, 81) !important;
+  color: rgb(243, 244, 246) !important;
+}
+
+.dark #experience span.bg-primary-100 {
+  background-color: rgb(55, 65, 81) !important;
+  color: rgb(243, 244, 246) !important;
+}
+
+/* Education section dates and text fixes */
+.dark #education p {
+  color: rgb(243, 244, 246) !important; /* Light gray for all paragraph text */
+}
+
+.dark #education span {
+  color: rgb(243, 244, 246) !important; /* Light gray for all span text including dates */
+}
+
+/* Specific fixes for education dates and descriptions */
+.dark #education .text-xs,
+.dark #education .text-sm {
+  color: rgb(243, 244, 246) !important; /* Light gray for small text like dates */
+}
+
+/* Education section titles - ensure they're dark in light mode */
+:not(.dark) #education h3,
+:not(.dark) #education h4 {
+  color: rgb(17, 24, 39) !important; /* Very dark for excellent contrast */
+}
+
+:not(.dark) #education .font-semibold {
+  color: rgb(17, 24, 39) !important; /* Very dark for headings */
+}
+
+/* Education section light mode text */
+:not(.dark) #education p {
+  color: rgb(55, 65, 81) !important; /* Dark gray for paragraph text */
+}
+
+:not(.dark) #education span:not(.gradient-text):not(.text-white) {
+  color: rgb(55, 65, 81) !important; /* Dark gray for span text */
+}
+
+/* Education section titles - ensure they're light in dark mode */
+.dark #education h3,
+.dark #education h4 {
+  color: rgb(255, 255, 255) !important; /* White for maximum visibility */
+}
+
+.dark #education .font-semibold {
+  color: rgb(255, 255, 255) !important; /* White for headings */
+}
+
+/* Experience section Key Achievements and Technologies headings */
+.dark #experience h5.font-semibold {
+  color: rgb(255, 255, 255) !important; /* White for maximum visibility */
+}
+
+:not(.dark) #experience h5.font-semibold {
+  color: rgb(17, 24, 39) !important; /* Very dark for light mode */
+}
+
+/* Experience section achievement items and list text */
+.dark #experience li span {
+  color: rgb(243, 244, 246) !important; /* Light gray for achievement items */
+}
+
+.dark #experience ul li {
+  color: rgb(243, 244, 246) !important; /* Light gray for list items */
+}
+
+:not(.dark) #experience li span {
+  color: rgb(31, 41, 55) !important; /* Dark gray for light mode */
+}
+
+:not(.dark) #experience ul li {
+  color: rgb(31, 41, 55) !important; /* Dark gray for light mode */
+}
+
+/* More comprehensive experience section text fixes for dark mode */
+.dark #experience span:not(.gradient-text):not(.text-white) {
+  color: rgb(243, 244, 246) !important; /* Light gray for all spans */
+}
+
+.dark #experience p {
+  color: rgb(243, 244, 246) !important; /* Light gray for all paragraphs */
+}
+
+.dark #experience .text-sm {
+  color: rgb(243, 244, 246) !important; /* Light gray for small text */
+}
+
+/* Force all experience section text to be light in dark mode */
+.dark #experience .experience-card span,
+.dark #experience .experience-card p,
+.dark #experience .glass-effect span,
+.dark #experience .glass-effect p {
+  color: rgb(243, 244, 246) !important;
+}
+
+/* Badge background fixes for light mode - better contrast */
+:not(.dark) .bg-accent-100 {
+  background-color: rgb(220, 252, 231) !important; /* Much lighter green */
+  color: rgb(21, 128, 61) !important; /* Darker green text */
+}
+
+:not(.dark) .bg-primary-100 {
+  background-color: rgb(219, 234, 254) !important; /* Much lighter blue */
+  color: rgb(30, 64, 175) !important; /* Darker blue text */
+}
+
+/* Skills section badges in light mode */
+:not(.dark) #skills .bg-accent-100 {
+  background-color: rgb(220, 252, 231) !important;
+  color: rgb(21, 128, 61) !important;
+}
+
+:not(.dark) #skills .bg-primary-100 {
+  background-color: rgb(219, 234, 254) !important;
+  color: rgb(30, 64, 175) !important;
+}
+
+/* About section skill badges in light mode */
+:not(.dark) #about .bg-primary-100 {
+  background-color: rgb(219, 234, 254) !important;
+  color: rgb(30, 64, 175) !important;
+}
+
+/* Experience section technology badges in light mode */
+:not(.dark) #experience .bg-accent-100 {
+  background-color: rgb(220, 252, 231) !important;
+  color: rgb(21, 128, 61) !important;
+}
+
+:not(.dark) #experience .bg-primary-100 {
+  background-color: rgb(219, 234, 254) !important;
+  color: rgb(30, 64, 175) !important;
+}
+
+/* Education section comprehensive text fixes for dark mode */
+.dark #education h3:not(.gradient-text) {
+  color: rgb(255, 255, 255) !important; /* White for main headings */
+}
+
+.dark #education h4 {
+  color: rgb(255, 255, 255) !important; /* White for sub-headings */
+}
+
+.dark #education .font-semibold:not(.gradient-text) {
+  color: rgb(255, 255, 255) !important; /* White for all semibold text */
+}
+
+/* Ensure Education section gradient text is visible in dark mode */
+.dark #education h3.gradient-text {
+  background: linear-gradient(to right, rgb(14, 165, 233), rgb(22, 146, 79)) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* Education section subtitle text fix for dark mode */
+.dark #education .text-center p {
+  color: rgb(255, 255, 255) !important;
+}
+
+/* Education section card text fix for dark mode */
+.dark #education .glass-effect p {
+  color: rgb(255, 255, 255) !important;
+}
+
+.dark #education .font-bold {
+  color: rgb(255, 255, 255) !important; /* White for all bold text */
+}
+
+/* Force all education headings to be white in dark mode */
+.dark #education h1,
+.dark #education h2,
+.dark #education h3,
+.dark #education h4,
+.dark #education h5,
+.dark #education h6 {
+  color: rgb(255, 255, 255) !important;
+}
+
 /* Skills section subheading fix for both modes */
 :not(.dark) #skills p {
   color: rgb(17, 24, 39) !important;
@@ -1040,12 +1262,12 @@
 }
 
 /* Dark mode text overrides for better contrast */
-.dark h1,
-.dark h2,
-.dark h3,
-.dark h4,
-.dark h5,
-.dark h6 {
+.dark h1:not(.gradient-text),
+.dark h2:not(.gradient-text),
+.dark h3:not(.gradient-text),
+.dark h4:not(.gradient-text),
+.dark h5:not(.gradient-text),
+.dark h6:not(.gradient-text) {
   color: rgb(255, 255, 255) !important;
   font-weight: 700 !important;
 }

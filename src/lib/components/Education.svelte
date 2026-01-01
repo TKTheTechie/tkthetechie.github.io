@@ -27,7 +27,7 @@
           Education & <span class="gradient-text">Recognition</span>
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
-        <p class="text-xl text-gray-800 dark:text-gray-100 max-w-3xl mx-auto">
+        <p class="text-xl text-gray-800 dark:text-white max-w-3xl mx-auto">
           Academic achievements, professional certifications, industry recognition, and community involvement.
         </p>
       </div>
