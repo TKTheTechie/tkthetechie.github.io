@@ -35,6 +35,7 @@
   --animate-snap-in: snapIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --animate-snap-out: snapOut 0.3s cubic-bezier(0.55, 0.055, 0.675, 0.19);
   --animate-slide-in-left: slideInFromLeft 0.3s ease-out;
+  --animate-pulse: pulse 2s ease-in-out infinite;
   
   --default-transition-duration: 300ms;
 }
@@ -48,6 +49,19 @@
 
 .dark {
   color-scheme: dark;
+}
+
+@keyframes pulseBorder {
+  0%, 100% { 
+    box-shadow: 
+      0 0 0 0 rgba(14, 165, 233, 0.4),
+      0 0 0 0 rgba(34, 197, 94, 0.3);
+  }
+  50% { 
+    box-shadow: 
+      0 0 0 4px rgba(14, 165, 233, 0.2),
+      0 0 0 8px rgba(34, 197, 94, 0.1);
+  }
 }
 
 @keyframes snapIn {
@@ -344,9 +358,231 @@
     animation: matrixGrid 20s linear infinite;
   }
   
+  /* Floating Orbs */
+  .floating-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(1px);
+    opacity: 0.4;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+  
+  .orb-1 {
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.3) 0%, transparent 70%);
+    top: 10%;
+    left: 10%;
+    animation: floatOrb1 8s infinite;
+  }
+  
+  .orb-2 {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, transparent 70%);
+    top: 20%;
+    right: 15%;
+    animation: floatOrb2 12s infinite;
+  }
+  
+  .orb-3 {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, transparent 70%);
+    bottom: 30%;
+    left: 20%;
+    animation: floatOrb3 10s infinite;
+  }
+  
+  .orb-4 {
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, transparent 70%);
+    bottom: 15%;
+    right: 25%;
+    animation: floatOrb4 14s infinite;
+  }
+  
+  .orb-5 {
+    width: 90px;
+    height: 90px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, transparent 70%);
+    top: 60%;
+    left: 50%;
+    animation: floatOrb5 9s infinite;
+  }
+  
+  /* Animated Particles */
+  .particles-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(14, 165, 233, 0.6);
+    border-radius: 50%;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  
+  .particle-1 {
+    top: 20%;
+    left: 10%;
+    animation: particleFloat1 15s infinite;
+  }
+  
+  .particle-2 {
+    top: 40%;
+    left: 80%;
+    background: rgba(34, 197, 94, 0.6);
+    animation: particleFloat2 18s infinite;
+  }
+  
+  .particle-3 {
+    top: 70%;
+    left: 30%;
+    animation: particleFloat3 12s infinite;
+  }
+  
+  .particle-4 {
+    top: 15%;
+    left: 60%;
+    background: rgba(34, 197, 94, 0.6);
+    animation: particleFloat4 20s infinite;
+  }
+  
+  .particle-5 {
+    top: 80%;
+    left: 70%;
+    animation: particleFloat5 16s infinite;
+  }
+  
+  .particle-6 {
+    top: 50%;
+    left: 20%;
+    background: rgba(34, 197, 94, 0.6);
+    animation: particleFloat6 14s infinite;
+  }
+  
+  /* Gradient Waves */
+  .gradient-wave {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    opacity: 0.1;
+    border-radius: 50%;
+    filter: blur(2px);
+  }
+  
+  .wave-1 {
+    background: conic-gradient(from 0deg, rgba(14, 165, 233, 0.3), rgba(34, 197, 94, 0.3), rgba(14, 165, 233, 0.3));
+    top: -50%;
+    left: -50%;
+    animation: rotateWave1 25s linear infinite;
+  }
+  
+  .wave-2 {
+    background: conic-gradient(from 180deg, rgba(34, 197, 94, 0.2), rgba(14, 165, 233, 0.2), rgba(34, 197, 94, 0.2));
+    bottom: -50%;
+    right: -50%;
+    animation: rotateWave2 30s linear infinite reverse;
+  }
+  
   @keyframes matrixGrid {
     0% { transform: translate(0, 0); }
     100% { transform: translate(50px, 50px); }
+  }
+  
+  /* Floating Orb Animations */
+  @keyframes floatOrb1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(30px, -20px) scale(1.1); }
+    50% { transform: translate(-20px, -40px) scale(0.9); }
+    75% { transform: translate(40px, -10px) scale(1.05); }
+  }
+  
+  @keyframes floatOrb2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-25px, 30px) scale(1.2); }
+    66% { transform: translate(35px, 15px) scale(0.8); }
+  }
+  
+  @keyframes floatOrb3 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    20% { transform: translate(20px, -30px) scale(1.1); }
+    40% { transform: translate(-30px, -20px) scale(0.9); }
+    60% { transform: translate(25px, 25px) scale(1.15); }
+    80% { transform: translate(-15px, 10px) scale(0.95); }
+  }
+  
+  @keyframes floatOrb4 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-40px, -35px) scale(1.3); }
+  }
+  
+  @keyframes floatOrb5 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(-35px, 20px) scale(0.8); }
+    50% { transform: translate(20px, -25px) scale(1.2); }
+    75% { transform: translate(30px, 30px) scale(0.9); }
+  }
+  
+  /* Particle Animations */
+  @keyframes particleFloat1 {
+    0%, 100% { transform: translate(0, 0); opacity: 0.6; }
+    25% { transform: translate(100px, -50px); opacity: 1; }
+    50% { transform: translate(200px, 30px); opacity: 0.4; }
+    75% { transform: translate(150px, -80px); opacity: 0.8; }
+  }
+  
+  @keyframes particleFloat2 {
+    0%, 100% { transform: translate(0, 0); opacity: 0.5; }
+    33% { transform: translate(-120px, 60px); opacity: 0.9; }
+    66% { transform: translate(-80px, -40px); opacity: 0.3; }
+  }
+  
+  @keyframes particleFloat3 {
+    0%, 100% { transform: translate(0, 0); opacity: 0.7; }
+    20% { transform: translate(80px, -100px); opacity: 0.4; }
+    40% { transform: translate(160px, -60px); opacity: 1; }
+    60% { transform: translate(120px, 20px); opacity: 0.6; }
+    80% { transform: translate(40px, -30px); opacity: 0.8; }
+  }
+  
+  @keyframes particleFloat4 {
+    0%, 100% { transform: translate(0, 0); opacity: 0.6; }
+    50% { transform: translate(-200px, 150px); opacity: 0.9; }
+  }
+  
+  @keyframes particleFloat5 {
+    0%, 100% { transform: translate(0, 0); opacity: 0.5; }
+    25% { transform: translate(-60px, -120px); opacity: 0.8; }
+    50% { transform: translate(-140px, -80px); opacity: 0.3; }
+    75% { transform: translate(-100px, -160px); opacity: 1; }
+  }
+  
+  @keyframes particleFloat6 {
+    0%, 100% { transform: translate(0, 0); opacity: 0.7; }
+    33% { transform: translate(180px, -90px); opacity: 0.4; }
+    66% { transform: translate(120px, 40px); opacity: 0.9; }
+  }
+  
+  /* Wave Animations */
+  @keyframes rotateWave1 {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  @keyframes rotateWave2 {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
   
   /* Card styles for better definition */

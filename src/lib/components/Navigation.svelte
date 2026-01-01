@@ -142,7 +142,7 @@
         {#each navItems as item}
           <button
             on:click={() => scrollToSection(item.href)}
-            class="relative text-gray-700 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold {
+            class="relative text-gray-700 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold cursor-pointer {
               currentSection === item.id 
                 ? 'text-primary-500 dark:text-primary-400' 
                 : ''
@@ -161,7 +161,7 @@
         <!-- Dark Mode Toggle -->
         <button
           on:click={toggleDarkMode}
-          class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+          class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
           aria-label="Toggle dark mode"
           title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
@@ -176,7 +176,7 @@
       <div class="md:hidden flex items-center space-x-2">
         <button
           on:click={toggleDarkMode}
-          class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+          class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
           aria-label="Toggle dark mode"
           title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
@@ -188,7 +188,7 @@
         
         <button
           on:click={() => isMobileMenuOpen = !isMobileMenuOpen}
-          class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200"
+          class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
           aria-label="Toggle menu"
         >
           <svg class="w-6 h-6 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -209,7 +209,7 @@
           {#each navItems as item}
             <button
               on:click={() => scrollToSection(item.href)}
-              class="relative text-left text-gray-700 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold py-2 {
+              class="relative text-left text-gray-700 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold py-2 cursor-pointer {
                 currentSection === item.id 
                   ? 'text-primary-500 dark:text-primary-400' 
                   : ''
