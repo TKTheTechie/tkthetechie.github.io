@@ -1,5 +1,11 @@
 {
   "portfolioItems": [
+      {
+      "title": "Solace Office Hours - Solace in Finance",
+      "imgSrc": "/images/portfolio/Solace-office-hours-2025.png",
+      "href": "https://www.youtube.com/watch?v=ebypWvxNjy4",
+      "description": "I explained my experience deploying and building on Solace at an Investment Bank along with a 101 on Fixed Income!"
+    },
        {
       "title": "Experimenting with Three.js, shaders and a Holographic Solly (Solace Mascot)",
       "imgSrc": "/images/portfolio/holographic-solly.png",
