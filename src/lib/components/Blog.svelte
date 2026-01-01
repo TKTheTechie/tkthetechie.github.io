@@ -1,10 +1,17 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { darkMode } from '$lib/stores/theme';
   
   let blogRef: HTMLElement;
   let isVisible = false;
   let posts: any[] = [];
   let loading = true;
+  let isDark = false;
+  
+  // Subscribe to dark mode changes
+  darkMode.subscribe(value => {
+    isDark = value;
+  });
   
   onMount(() => {
     const observer = new IntersectionObserver(
@@ -66,7 +73,7 @@
   };
 </script>
 
-<section id="blog" bind:this={blogRef} class="scroll-snap-section py-20 section-light">
+<section id="blog" bind:this={blogRef} class="scroll-snap-section py-20 section-light" style="background-color: {isDark ? 'rgb(30, 41, 59)' : 'rgb(249, 250, 251)'};">
   <div class="container-max section-padding">
     <div class="max-w-6xl mx-auto">
       <!-- Section Header -->
@@ -75,7 +82,7 @@
           Latest <span class="gradient-text">Blog Posts</span>
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
-        <p class="text-xl text-gray-800 dark:text-gray-100 max-w-3xl mx-auto">
+        <p class="text-xl text-gray-800 dark:text-white max-w-3xl mx-auto">
           Insights on event-driven architecture, modern development practices, and emerging technologies.
           Sharing knowledge from real-world implementations and industry experience.
         </p>
@@ -151,7 +158,7 @@
                   <!-- Read More Link -->
                   <a 
                     href={post.path}
-                    class="inline-flex items-center text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 font-medium text-sm transition-colors duration-200"
+                    class="inline-flex items-center text-primary-500 hover:text-primary-600 dark:text-white dark:hover:text-white font-medium text-sm transition-colors duration-200"
                   >
                     Read More
                     <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

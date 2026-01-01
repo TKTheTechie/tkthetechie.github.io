@@ -5,6 +5,24 @@
   export let category: string = 'Blog';
   export let headerImage: string = '';
   
+  // Check if dark mode is active
+  let isDark = false;
+  
+  // Simple dark mode detection
+  if (typeof window !== 'undefined') {
+    isDark = document.documentElement.classList.contains('dark');
+    
+    // Watch for dark mode changes
+    const observer = new MutationObserver(() => {
+      isDark = document.documentElement.classList.contains('dark');
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  }
+  
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -33,7 +51,7 @@
   <meta name="author" content={author} />
 </svelte:head>
 
-<div class="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
+<div class="min-h-screen transition-colors duration-300" style="background: {isDark ? 'linear-gradient(to bottom right, rgb(55, 65, 81), rgb(75, 85, 99), rgb(55, 65, 81))' : 'white'}">
   <!-- Header -->
   <div class="bg-gradient-to-br from-gray-900 via-blue-900 to-green-900 text-white py-16 pt-24">
     <div class="container-max section-padding">
@@ -86,7 +104,7 @@
   </div>
   
   <!-- Article Content -->
-  <div class="py-16 bg-white dark:bg-gray-800 transition-colors duration-300">
+  <div class="py-16 transition-colors duration-300" style="background-color: {isDark ? 'rgb(75, 85, 99)' : 'white'}">
     <div class="container-max section-padding">
       <div class="max-w-4xl mx-auto">
         

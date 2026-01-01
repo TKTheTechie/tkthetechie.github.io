@@ -1128,6 +1128,142 @@
   color: rgb(255, 255, 255) !important;
 }
 
+/* Navigation hamburger menu button fixes */
+:not(.dark) nav button[aria-label="Toggle menu"] svg {
+  color: rgb(17, 24, 39) !important; /* Very dark for light mode */
+}
+
+.dark nav button[aria-label="Toggle menu"] svg {
+  color: rgb(255, 255, 255) !important; /* White for dark mode */
+}
+
+/* Navigation hamburger menu button background fixes */
+:not(.dark) nav button[aria-label="Toggle menu"] {
+  background-color: rgb(243, 244, 246) !important; /* Light gray background */
+  border-color: rgb(209, 213, 219) !important; /* Light border */
+}
+
+:not(.dark) nav button[aria-label="Toggle menu"]:hover {
+  background-color: rgb(229, 231, 235) !important; /* Slightly darker on hover */
+}
+
+.dark nav button[aria-label="Toggle menu"] {
+  background-color: rgb(55, 65, 81) !important; /* Dark gray background */
+  border-color: rgb(75, 85, 99) !important; /* Dark border */
+}
+
+.dark nav button[aria-label="Toggle menu"]:hover {
+  background-color: rgb(75, 85, 99) !important; /* Lighter on hover */
+}
+
+/* Blog section text fixes for light mode */
+:not(.dark) #blog p {
+  color: rgb(17, 24, 39) !important; /* Very dark for excellent contrast */
+}
+
+:not(.dark) #blog span:not(.gradient-text):not(.text-white) {
+  color: rgb(31, 41, 55) !important; /* Dark gray for span text */
+}
+
+:not(.dark) #blog .text-gray-800 {
+  color: rgb(17, 24, 39) !important; /* Very dark for better contrast */
+}
+
+:not(.dark) #blog .text-sm {
+  color: rgb(31, 41, 55) !important; /* Dark gray for small text like dates and author */
+}
+
+/* Blog card content text in light mode */
+:not(.dark) #blog .glass-effect span {
+  color: rgb(31, 41, 55) !important; /* Dark gray for card text */
+}
+
+:not(.dark) #blog .glass-effect .text-sm {
+  color: rgb(55, 65, 81) !important; /* Darker gray for small text in cards */
+}
+
+/* Blog section background fix for light mode */
+:not(.dark) #blog {
+  background-color: rgb(249, 250, 251) !important; /* Light gray background */
+}
+
+:not(.dark) #blog.section-light {
+  background-color: rgb(249, 250, 251) !important; /* Light gray background with higher specificity */
+}
+
+:not(.dark) section#blog.scroll-snap-section.section-light {
+  background-color: rgb(249, 250, 251) !important; /* Maximum specificity for light mode */
+}
+
+.dark #blog {
+  background-color: rgb(30, 41, 59) !important; /* Dark background for dark mode */
+}
+
+/* Blog card backgrounds fix */
+:not(.dark) #blog .glass-effect {
+  background-color: rgb(255, 255, 255) !important; /* White background for light mode */
+  border-color: rgb(229, 231, 235) !important; /* Light border */
+}
+
+.dark #blog .glass-effect {
+  background-color: rgb(31, 41, 55) !important; /* Darker background for better text contrast */
+  border-color: rgb(55, 65, 81) !important; /* Dark border */
+}
+
+/* Blog card text fixes for dark mode */
+.dark #blog .glass-effect h3 {
+  color: rgb(255, 255, 255) !important; /* White headings */
+}
+
+.dark #blog .glass-effect span {
+  color: rgb(209, 213, 219) !important; /* Light gray for span text */
+}
+
+.dark #blog .glass-effect p {
+  color: rgb(209, 213, 219) !important; /* Light gray for paragraph text */
+}
+
+/* Blog card "Read More" link fix for dark mode */
+.dark #blog .glass-effect a {
+  color: rgb(255, 255, 255) !important; /* White for "Read More" links */
+}
+
+.dark #blog .glass-effect a:hover {
+  color: rgb(255, 255, 255) !important; /* Stay white on hover */
+}
+
+/* More specific rule for "Read More" links */
+.dark #blog article a {
+  color: rgb(255, 255, 255) !important; /* White for all article links */
+}
+
+.dark #blog article a:hover {
+  color: rgb(255, 255, 255) !important; /* Stay white on hover */
+}
+
+/* Maximum specificity for "Read More" links */
+.dark #blog article .inline-flex {
+  color: rgb(255, 255, 255) !important; /* Force white for inline-flex links */
+}
+
+.dark #blog article .inline-flex:hover {
+  color: rgb(255, 255, 255) !important; /* Force white on hover */
+}
+
+/* Target the specific "Read More" link structure */
+.dark #blog .glass-effect .inline-flex.items-center {
+  color: rgb(255, 255, 255) !important; /* Maximum specificity */
+}
+
+.dark #blog .glass-effect .inline-flex.items-center:hover {
+  color: rgb(255, 255, 255) !important; /* Maximum specificity on hover */
+}
+
+/* Blog section header subtitle fix for dark mode */
+.dark #blog .text-center p.text-xl {
+  color: rgb(255, 255, 255) !important; /* Force white for blog subtitle */
+}
+
 .dark #education .font-bold {
   color: rgb(255, 255, 255) !important; /* White for all bold text */
 }
