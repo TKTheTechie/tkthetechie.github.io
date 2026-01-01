@@ -1,7 +1,7 @@
 ---
 title: "Why Broker-Based Messaging Solutions Outperform Brokerless Solutions in Capital Markets"
 description: "A comprehensive analysis of why broker-based architectures like Solace offer superior long-term value over brokerless solutions for mission-critical financial applications."
-date: "2024-03-15"
+date: "2025-09-26"
 category: "Architecture"
 tags: ["Event Driven Architecture", "Capital Markets", "Messaging", "Solace", "Financial Technology", "Low Latency"]
 author: "Thomas Kunnumpurath"
