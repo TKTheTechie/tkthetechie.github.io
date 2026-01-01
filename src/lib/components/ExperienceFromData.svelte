@@ -48,18 +48,29 @@
               <div class="glass-effect rounded-2xl p-8 hover-lift experience-card card-hover">
                 <!-- Header -->
                 <div class="mb-6">
-                  <div class="flex flex-wrap items-center gap-2 mb-2">
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{exp.company}</h3>
+                  <div class="flex flex-wrap items-center gap-3 mb-2">
+                    <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-200 dark:border-gray-300" style="background-color: white !important;">
+                      <img 
+                        src={exp.logo} 
+                        alt="{exp.company} logo" 
+                        class="w-40 h-24 object-contain"
+                        on:error={(e) => {
+                          console.error(`Failed to load logo for ${exp.company}:`, exp.logo);
+                          e.target.style.display = 'none';
+                        }}
+                        on:load={() => console.log(`Successfully loaded logo for ${exp.company}`)}
+                      />
+                    </div>
                     <span class="px-3 py-1 bg-primary-100 dark:bg-primary-800 text-primary-700 dark:text-white rounded-full text-sm font-medium">
                       {exp.period}
                     </span>
                   </div>
                   <h4 class="text-lg font-semibold gradient-text mb-1">{exp.position}</h4>
-                  <p class="text-gray-500 dark:text-gray-400">{exp.location}</p>
+                  <p class="text-gray-800 dark:text-gray-400">{exp.location}</p>
                 </div>
                 
                 <!-- Description -->
-                <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                <p class="text-gray-800 dark:text-gray-300 mb-6 leading-relaxed">
                   {exp.description}
                 </p>
                 
@@ -72,7 +83,7 @@
                         <svg class="w-5 h-5 text-primary-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
-                        <span class="text-gray-600 dark:text-gray-300 text-sm">{achievement}</span>
+                        <span class="text-gray-800 dark:text-gray-300 text-sm">{achievement}</span>
                       </li>
                     {/each}
                   </ul>

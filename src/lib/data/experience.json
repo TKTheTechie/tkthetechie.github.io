@@ -4,6 +4,7 @@
   "experiences": [
     {
       "company": "Solace",
+      "logo": "images/Solace-logo.svg",
       "position": "Vice President of Systems/PreSales Engineering, Americas",
       "location": "Remote",
       "period": "2018 - Present",
@@ -27,6 +28,7 @@
     },
     {
       "company": "CapitalOne",
+      "logo": "images/Capital_One-Logo.png",
       "position": "Software Development Manager",
       "location": "New York",
       "period": "2017 - 2018",
@@ -49,6 +51,7 @@
     },
     {
       "company": "Deutsche Bank",
+      "logo": "images/Deutsche_Bank-logo.png",
       "position": "Vice President, Lead Messaging Middleware Specialist",
       "location": "New York",
       "period": "2008 - 2017",

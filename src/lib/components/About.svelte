@@ -34,7 +34,7 @@
           <span class="gradient-text">About</span> Me
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
-        <p class="text-xl text-gray-600 dark:text-gray-100 max-w-3xl mx-auto">
+        <p class="text-xl text-gray-800 dark:text-gray-100 max-w-3xl mx-auto">
           A passionate technical leader with a proven track record of scaling teams, 
           driving innovation, and delivering enterprise-grade solutions.
         </p>
@@ -73,7 +73,7 @@
               <div class="text-3xl md:text-4xl font-bold gradient-text mb-2">
                 {stat.number}
               </div>
-              <div class="text-gray-600 dark:text-gray-300 font-medium">
+              <div class="text-gray-800 dark:text-gray-300 font-medium">
                 {stat.label}
               </div>
             </div>
@@ -84,7 +84,7 @@
       <!-- Education -->
       <div class="mt-16 {isVisible ? 'animate-slide-up' : 'opacity-0'}" style="animation-delay: 0.6s;">
         <div class="glass-effect rounded-2xl p-8 card-hover">
-          <h3 class="text-2xl font-bold mb-6 gradient-text">Education</h3>
+          <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Education</h3>
           <div class="flex items-center space-x-4">
             <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center">
               <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,7 +94,7 @@
             </div>
             <div>
               <h4 class="text-xl font-semibold text-gray-900 dark:text-white">Bachelor of Science, Computer Science</h4>
-              <p class="text-gray-600 dark:text-gray-300">New Jersey Institute of Technology • 2005 • 4.0 Major GPA</p>
+              <p class="text-gray-800 dark:text-gray-100">New Jersey Institute of Technology • 2005 • 4.0 Major GPA</p>
             </div>
           </div>
         </div>

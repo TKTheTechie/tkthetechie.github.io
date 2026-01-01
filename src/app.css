@@ -268,8 +268,8 @@
     --bg-primary: white;
     --bg-secondary: rgb(249, 250, 251);
     --text-primary: rgb(17, 24, 39);
-    --text-secondary: rgb(75, 85, 99);
-    --text-muted: rgb(107, 114, 128);
+    --text-secondary: rgb(55, 65, 81);
+    --text-muted: rgb(75, 85, 99);
   }
   
   /* Dark mode styles */
@@ -654,7 +654,7 @@
 
 /* Blog prose enhancements */
 .prose {
-  @apply text-gray-700 dark:text-gray-300;
+  @apply text-gray-800 dark:text-gray-300;
 }
 
 .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
@@ -695,6 +695,332 @@
 
 .prose th {
   @apply bg-gray-100 dark:bg-gray-800 font-semibold;
+}
+
+/* Light mode text improvements for better contrast */
+.text-gray-600 {
+  color: rgb(55, 65, 81) !important; /* Darker gray for better contrast */
+}
+
+.text-gray-500 {
+  color: rgb(75, 85, 99) !important; /* Darker gray for better contrast */
+}
+
+.text-gray-700 {
+  color: rgb(17, 24, 39) !important; /* Much darker for excellent contrast */
+}
+
+/* Comprehensive light mode text fixes */
+:not(.dark) .text-gray-600 {
+  color: rgb(31, 41, 55) !important; /* Very dark gray */
+}
+
+:not(.dark) .text-gray-500 {
+  color: rgb(55, 65, 81) !important; /* Dark gray */
+}
+
+:not(.dark) .text-gray-700 {
+  color: rgb(17, 24, 39) !important; /* Very dark */
+}
+
+:not(.dark) .text-gray-800 {
+  color: rgb(17, 24, 39) !important; /* Ensure very dark */
+}
+
+:not(.dark) .text-secondary {
+  color: rgb(31, 41, 55) !important; /* Very dark */
+}
+
+/* Navigation specific improvements */
+:not(.dark) nav button,
+:not(.dark) nav a {
+  color: rgb(17, 24, 39) !important;
+}
+
+/* Skills section specific improvements */
+:not(.dark) .skill-item span {
+  color: rgb(17, 24, 39) !important;
+  font-weight: 600 !important;
+}
+
+/* All paragraph text in light mode */
+:not(.dark) p {
+  color: rgb(31, 41, 55) !important;
+}
+
+/* All span text in light mode */
+:not(.dark) span:not(.gradient-text):not(.text-white):not(.text-primary-500):not(.text-primary-600):not(.text-primary-700):not(.text-accent-700) {
+  color: rgb(31, 41, 55) !important;
+}
+
+/* Section-specific overrides for better light mode contrast */
+:not(.dark) #about span,
+:not(.dark) #experience span,
+:not(.dark) #skills span,
+:not(.dark) #portfolio span,
+:not(.dark) #blog span,
+:not(.dark) #contact span,
+:not(.dark) #education span {
+  color: rgb(31, 41, 55) !important;
+}
+
+/* Portfolio item headings - ensure they're very dark in light mode */
+:not(.dark) #portfolio h3 {
+  color: rgb(17, 24, 39) !important;
+  font-weight: 700 !important;
+}
+
+/* Portfolio item headings - ensure they're light in dark mode */
+.dark #portfolio h3 {
+  color: rgb(255, 255, 255) !important;
+  font-weight: 700 !important;
+}
+
+/* Portfolio item descriptions */
+:not(.dark) #portfolio p {
+  color: rgb(31, 41, 55) !important;
+}
+
+.dark #portfolio p {
+  color: rgb(209, 213, 219) !important;
+}
+
+/* Blog section text improvements */
+:not(.dark) #blog h3 {
+  color: rgb(17, 24, 39) !important;
+  font-weight: 700 !important;
+}
+
+.dark #blog h3 {
+  color: rgb(255, 255, 255) !important;
+  font-weight: 700 !important;
+}
+
+:not(.dark) #blog span {
+  color: rgb(31, 41, 55) !important;
+}
+
+.dark #blog span:not(.text-white):not(.gradient-text) {
+  color: rgb(209, 213, 219) !important;
+}
+
+/* Footer background and text fixes */
+:not(.dark) #footer {
+  background-color: rgb(243, 244, 246) !important; /* Light gray background */
+  color: rgb(17, 24, 39) !important; /* Dark text */
+}
+
+.dark #footer {
+  background-color: rgb(15, 23, 42) !important; /* Dark background */
+  color: rgb(255, 255, 255) !important; /* White text */
+}
+
+/* Footer text elements */
+:not(.dark) #footer h3 {
+  color: rgb(17, 24, 39) !important;
+}
+
+:not(.dark) #footer p {
+  color: rgb(75, 85, 99) !important;
+}
+
+:not(.dark) #footer button {
+  color: rgb(75, 85, 99) !important;
+}
+
+.dark #footer h3 {
+  color: rgb(255, 255, 255) !important;
+}
+
+.dark #footer p {
+  color: rgb(156, 163, 175) !important;
+}
+
+.dark #footer button {
+  color: rgb(156, 163, 175) !important;
+}
+
+/* Footer social media icons */
+:not(.dark) #footer a {
+  background-color: rgb(209, 213, 219) !important; /* Light gray background */
+  color: rgb(55, 65, 81) !important; /* Dark icon color */
+}
+
+:not(.dark) #footer a:hover {
+  background: linear-gradient(135deg, rgb(14, 165, 233), rgb(34, 197, 94)) !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+.dark #footer a {
+  background-color: rgb(55, 65, 81) !important; /* Dark gray background */
+  color: rgb(255, 255, 255) !important; /* White icon color */
+}
+
+.dark #footer a:hover {
+  background: linear-gradient(135deg, rgb(14, 165, 233), rgb(34, 197, 94)) !important;
+  color: rgb(255, 255, 255) !important;
+}
+
+/* Contact section social media descriptions */
+:not(.dark) #contact span {
+  color: rgb(31, 41, 55) !important;
+}
+
+.dark #contact span:not(.gradient-text):not(.text-white) {
+  color: rgb(255, 255, 255) !important;
+}
+
+/* Hero section text should be white in both modes due to dark background */
+#home h1,
+#home h2,
+#home p,
+#home span:not(.gradient-text) {
+  color: rgb(255, 255, 255) !important;
+}
+
+/* Ensure hero text is white in both light and dark modes */
+:not(.dark) #home h1,
+:not(.dark) #home h2,
+:not(.dark) #home p,
+:not(.dark) #home span:not(.gradient-text) {
+  color: rgb(255, 255, 255) !important;
+}
+
+.dark #home h1,
+.dark #home h2,
+.dark #home p,
+.dark #home span:not(.gradient-text) {
+  color: rgb(255, 255, 255) !important;
+}
+
+/* Navigation dark mode toggle button fixes */
+:not(.dark) nav button[aria-label="Toggle dark mode"] {
+  background-color: rgb(243, 244, 246) !important; /* Light gray background */
+  border-color: rgb(209, 213, 219) !important; /* Light border */
+}
+
+:not(.dark) nav button[aria-label="Toggle dark mode"]:hover {
+  background-color: rgb(229, 231, 235) !important; /* Slightly darker on hover */
+}
+
+:not(.dark) nav button[aria-label="Toggle dark mode"] svg {
+  color: rgb(55, 65, 81) !important; /* Dark icon for light mode */
+}
+
+.dark nav button[aria-label="Toggle dark mode"] {
+  background-color: rgb(55, 65, 81) !important; /* Dark gray background */
+  border-color: rgb(75, 85, 99) !important; /* Dark border */
+}
+
+.dark nav button[aria-label="Toggle dark mode"]:hover {
+  background-color: rgb(75, 85, 99) !important; /* Lighter on hover */
+}
+
+.dark nav button[aria-label="Toggle dark mode"] svg {
+  color: rgb(255, 255, 255) !important; /* White icon for dark mode */
+}
+
+/* Skills section subheading fix for both modes */
+:not(.dark) #skills p {
+  color: rgb(17, 24, 39) !important;
+  font-weight: 500 !important;
+}
+
+.dark #skills p {
+  color: rgb(243, 244, 246) !important;
+  font-weight: 500 !important;
+}
+
+/* Fix all section subheadings for proper contrast */
+:not(.dark) #about p,
+:not(.dark) #experience p,
+:not(.dark) #portfolio p,
+:not(.dark) #blog p,
+:not(.dark) #contact p {
+  color: rgb(17, 24, 39) !important;
+  font-weight: 500 !important;
+}
+
+.dark #about p,
+.dark #experience p,
+.dark #portfolio p,
+.dark #blog p,
+.dark #contact p {
+  color: rgb(243, 244, 246) !important;
+  font-weight: 500 !important;
+}
+
+/* Fix specific headings only - very targeted approach */
+/* Education heading in About section */
+:not(.dark) #about h3 {
+  color: rgb(17, 24, 39) !important;
+}
+
+.dark #about h3 {
+  color: rgb(243, 244, 246) !important; /* Very light gray */
+}
+
+/* Experience section - only the "Key Achievements" and "Technologies" labels */
+:not(.dark) #experience h5.font-semibold {
+  color: rgb(17, 24, 39) !important;
+}
+
+.dark #experience h5.font-semibold {
+  color: rgb(243, 244, 246) !important; /* Very light gray for better readability */
+}
+
+/* Education section sub-headings and date items */
+:not(.dark) #about h4.font-semibold {
+  color: rgb(17, 24, 39) !important;
+}
+
+.dark #about h4.font-semibold {
+  color: rgb(243, 244, 246) !important; /* Light gray for readability */
+}
+
+/* Experience section position titles (h4 elements) */
+:not(.dark) #experience h4.font-semibold {
+  color: rgb(17, 24, 39) !important;
+}
+
+.dark #experience h4.font-semibold {
+  color: rgb(243, 244, 246) !important; /* Light gray for readability */
+}
+
+/* Location and date text in experience section */
+:not(.dark) #experience p.text-gray-500 {
+  color: rgb(75, 85, 99) !important;
+}
+
+.dark #experience p.text-gray-500 {
+  color: rgb(156, 163, 175) !important; /* Medium gray for secondary text */
+}
+
+/* Force education section text to be visible in dark mode */
+.dark #about .glass-effect p {
+  color: rgb(229, 231, 235) !important; /* Very light gray */
+}
+
+:not(.dark) #about .glass-effect p {
+  color: rgb(31, 41, 55) !important; /* Dark gray for light mode */
+}
+
+/* Force education heading to be visible in dark mode */
+.dark #about .glass-effect h3 {
+  color: rgb(255, 255, 255) !important; /* White for maximum visibility */
+}
+
+:not(.dark) #about .glass-effect h3 {
+  color: rgb(17, 24, 39) !important; /* Very dark for light mode */
+}
+
+/* Force education subheading (degree title) to be visible in dark mode */
+.dark #about .glass-effect h4 {
+  color: rgb(255, 255, 255) !important; /* White for maximum visibility */
+}
+
+:not(.dark) #about .glass-effect h4 {
+  color: rgb(17, 24, 39) !important; /* Very dark for light mode */
 }
 
 /* Form elements dark mode */

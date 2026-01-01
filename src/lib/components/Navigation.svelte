@@ -142,7 +142,7 @@
         {#each navItems as item}
           <button
             on:click={() => scrollToSection(item.href)}
-            class="relative text-gray-700 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold cursor-pointer {
+            class="relative text-gray-900 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold cursor-pointer {
               currentSection === item.id 
                 ? 'text-primary-500 dark:text-primary-400' 
                 : ''
@@ -209,7 +209,7 @@
           {#each navItems as item}
             <button
               on:click={() => scrollToSection(item.href)}
-              class="relative text-left text-gray-700 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold py-2 cursor-pointer {
+              class="relative text-left text-gray-900 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold py-2 cursor-pointer {
                 currentSection === item.id 
                   ? 'text-primary-500 dark:text-primary-400' 
                   : ''

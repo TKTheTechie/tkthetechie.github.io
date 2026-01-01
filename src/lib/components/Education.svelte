@@ -27,7 +27,7 @@
           Education & <span class="gradient-text">Recognition</span>
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
-        <p class="text-xl text-gray-600 dark:text-gray-100 max-w-3xl mx-auto">
+        <p class="text-xl text-gray-800 dark:text-gray-100 max-w-3xl mx-auto">
           Academic achievements, professional certifications, industry recognition, and community involvement.
         </p>
       </div>
@@ -46,9 +46,9 @@
             <div>
               <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Bachelor of Science, Computer Science</h4>
               <p class="text-lg font-semibold text-primary-600 dark:text-primary-400 mb-2">4.0 Major GPA</p>
-              <p class="text-gray-600 dark:text-gray-300 mb-1">New Jersey Institute Of Technology</p>
-              <p class="text-gray-600 dark:text-gray-300 mb-2">Newark, NJ</p>
-              <p class="text-gray-500 dark:text-gray-400 font-medium">2005</p>
+              <p class="text-gray-800 dark:text-gray-100 mb-1">New Jersey Institute Of Technology</p>
+              <p class="text-gray-800 dark:text-gray-100 mb-2">Newark, NJ</p>
+              <p class="text-gray-800 dark:text-gray-100 font-medium">2005</p>
             </div>
           </div>
         </div>
@@ -67,7 +67,7 @@
               </div>
               <div>
                 <h4 class="font-semibold text-gray-900 dark:text-white mb-1">AWS Certified Developer</h4>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">2017</p>
+                <p class="text-gray-800 dark:text-gray-100 text-sm">2017</p>
               </div>
             </div>
           </div>
@@ -81,7 +81,7 @@
               </div>
               <div>
                 <h4 class="font-semibold text-gray-900 dark:text-white mb-1">Google Cloud Certified Developer</h4>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">2018</p>
+                <p class="text-gray-800 dark:text-gray-100 text-sm">2018</p>
               </div>
             </div>
           </div>
@@ -95,7 +95,7 @@
               </div>
               <div>
                 <h4 class="font-semibold text-gray-900 dark:text-white mb-1">Chartered Financial Analyst Level 1</h4>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">2010</p>
+                <p class="text-gray-800 dark:text-gray-100 text-sm">2010</p>
               </div>
             </div>
           </div>
@@ -113,8 +113,8 @@
               </svg>
             </div>
             <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Solace Simply Stunning Award</h4>
-            <p class="text-gray-600 dark:text-gray-300 text-sm mb-1">Target Achievement</p>
-            <p class="text-gray-500 dark:text-gray-400 text-xs">2022, 2023, 2025</p>
+            <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Target Achievement</p>
+            <p class="text-gray-800 dark:text-gray-100 text-xs">2022, 2023, 2025</p>
           </div>
           
           <div class="glass-effect rounded-xl p-6 text-center hover-lift card-hover">
@@ -124,8 +124,8 @@
               </svg>
             </div>
             <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Solace Individual Contributor Award</h4>
-            <p class="text-gray-600 dark:text-gray-300 text-sm mb-1">Cloud spending optimization</p>
-            <p class="text-gray-500 dark:text-gray-400 text-xs">2019</p>
+            <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Cloud spending optimization</p>
+            <p class="text-gray-800 dark:text-gray-100 text-xs">2019</p>
           </div>
           
           <div class="glass-effect rounded-xl p-6 text-center hover-lift card-hover">
@@ -135,8 +135,8 @@
               </svg>
             </div>
             <h4 class="font-semibold text-gray-900 dark:text-white mb-2">CapitalOne Hackathon Creative Award</h4>
-            <p class="text-gray-600 dark:text-gray-300 text-sm mb-1">Innovation Winner</p>
-            <p class="text-gray-500 dark:text-gray-400 text-xs">2017</p>
+            <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Innovation Winner</p>
+            <p class="text-gray-800 dark:text-gray-100 text-xs">2017</p>
           </div>
           
           <div class="glass-effect rounded-xl p-6 text-center hover-lift card-hover">
@@ -146,8 +146,8 @@
               </svg>
             </div>
             <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Deutsche Bank My Recognition Award</h4>
-            <p class="text-gray-600 dark:text-gray-300 text-sm mb-1">Outstanding Performance</p>
-            <p class="text-gray-500 dark:text-gray-400 text-xs">2014</p>
+            <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Outstanding Performance</p>
+            <p class="text-gray-800 dark:text-gray-100 text-xs">2014</p>
           </div>
         </div>
       </div>
@@ -165,8 +165,8 @@
               </div>
               <div>
                 <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Habitat for Humanity</h4>
-                <p class="text-gray-600 dark:text-gray-300 text-sm mb-1">Career services and food packing initiatives</p>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">2006-2018</p>
+                <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Career services and food packing initiatives</p>
+                <p class="text-gray-800 dark:text-gray-100 text-sm">2006-2018</p>
               </div>
             </div>
           </div>
@@ -180,8 +180,8 @@
               </div>
               <div>
                 <h4 class="font-semibold text-gray-900 dark:text-white mb-2">C1 Coders</h4>
-                <p class="text-gray-600 dark:text-gray-300 text-sm mb-1">Coding lessons to middle schoolers</p>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">2017</p>
+                <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Coding lessons to middle schoolers</p>
+                <p class="text-gray-800 dark:text-gray-100 text-sm">2017</p>
               </div>
             </div>
           </div>
@@ -195,8 +195,8 @@
             </div>
             <div>
               <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Coding Camp at St. Paul's School</h4>
-              <p class="text-gray-600 dark:text-gray-300 text-sm mb-1">Volunteer instructor</p>
-              <p class="text-gray-500 dark:text-gray-400 text-sm">2022 - 2023</p>
+              <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Volunteer instructor</p>
+              <p class="text-gray-800 dark:text-gray-100 text-sm">2022 - 2023</p>
             </div>
           </div>
         </div>

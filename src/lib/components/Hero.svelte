@@ -54,7 +54,7 @@
     <div class="lg:hidden flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 text-center">
       <!-- Profile Picture -->
       <div class="mb-6 {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.1s;">
-        <div class="w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4 relative">
+        <div class="w-40 h-40 sm:w-48 sm:h-48 mx-auto mb-4 relative">
           <div class="absolute inset-0 rounded-full animate-pulse-border" style="animation: pulseBorder 2s ease-in-out infinite;"></div>
           <img 
             src="/profile-pic.png" 

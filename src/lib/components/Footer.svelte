@@ -20,7 +20,7 @@
   ];
 </script>
 
-<footer id="footer" class="scroll-snap-section py-12 transition-colors duration-300" style="background-color: rgb(15, 23, 42); color: white;">
+<footer id="footer" class="scroll-snap-section py-12 transition-colors duration-300 bg-gray-100 dark:bg-slate-900 text-gray-900 dark:text-white">
   <div class="container-max section-padding">
     <div class="max-w-6xl mx-auto">
       <!-- Main Footer Content -->
@@ -33,7 +33,7 @@
             </div>
             <span class="text-xl font-bold gradient-text">TheTechie</span>
           </div>
-          <p class="text-gray-400 leading-relaxed">
+          <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
             Passionate about building scalable systems, leading engineering teams, 
             and evangelizing modern architectural patterns.
           </p>
@@ -41,12 +41,12 @@
         
         <!-- Quick Links -->
         <div>
-          <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+          <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
           <div class="space-y-2">
             {#each ['About', 'Experience', 'Skills', 'Contact'] as link}
               <button
                 on:click={() => document.querySelector(`#${link.toLowerCase()}`)?.scrollIntoView({ behavior: 'smooth' })}
-                class="block text-gray-400 hover:text-primary-400 transition-colors duration-200"
+                class="block text-gray-600 dark:text-gray-400 hover:text-primary-500 dark:hover:text-primary-400 transition-colors duration-200"
               >
                 {link}
               </button>
@@ -56,8 +56,8 @@
         
         <!-- Contact Info -->
         <div>
-          <h3 class="text-lg font-semibold mb-4">Get In Touch</h3>
-          <div class="space-y-2 text-gray-400">
+          <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Get In Touch</h3>
+          <div class="space-y-2 text-gray-600 dark:text-gray-400">
             <p>Available for speaking engagements</p>
             <p>Open to consulting opportunities</p>
             <p>Always happy to connect with fellow technologists</p>
@@ -72,7 +72,7 @@
             href={social.href}
             target="_blank"
             rel="noopener noreferrer"
-            class="w-10 h-10 bg-gray-800 hover:bg-gradient-to-br hover:from-primary-500 hover:to-accent-600 rounded-lg flex items-center justify-center transition-all duration-300 hover-lift"
+            class="w-10 h-10 bg-gray-300 dark:bg-gray-800 hover:bg-gradient-to-br hover:from-primary-500 hover:to-accent-600 rounded-lg flex items-center justify-center transition-all duration-300 hover-lift text-gray-700 dark:text-white"
             aria-label={social.name}
           >
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -83,11 +83,11 @@
       </div>
       
       <!-- Copyright -->
-      <div class="border-t border-gray-800 pt-8 text-center">
-        <p class="text-gray-400">
+      <div class="border-t border-gray-300 dark:border-gray-800 pt-8 text-center">
+        <p class="text-gray-600 dark:text-gray-400">
           © {currentYear} Thomas Kunnumpurath. All rights reserved.
         </p>
-        <p class="text-gray-500 text-sm mt-2">
+        <p class="text-gray-500 dark:text-gray-500 text-sm mt-2">
           Built with Svelte 5 and Tailwind CSS
         </p>
       </div>

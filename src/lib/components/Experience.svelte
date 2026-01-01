@@ -20,6 +20,7 @@
   const experiences = [
     {
       company: 'Solace',
+      logo: 'images/Solace-logo.svg',
       position: 'Vice President of Systems/PreSales Engineering, Americas',
       period: '2018 - Present',
       location: 'Remote',
@@ -36,6 +37,7 @@
     },
     {
       company: 'CapitalOne',
+      logo: 'images/Capital_One-Logo.png',
       position: 'Software Development Manager',
       period: '2017 - 2018',
       location: 'New York',
@@ -50,6 +52,7 @@
     },
     {
       company: 'Deutsche Bank',
+      logo: 'images/Deutsche_Bank-logo.png',
       position: 'Vice President, Lead Messaging Middleware Specialist',
       period: '2008 - 2017',
       location: 'New York',
@@ -95,8 +98,20 @@
               <div class="glass-effect rounded-2xl p-8 hover-lift experience-card">
                 <!-- Header -->
                 <div class="mb-6">
-                  <div class="flex flex-wrap items-center gap-2 mb-2">
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{exp.company}</h3>
+                  <div class="flex flex-wrap items-center gap-3 mb-2">
+                    <div class="flex items-center gap-3">
+                      <img 
+                        src={exp.logo} 
+                        alt="{exp.company} logo" 
+                        class="w-8 h-8 object-contain"
+                        on:error={(e) => {
+                          console.error(`Failed to load logo for ${exp.company}:`, exp.logo);
+                          e.target.style.display = 'none';
+                        }}
+                        on:load={() => console.log(`Successfully loaded logo for ${exp.company}`)}
+                      />
+                      <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{exp.company}</h3>
+                    </div>
                     <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-sm font-medium">
                       {exp.period}
                     </span>

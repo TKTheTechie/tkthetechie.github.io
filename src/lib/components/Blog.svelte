@@ -75,7 +75,7 @@
           Latest <span class="gradient-text">Blog Posts</span>
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
-        <p class="text-xl text-gray-600 dark:text-gray-100 max-w-3xl mx-auto">
+        <p class="text-xl text-gray-800 dark:text-gray-100 max-w-3xl mx-auto">
           Insights on event-driven architecture, modern development practices, and emerging technologies.
           Sharing knowledge from real-world implementations and industry experience.
         </p>
@@ -95,7 +95,7 @@
             </svg>
           </div>
           <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">No Blog Posts Yet</h3>
-          <p class="text-gray-600 dark:text-gray-300">Check back soon for insights and tutorials!</p>
+          <p class="text-gray-800 dark:text-gray-300">Check back soon for insights and tutorials!</p>
         </div>
       {:else}
         <!-- Blog Posts Grid -->
@@ -127,7 +127,7 @@
                   <span class="px-3 py-1 bg-gradient-to-r {getCategoryColor(post.meta?.category)} text-white text-sm font-medium rounded-full">
                     {post.meta?.category || 'Blog'}
                   </span>
-                  <span class="text-sm text-gray-500 dark:text-gray-400">
+                  <span class="text-sm text-gray-800 dark:text-gray-400">
                     {formatDate(post.meta?.date || new Date().toISOString())}
                   </span>
                 </div>
@@ -143,7 +143,7 @@
                     <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center">
                       <span class="text-white text-sm font-bold">TK</span>
                     </div>
-                    <span class="text-sm text-gray-600 dark:text-gray-300">
+                    <span class="text-sm text-gray-800 dark:text-gray-300">
                       {post.meta?.author || 'Thomas Kunnumpurath'}
                     </span>
                   </div>

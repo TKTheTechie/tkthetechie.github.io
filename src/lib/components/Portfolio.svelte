@@ -124,7 +124,7 @@
           Featured <span class="gradient-text">Portfolio</span>
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full mb-6"></div>
-        <p class="text-xl text-gray-600 dark:text-gray-100 max-w-3xl mx-auto">
+        <p class="text-xl text-gray-800 dark:text-gray-100 max-w-3xl mx-auto">
           A showcase of my contributions to the tech community through open source projects, 
           speaking engagements, publications, and educational content.
         </p>
@@ -211,7 +211,7 @@
                         </h3>
                         
                         <!-- Description -->
-                        <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-4 leading-relaxed">
+                        <p class="text-gray-800 dark:text-gray-300 text-sm mb-4 line-clamp-4 leading-relaxed">
                           {item.description}
                         </p>
                         
@@ -233,7 +233,7 @@
                               </svg>
                             </span>
                           {:else}
-                            <span class="text-gray-400 dark:text-gray-500 text-sm italic">Coming Soon</span>
+                            <span class="text-gray-800 dark:text-gray-500 text-sm italic">Coming Soon</span>
                           {/if}
                         </div>
                       </div>
@@ -251,7 +251,7 @@
           on:click={prevSlide}
           aria-label="Previous slide"
         >
-          <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-600 dark:text-gray-300 group-hover:text-primary-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-800 dark:text-gray-300 group-hover:text-primary-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
@@ -261,7 +261,7 @@
           on:click={nextSlide}
           aria-label="Next slide"
         >
-          <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-600 dark:text-gray-300 group-hover:text-primary-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-800 dark:text-gray-300 group-hover:text-primary-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
         </button>

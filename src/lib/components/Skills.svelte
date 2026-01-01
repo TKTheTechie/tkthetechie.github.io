@@ -120,7 +120,7 @@
           Skills & <span class="gradient-text">Expertise</span>
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
-        <p class="text-xl text-gray-600 dark:text-gray-100 max-w-3xl mx-auto">
+        <p class="text-xl text-gray-900 dark:text-gray-100 max-w-3xl mx-auto">
           A comprehensive skill set spanning technical leadership, architecture design, 
           and business strategy developed over 15+ years in the industry.
         </p>
