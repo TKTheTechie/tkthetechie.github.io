@@ -3,6 +3,9 @@
   
   let heroRef: HTMLElement;
   let isVisible = false;
+  let mouseX = 0;
+  let mouseY = 0;
+  let isMouseInside = false;
   
   onMount(() => {
     const observer = new IntersectionObserver(
@@ -14,35 +17,90 @@
     
     if (heroRef) observer.observe(heroRef);
     
-    return () => observer.disconnect();
+    // Mouse tracking for parallax effects
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!heroRef) return;
+      
+      const rect = heroRef.getBoundingClientRect();
+      mouseX = (e.clientX - rect.left) / rect.width;
+      mouseY = (e.clientY - rect.top) / rect.height;
+      
+      // Optional: Add subtle console logging for debugging (remove in production)
+      // console.log('Mouse position:', { mouseX: mouseX.toFixed(2), mouseY: mouseY.toFixed(2) });
+    };
+    
+    const handleMouseEnter = () => {
+      isMouseInside = true;
+    };
+    
+    const handleMouseLeave = () => {
+      isMouseInside = false;
+      // Reset to center when mouse leaves
+      mouseX = 0.5;
+      mouseY = 0.5;
+    };
+    
+    if (heroRef) {
+      heroRef.addEventListener('mousemove', handleMouseMove);
+      heroRef.addEventListener('mouseenter', handleMouseEnter);
+      heroRef.addEventListener('mouseleave', handleMouseLeave);
+    }
+    
+    return () => {
+      observer.disconnect();
+      if (heroRef) {
+        heroRef.removeEventListener('mousemove', handleMouseMove);
+        heroRef.removeEventListener('mouseenter', handleMouseEnter);
+        heroRef.removeEventListener('mouseleave', handleMouseLeave);
+      }
+    };
   });
+  
+  // Calculate parallax transforms based on mouse position
+  $: parallaxStrong = `translate(${(mouseX - 0.5) * 60}px, ${(mouseY - 0.5) * 60}px)`;
+  $: parallaxMedium = `translate(${(mouseX - 0.5) * 40}px, ${(mouseY - 0.5) * 40}px)`;
+  $: parallaxLight = `translate(${(mouseX - 0.5) * 20}px, ${(mouseY - 0.5) * 20}px)`;
+  $: parallaxReverse = `translate(${(0.5 - mouseX) * 30}px, ${(0.5 - mouseY) * 30}px)`;
 </script>
 
 <section id="home" bind:this={heroRef} class="scroll-snap-section relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-green-900">
   <!-- Animated Background Pattern -->
   <div class="absolute inset-0 z-0">
-    <div class="matrix-bg"></div>
+    <div class="matrix-bg" style="transform: {parallaxLight}; transition: transform 0.1s ease-out;"></div>
     
-    <!-- Floating Orbs -->
-    <div class="floating-orb orb-1"></div>
-    <div class="floating-orb orb-2"></div>
-    <div class="floating-orb orb-3"></div>
-    <div class="floating-orb orb-4"></div>
-    <div class="floating-orb orb-5"></div>
+    <!-- Floating Orbs with enhanced movement and mouse tracking -->
+    <div class="floating-orb orb-1" style="transform: {parallaxMedium}; transition: transform 0.15s ease-out;"></div>
+    <div class="floating-orb orb-2" style="transform: {parallaxStrong}; transition: transform 0.1s ease-out;"></div>
+    <div class="floating-orb orb-3" style="transform: {parallaxLight}; transition: transform 0.2s ease-out;"></div>
+    <div class="floating-orb orb-4" style="transform: {parallaxReverse}; transition: transform 0.15s ease-out;"></div>
+    <div class="floating-orb orb-5" style="transform: {parallaxMedium}; transition: transform 0.1s ease-out;"></div>
     
-    <!-- Animated Particles -->
-    <div class="particles-container">
-      <div class="particle particle-1"></div>
-      <div class="particle particle-2"></div>
-      <div class="particle particle-3"></div>
-      <div class="particle particle-4"></div>
-      <div class="particle particle-5"></div>
-      <div class="particle particle-6"></div>
+    <!-- Enhanced Animated Particles -->
+    <div class="particles-container" style="transform: {parallaxLight}; transition: transform 0.2s ease-out;">
+      <div class="particle particle-1 enhanced-particle"></div>
+      <div class="particle particle-2 enhanced-particle"></div>
+      <div class="particle particle-3 enhanced-particle"></div>
+      <div class="particle particle-4 enhanced-particle"></div>
+      <div class="particle particle-5 enhanced-particle"></div>
+      <div class="particle particle-6 enhanced-particle"></div>
+      <!-- Additional particles for more pronounced effect -->
+      <div class="particle particle-7 enhanced-particle"></div>
+      <div class="particle particle-8 enhanced-particle"></div>
+      <div class="particle particle-9 enhanced-particle"></div>
+      <div class="particle particle-10 enhanced-particle"></div>
     </div>
     
-    <!-- Gradient Waves -->
-    <div class="gradient-wave wave-1"></div>
-    <div class="gradient-wave wave-2"></div>
+    <!-- Enhanced Gradient Waves -->
+    <div class="gradient-wave wave-1 enhanced-wave" style="transform: {parallaxReverse}; transition: transform 0.25s ease-out;"></div>
+    <div class="gradient-wave wave-2 enhanced-wave" style="transform: {parallaxMedium}; transition: transform 0.2s ease-out;"></div>
+    
+    <!-- New: Interactive cursor glow effect -->
+    {#if isMouseInside}
+      <div 
+        class="cursor-glow" 
+        style="left: {mouseX * 100}%; top: {mouseY * 100}%; transform: translate(-50%, -50%);"
+      ></div>
+    {/if}
   </div>
   
   <!-- Gradient Overlay -->
@@ -119,7 +177,7 @@
                 element?.scrollIntoView({ behavior: 'smooth' });
               }
             }}
-            class="px-6 py-3 glass-effect text-white rounded-lg font-semibold hover:bg-white/20 transition-all duration-300 hover-lift shadow-xl border border-white/30 text-sm"
+            class="px-6 py-3 glass-effect text-black dark:text-white rounded-lg font-semibold hover:bg-white/20 dark:hover:bg-white/20 hover:text-black dark:hover:text-white transition-all duration-300 hover-lift shadow-xl border border-white/30 text-sm"
           >
             Get In Touch
           </button>
@@ -202,7 +260,7 @@
                 element?.scrollIntoView({ behavior: 'smooth' });
               }
             }}
-            class="px-8 py-4 glass-effect text-white rounded-lg font-semibold hover:bg-white/20 transition-all duration-300 hover-lift shadow-xl border border-white/30"
+            class="px-8 py-4 glass-effect text-black dark:text-white rounded-lg font-semibold hover:bg-white/20 dark:hover:bg-white/20 hover:text-black dark:hover:text-white transition-all duration-300 hover-lift shadow-xl border border-white/30"
           >
             Get In Touch
           </button>
