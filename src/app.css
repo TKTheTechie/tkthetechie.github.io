@@ -1415,6 +1415,15 @@ div.bg-gradient-to-br div.flex.items-center.justify-center span {
   color: rgb(255, 255, 255) !important; /* White text in dark mode */
 }
 
+/* Portfolio carousel arrows using CSS variables */
+#portfolio button {
+  --arrow-color: #000000; /* Black arrows in light mode */
+}
+
+.dark #portfolio button {
+  --arrow-color: #ffffff; /* White arrows in dark mode */
+}
+
 /* Blog card author name fix for dark mode */
 .dark #blog .glass-effect .flex.items-center.space-x-2 span.text-sm {
   color: rgb(255, 255, 255) !important; /* Force white for author names */

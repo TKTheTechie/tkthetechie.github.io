@@ -61,12 +61,9 @@
                         on:load={() => console.log(`Successfully loaded logo for ${exp.company}`)}
                       />
                     </div>
-                    <span class="px-3 py-1 bg-primary-100 dark:bg-primary-800 text-primary-700 dark:text-white rounded-full text-sm font-medium">
-                      {exp.period}
-                    </span>
                   </div>
                   <h4 class="text-lg font-semibold gradient-text mb-1">{exp.position}</h4>
-                  <p class="text-gray-800 dark:text-gray-400">{exp.location}</p>
+                  <p class="text-gray-800 dark:text-gray-400">{exp.location} • {exp.period}</p>
                 </div>
                 
                 <!-- Description -->
@@ -87,18 +84,6 @@
                       </li>
                     {/each}
                   </ul>
-                </div>
-                
-                <!-- Technologies -->
-                <div>
-                  <h5 class="font-semibold text-gray-900 dark:text-white mb-3">Technologies:</h5>
-                  <div class="flex flex-wrap gap-2">
-                    {#each exp.technologies as tech}
-                      <span class="px-3 py-1 bg-accent-100 dark:bg-accent-800 text-accent-700 dark:text-white rounded-full text-xs font-medium">
-                        {tech}
-                      </span>
-                    {/each}
-                  </div>
                 </div>
               </div>
             </div>

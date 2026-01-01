@@ -55,24 +55,6 @@
               evangelizing modern architectural patterns. My experience ranges from hands-on 
               development to executive-level technical strategy.
             </p>
-            
-            <div class="flex flex-wrap gap-3 mb-8">
-              <span class="px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-medium">
-                Event Driven Architecture
-              </span>
-              <span class="px-4 py-2 bg-green-600 text-white rounded-full text-sm font-medium">
-                Cloud Solutions
-              </span>
-              <span class="px-4 py-2 bg-purple-600 text-white rounded-full text-sm font-medium">
-                Team Leadership
-              </span>
-              <span class="px-4 py-2 bg-orange-600 text-white rounded-full text-sm font-medium">
-                Technical Strategy
-              </span>
-              <span class="px-4 py-2 bg-indigo-600 text-white rounded-full text-sm font-medium">
-                Public Speaking
-              </span>
-            </div>
           </div>
         </div>
         

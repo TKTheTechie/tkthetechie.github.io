@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { PORTFOLIO_ITEMS } from '$lib/data/portfolio';
+  import portfolioData from '$lib/data/portfolio.json';
   
   let portfolioRef: HTMLElement;
   let carouselContainer: HTMLElement;
@@ -11,7 +11,7 @@
   let isAutoplayPaused = false;
   
   // Calculate total slides based on items per view
-  $: totalSlides = Math.ceil(PORTFOLIO_ITEMS.length / itemsPerView);
+  $: totalSlides = Math.ceil(portfolioData.portfolioItems.length / itemsPerView);
   $: maxIndex = totalSlides - 1;
   
   onMount(() => {
@@ -109,7 +109,7 @@
       'Speaking': 'from-blue-500 to-blue-600',
       'Publication': 'from-orange-500 to-orange-600',
       'Education': 'from-red-500 to-red-600',
-      'Project': 'from-gray-500 to-gray-600'
+      'Project': 'from-yellow-500 to-yellow-600'
     };
     return colors[type] || colors.Project;
   };
@@ -146,7 +146,7 @@
             {#each Array(totalSlides) as _, slideIndex}
               <div class="w-full flex-shrink-0">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4">
-                  {#each PORTFOLIO_ITEMS.slice(slideIndex * itemsPerView, (slideIndex + 1) * itemsPerView) as item, itemIndex}
+                  {#each portfolioData.portfolioItems.slice(slideIndex * itemsPerView, (slideIndex + 1) * itemsPerView) as item, itemIndex}
                     {@const itemType = getItemType(item)}
                     <article 
                       class="glass-effect rounded-2xl overflow-hidden hover-lift card-hover transition-all duration-300 cursor-pointer group"
@@ -247,22 +247,22 @@
         
         <!-- Navigation Arrows -->
         <button 
-          class="absolute left-0 md:-left-6 lg:-left-12 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 flex items-center justify-center group z-10"
+          class="absolute left-0 md:-left-6 lg:-left-12 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white dark:bg-gray-800 backdrop-blur-sm rounded-full shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 flex items-center justify-center group z-10 border border-gray-200 dark:border-gray-600"
           on:click={prevSlide}
           aria-label="Previous slide"
         >
-          <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-800 dark:text-gray-300 group-hover:text-primary-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          <svg class="w-8 h-8" viewBox="0 0 24 24" style="fill: var(--arrow-color, #000000);">
+            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
           </svg>
         </button>
         
         <button 
-          class="absolute right-0 md:-right-6 lg:-right-12 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-700 transition-all duration-300 flex items-center justify-center group z-10"
+          class="absolute right-0 md:-right-6 lg:-right-12 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white dark:bg-gray-800 backdrop-blur-sm rounded-full shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 flex items-center justify-center group z-10 border border-gray-200 dark:border-gray-600"
           on:click={nextSlide}
           aria-label="Next slide"
         >
-          <svg class="w-5 h-5 md:w-6 md:h-6 text-gray-800 dark:text-gray-300 group-hover:text-primary-500 transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          <svg class="w-8 h-8" viewBox="0 0 24 24" style="fill: var(--arrow-color, #000000);">
+            <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
           </svg>
         </button>
         
