@@ -84,18 +84,18 @@
           </h1>
           
           <!-- Meta Info -->
-          <div class="flex items-center justify-center space-x-6 text-gray-300">
+          <div class="flex items-center justify-center space-x-6 text-white">
             <div class="flex items-center space-x-2">
               <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center">
                 <span class="text-white text-sm font-bold">TK</span>
               </div>
-              <span class="font-medium">{author}</span>
+              <span class="font-medium" style="color: white !important;">{author}</span>
             </div>
             <div class="flex items-center space-x-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <span>{formatDate(date)}</span>
+              <span style="color: white !important;">{formatDate(date)}</span>
             </div>
           </div>
         </article>
@@ -122,16 +122,23 @@
           </div>
         {/if}
         <div class="prose prose-lg prose-gray dark:prose-invert max-w-none
-                    prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white
-                    prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed
+                    prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-headings:mb-6 prose-headings:mt-8
+                    prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-6
                     prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-a:no-underline hover:prose-a:underline
                     prose-strong:text-gray-900 dark:prose-strong:text-white
-                    prose-code:text-primary-600 dark:prose-code:text-primary-400 prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
-                    prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700
-                    prose-blockquote:border-l-primary-500 prose-blockquote:bg-gray-50 dark:prose-blockquote:bg-gray-800 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg
-                    prose-ul:text-gray-700 dark:prose-ul:text-gray-300
-                    prose-ol:text-gray-700 dark:prose-ol:text-gray-300
-                    prose-li:text-gray-700 dark:prose-li:text-gray-300">
+                    prose-code:text-primary-600 dark:prose-code:text-primary-400 prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:font-mono
+                    prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700 prose-pre:rounded-lg prose-pre:mb-8
+                    prose-blockquote:border-l-primary-500 prose-blockquote:bg-gray-50 dark:prose-blockquote:bg-gray-800 prose-blockquote:py-6 prose-blockquote:px-8 prose-blockquote:rounded-r-lg prose-blockquote:my-8
+                    prose-ul:text-gray-700 dark:prose-ul:text-gray-300 prose-ul:mb-6
+                    prose-ol:text-gray-700 dark:prose-ol:text-gray-300 prose-ol:mb-6
+                    prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-li:mb-2
+                    prose-h1:text-4xl prose-h1:mb-8 prose-h1:mt-12
+                    prose-h2:text-3xl prose-h2:mb-6 prose-h2:mt-10
+                    prose-h3:text-2xl prose-h3:mb-4 prose-h3:mt-8
+                    prose-h4:text-xl prose-h4:mb-4 prose-h4:mt-6
+                    prose-img:rounded-lg prose-img:shadow-lg prose-img:my-8
+                    prose-hr:my-12 prose-hr:border-gray-300 dark:prose-hr:border-gray-600"
+             style="font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;">
           <slot />
         </div>
         

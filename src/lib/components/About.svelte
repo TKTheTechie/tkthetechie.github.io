@@ -57,11 +57,21 @@
             </p>
             
             <div class="flex flex-wrap gap-3 mb-8">
-              {#each ['Event Driven Architecture', 'Cloud Solutions', 'Team Leadership', 'Technical Strategy', 'Public Speaking'] as skill}
-                <span class="px-4 py-2 bg-primary-100 dark:bg-primary-800 text-primary-700 dark:text-white rounded-full text-sm font-medium">
-                  {skill}
-                </span>
-              {/each}
+              <span class="px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-medium">
+                Event Driven Architecture
+              </span>
+              <span class="px-4 py-2 bg-green-600 text-white rounded-full text-sm font-medium">
+                Cloud Solutions
+              </span>
+              <span class="px-4 py-2 bg-purple-600 text-white rounded-full text-sm font-medium">
+                Team Leadership
+              </span>
+              <span class="px-4 py-2 bg-orange-600 text-white rounded-full text-sm font-medium">
+                Technical Strategy
+              </span>
+              <span class="px-4 py-2 bg-indigo-600 text-white rounded-full text-sm font-medium">
+                Public Speaking
+              </span>
             </div>
           </div>
         </div>
@@ -84,7 +94,7 @@
       <!-- Education -->
       <div class="mt-16 {isVisible ? 'animate-slide-up' : 'opacity-0'}" style="animation-delay: 0.6s;">
         <div class="glass-effect rounded-2xl p-8 card-hover">
-          <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Education</h3>
+          <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white" style="color: inherit;">Education</h3>
           <div class="flex items-center space-x-4">
             <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center">
               <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,8 +103,8 @@
               </svg>
             </div>
             <div>
-              <h4 class="text-xl font-semibold text-gray-900 dark:text-white">Bachelor of Science, Computer Science</h4>
-              <p class="text-gray-800 dark:text-gray-100">New Jersey Institute of Technology • 2005 • 4.0 Major GPA</p>
+              <h4 class="text-xl font-semibold text-gray-900 dark:text-white" style="color: inherit;">Bachelor of Science, Computer Science</h4>
+              <p class="text-gray-800 dark:text-white" style="color: inherit;">New Jersey Institute of Technology • 2005 • 4.0 Major GPA</p>
             </div>
           </div>
         </div>

@@ -1264,6 +1264,150 @@
   color: rgb(255, 255, 255) !important; /* Force white for blog subtitle */
 }
 
+/* Blog post header author and date fixes for light mode */
+:not(.dark) .text-gray-300 {
+  color: rgb(17, 24, 39) !important; /* Very dark for blog post header meta info */
+}
+
+/* Blog post header meta info on gradient background should stay white */
+.bg-gradient-to-br .text-white {
+  color: rgb(255, 255, 255) !important; /* Keep white on dark gradient background */
+}
+
+/* Blog post header author and date - force white */
+.bg-gradient-to-br span {
+  color: rgb(255, 255, 255) !important; /* Force white for all spans on gradient background */
+}
+
+/* More specific rule for blog header meta info */
+.bg-gradient-to-br .flex.items-center span {
+  color: rgb(255, 255, 255) !important; /* Maximum specificity for author and date */
+}
+
+/* Ultra-specific rule for blog post header text */
+div.bg-gradient-to-br div.flex.items-center.justify-center span {
+  color: rgb(255, 255, 255) !important; /* Force white with maximum specificity */
+}
+
+/* Target the specific blog header container */
+.bg-gradient-to-br.from-gray-900 span {
+  color: rgb(255, 255, 255) !important; /* Target gradient background spans */
+}
+
+/* Force all text in blog header to be white */
+.bg-gradient-to-br.from-gray-900.via-blue-900.to-green-900 * {
+  color: rgb(255, 255, 255) !important; /* Nuclear option - force everything white */
+}
+
+/* Blog card author name fix for dark mode */
+.dark #blog .glass-effect .flex.items-center.space-x-2 span.text-sm {
+  color: rgb(255, 255, 255) !important; /* Force white for author names */
+}
+
+/* About section education text fix for dark mode */
+.dark #about .glass-effect p {
+  color: rgb(255, 255, 255) !important; /* Force white for education text */
+}
+
+/* More specific rule for About education */
+.dark #about .glass-effect div p {
+  color: rgb(255, 255, 255) !important; /* Maximum specificity for education paragraph */
+}
+
+/* About section education headings fix for dark mode */
+.dark #about .glass-effect h3 {
+  color: rgb(255, 255, 255) !important; /* Force white for education main heading */
+}
+
+.dark #about .glass-effect h4 {
+  color: rgb(255, 255, 255) !important; /* Force white for education subheading */
+}
+
+/* Ultra-specific rule for "Education" heading */
+.dark #about .glass-effect h3.text-2xl.font-bold {
+  color: rgb(255, 255, 255) !important; /* Maximum specificity for "Education" heading */
+}
+
+/* Ultra-specific rule for degree title */
+.dark #about .glass-effect h4.text-xl.font-semibold {
+  color: rgb(255, 255, 255) !important; /* Maximum specificity for degree title */
+}
+
+/* Blog category badges fix for dark mode */
+.dark #blog .bg-gradient-to-r {
+  background: linear-gradient(to right, rgb(59, 130, 246), rgb(37, 99, 235)) !important; /* Darker blue gradient */
+  color: rgb(17, 24, 39) !important; /* Dark text for better contrast */
+}
+
+/* Specific badge colors for better contrast in dark mode */
+.dark #blog span.bg-gradient-to-r.from-blue-500 {
+  background: linear-gradient(to right, rgb(29, 78, 216), rgb(21, 94, 117)) !important;
+  color: rgb(255, 255, 255) !important; /* White text on dark blue */
+}
+
+.dark #blog span.bg-gradient-to-r.from-green-500 {
+  background: linear-gradient(to right, rgb(22, 163, 74), rgb(21, 128, 61)) !important;
+  color: rgb(255, 255, 255) !important; /* White text on green */
+}
+
+.dark #blog span.bg-gradient-to-r.from-purple-500 {
+  background: linear-gradient(to right, rgb(126, 34, 206), rgb(107, 33, 168)) !important;
+  color: rgb(255, 255, 255) !important; /* White text on purple */
+}
+
+.dark #blog span.bg-gradient-to-r.from-orange-500 {
+  background: linear-gradient(to right, rgb(234, 88, 12), rgb(194, 65, 12)) !important;
+  color: rgb(255, 255, 255) !important; /* White text on orange */
+}
+
+.dark #blog span.bg-gradient-to-r.from-yellow-500 {
+  background: linear-gradient(to right, rgb(202, 138, 4), rgb(161, 98, 7)) !important;
+  color: rgb(17, 24, 39) !important; /* Dark text on yellow for better contrast */
+}
+
+/* Default gray badges (Crypto, Personal, etc.) */
+.dark #blog span.bg-gradient-to-r.from-gray-500 {
+  background: linear-gradient(to right, rgb(31, 41, 55), rgb(17, 24, 39)) !important;
+  color: rgb(255, 255, 255) !important; /* White text on dark gray */
+}
+
+/* Additional specific overrides for any light badges */
+.dark #blog span.px-3.py-1.bg-gradient-to-r.text-white {
+  color: rgb(255, 255, 255) !important; /* Force white text on all badges */
+}
+
+/* Category filter badges fix for dark mode */
+.dark button.px-4.py-2.rounded-full:not(.bg-gradient-to-r) {
+  color: rgb(0, 0, 0) !important; /* Force black text on unselected filter badges */
+}
+
+/* More specific rule for blog page category filters */
+.dark .flex.flex-wrap button:not([class*="bg-gradient-to-r"]) {
+  color: rgb(0, 0, 0) !important; /* Force black text on unselected category filters */
+}
+
+/* Blog page results count fix for dark mode */
+.dark .mt-4.text-gray-600 {
+  color: rgb(255, 255, 255) !important; /* Force white text for results count */
+}
+
+/* About section skill badges fix for dark mode */
+.dark #about span.bg-primary-100 {
+  background-color: rgb(17, 24, 39) !important; /* Very dark background */
+  color: rgb(255, 255, 255) !important; /* White text */
+}
+
+.dark #about .px-4.py-2.bg-primary-100 {
+  background-color: rgb(17, 24, 39) !important; /* Very dark background for skill badges */
+  color: rgb(255, 255, 255) !important; /* White text */
+}
+
+/* Ultra-specific rule for About skill badges */
+.dark #about .flex.flex-wrap span {
+  background-color: rgb(17, 24, 39) !important; /* Force very dark background */
+  color: rgb(255, 255, 255) !important; /* Force white text */
+}
+
 .dark #education .font-bold {
   color: rgb(255, 255, 255) !important; /* White for all bold text */
 }

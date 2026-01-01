@@ -64,9 +64,31 @@
       'Tech': 'from-green-500 to-green-600',
       'Architecture': 'from-purple-500 to-purple-600',
       'Tutorial': 'from-orange-500 to-orange-600',
+      'Crypto': 'from-yellow-500 to-yellow-600',
       'default': 'from-gray-500 to-gray-600'
     };
     return colors[category] || colors.default;
+  };
+  
+  const getCategoryFilterColor = (category: string, isSelected: boolean) => {
+    if (category === 'all') {
+      return isSelected 
+        ? 'bg-gradient-to-r from-primary-500 to-accent-600 text-white' 
+        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600';
+    }
+    
+    const colorMap = {
+      'Dev': isSelected ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white' : 'bg-blue-100 dark:bg-blue-400 text-blue-700 dark:text-black hover:bg-blue-200 dark:hover:bg-blue-300',
+      'Tech': isSelected ? 'bg-gradient-to-r from-green-500 to-green-600 text-white' : 'bg-green-100 dark:bg-green-400 text-green-700 dark:text-black hover:bg-green-200 dark:hover:bg-green-300',
+      'Architecture': isSelected ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white' : 'bg-purple-100 dark:bg-purple-400 text-purple-700 dark:text-black hover:bg-purple-200 dark:hover:bg-purple-300',
+      'Tutorial': isSelected ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white' : 'bg-orange-100 dark:bg-orange-400 text-orange-700 dark:text-black hover:bg-orange-200 dark:hover:bg-orange-300',
+      'Crypto': isSelected ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-white' : 'bg-yellow-100 dark:bg-yellow-400 text-yellow-700 dark:text-black hover:bg-yellow-200 dark:hover:bg-yellow-300',
+      'Personal': isSelected ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white' : 'bg-indigo-100 dark:bg-indigo-400 text-indigo-700 dark:text-black hover:bg-indigo-200 dark:hover:bg-indigo-300'
+    };
+    
+    return colorMap[category] || (isSelected 
+      ? 'bg-gradient-to-r from-gray-500 to-gray-600 text-white' 
+      : 'bg-gray-100 dark:bg-gray-400 text-gray-700 dark:text-black hover:bg-gray-200 dark:hover:bg-gray-300');
   };
   
   $: filteredPosts = (posts || []).filter(post => {
@@ -147,9 +169,7 @@
                 {#each categories as category}
                   <button
                     on:click={() => selectedCategory = category}
-                    class="px-4 py-2 rounded-full font-medium transition-all duration-200 {selectedCategory === category 
-                      ? 'bg-gradient-to-r from-primary-500 to-accent-600 text-white' 
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}"
+                    class="px-4 py-2 rounded-full font-medium transition-all duration-200 {getCategoryFilterColor(category, selectedCategory === category)}"
                   >
                     {category === 'all' ? 'All Posts' : category}
                   </button>
@@ -158,7 +178,7 @@
             </div>
             
             <!-- Results Count -->
-            <div class="mt-4 text-gray-600 dark:text-gray-400">
+            <div class="mt-4 text-gray-600 dark:text-white">
               {filteredPosts.length} {filteredPosts.length === 1 ? 'post' : 'posts'} found
             </div>
           </div>
