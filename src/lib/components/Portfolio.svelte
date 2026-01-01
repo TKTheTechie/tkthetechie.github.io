@@ -94,12 +94,7 @@
   };
   
   const getItemType = (item: any) => {
-    if (item.title.includes('Open Source Project')) return 'Open Source';
-    if (item.title.includes('Podcast')) return 'Podcast';
-    if (item.title.includes('Talk') || item.title.includes('re:Invent') || item.title.includes('Office Hours')) return 'Speaking';
-    if (item.title.includes('Whitepaper')) return 'Publication';
-    if (item.title.includes('Course')) return 'Education';
-    return 'Project';
+    return item.category || 'Project';
   };
   
   const getTypeColor = (type: string) => {

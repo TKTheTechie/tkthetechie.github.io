@@ -4,73 +4,85 @@
       "title": "Solace Office Hours - Solace in Finance",
       "imgSrc": "/images/portfolio/Solace-office-hours-2025.png",
       "href": "https://www.youtube.com/watch?v=ebypWvxNjy4",
-      "description": "I explained my experience deploying and building on Solace at an Investment Bank along with a 101 on Fixed Income!"
+      "description": "I explained my experience deploying and building on Solace at an Investment Bank along with a 101 on Fixed Income!",
+      "category": "Speaking"
     },
        {
       "title": "Experimenting with Three.js, shaders and a Holographic Solly (Solace Mascot)",
       "imgSrc": "/images/portfolio/holographic-solly.png",
       "href": "https://tkthetechie.io/holographic-solly",
-      "description": "A 3D Interactive Web App using Three.js (via Threlte) that uses shaders to achieve a holographic effect"
+      "description": "A 3D Interactive Web App using Three.js (via Threlte) that uses shaders to achieve a holographic effect",
+      "category": "Project"
     },
     {
       "title": "EDA Summit Talk - Jet Streams & Market Streams: Navigating EDA in Aviation and Proprietary Trading",
       "imgSrc": "/images/portfolio/EDA-Summit-2024-Talk.jpeg",
       "href": "https://edasummit.com/videos/jet-streams-market-streams/",
-      "description": "I was the moderator for a panel discussion at the EDA Summit 2024 conference where we discussed the challenges and solutions of EDA with CTC and United Airlines."
+      "description": "I was the moderator for a panel discussion at the EDA Summit 2024 conference where we discussed the challenges and solutions of EDA with CTC and United Airlines.",
+      "category": "Speaking"
     },
     {
       "title": "AWS FSI - Podcast - Innovation in Capital Markets",
       "imgSrc": "/images/portfolio/aws-fsi-podcast.png",
       "href": "https://pages.awscloud.com/FSI-Episode-Landing-Pages_Ep-2.html",
-      "description": "I was invited to speak on the AWS FSI podcast about how Solace is helping financial institutions innovate in capital markets."
+      "description": "I was invited to speak on the AWS FSI podcast about how Solace is helping financial institutions innovate in capital markets.",
+      "category": "Podcast"
     },
     {
       "title": "Open Source Project - Solace PubSub+ Plugin for GraphQL",
       "imgSrc": "/images/blog/headers/graphql-with-solace.png",
       "href": "https://tkthetechie.io/blog/graphql-with-solace-pubsub",
-      "description": "I authored an open source plugin from GraphQL into Solace PubSub+"
+      "description": "I authored an open source plugin from GraphQL into Solace PubSub+",
+      "category": "Open Source"
     },
     {
       "title": "Open Source Project - Solace Plugin for DAPR",
       "imgSrc": "/images/portfolio/solace-dapr.png",
       "href": "https://docs.dapr.io/reference/components-reference/supported-pubsub/setup-solace-amqp/",
-      "description": "I authored the Solace PubSub+ plugin into DAPR"
+      "description": "I authored the Solace PubSub+ plugin into DAPR",
+      "category": "Open Source"
     },
     {
       "title": "AWS re:Invent - How to Build a Kafka Mesh",
       "imgSrc": "/images/portfolio/AWSKafkaMesh.png",
       "href": "https://www.youtube.com/watch?v=8KibI-OoE0I",
-      "description": "I presented on stage at AWS:ReInvent 2022 on how to implement a Kafka Mesh topology using Solace PubSub+"
+      "description": "I presented on stage at AWS:ReInvent 2022 on how to implement a Kafka Mesh topology using Solace PubSub+",
+      "category": "Speaking"
     },
     {
       "title": "Podcast - Event Driven Elixir",
       "imgSrc": "/images/portfolio/ElixirMixPodcast.png",
       "href": "https://podcasts.apple.com/no/podcast/event-driven-elixir-with-thomas-kunnumpurath-emx-166/id1379029137?i=1000553643549",
-      "description": "I was invited to speak on a podcast for Elixir Lang based on a blog post I wrote integrating Solace PubSub+ with Elixir"
+      "description": "I was invited to speak on a podcast for Elixir Lang based on a blog post I wrote integrating Solace PubSub+ with Elixir",
+      "category": "Podcast"
     },
     {
       "title": "Open Source Project - Solace Redelivery Delayer",
       "imgSrc": "/images/portfolio/SolaceRedeliveryDelayer.png",
       "href": "https://github.com/solacecommunity/solace-redelivery-delayer",
-      "description": "I developed an open source micro-service that implements a delayed delivery pattern to a Solace Queue using Spring and Solace's New Java API. I also made use of Java Streams and Delayed Queues to get the required behavior efficiently."
+      "description": "I developed an open source micro-service that implements a delayed delivery pattern to a Solace Queue using Spring and Solace's New Java API. I also made use of Java Streams and Delayed Queues to get the required behavior efficiently.",
+      "category": "Open Source"
     },
     {
       "title": "Whitepaper - A Guide to Connectivity for OpenFin Architects and Developers",
       "imgSrc": "/images/portfolio/OpenFin.jpeg",
       "href": "https://solace.com/resources/white-papers/wp-download-openfin-guide-to-connectivity-lp",
-      "description": "I published a white paper that showed how the OpenFin Desktop Application can take advantage of the Solace PubSub+ platform to securely stream data using a variety of message exchange patterns."
+      "description": "I published a white paper that showed how the OpenFin Desktop Application can take advantage of the Solace PubSub+ platform to securely stream data using a variety of message exchange patterns.",
+      "category": "Publication"
     },
     {
       "title": "Open Source Project - SolCharts",
       "imgSrc": "/images/portfolio/SolCharts.png",
       "href": "https://github.com/solacecommunity/sol-charts",
-      "description": "I created an opensource project that made extensive use of the Svelte JavaScript framework as well as Electron, to create a standalone application that is able to chart activity with the Solace PubSub+ broker."
+      "description": "I created an opensource project that made extensive use of the Svelte JavaScript framework as well as Electron, to create a standalone application that is able to chart activity with the Solace PubSub+ broker.",
+      "category": "Open Source"
     },
     {
       "title": "Udemy Course - Battleship over Solace PubSub+",
       "imgSrc": "/images/portfolio/BattleshipOverSolace.png",
       "href": "",
-      "description": "I lead the design and development of a Udemy course that covered the fundamentals of Solace PubSub+ via building an interactive game with Solace and a JavaScript SPA using the Aurelia JS framework. I was also a featured guest blogger on the Aurelia.io site as a result of this initiative."
+      "description": "I lead the design and development of a Udemy course that covered the fundamentals of Solace PubSub+ via building an interactive game with Solace and a JavaScript SPA using the Aurelia JS framework. I was also a featured guest blogger on the Aurelia.io site as a result of this initiative.",
+      "category": "Education"
     }
   ]
 }
