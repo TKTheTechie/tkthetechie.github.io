@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#22c55e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Grid Pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#334155" stroke-width="1" opacity="0.3"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  
+  <!-- Title -->
+  <text x="600" y="200" font-family="Arial, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="white">
+    Broker-Based vs Brokerless
+  </text>
+  <text x="600" y="260" font-family="Arial, sans-serif" font-size="36" font-weight="normal" text-anchor="middle" fill="#94a3b8">
+    Messaging in Capital Markets
+  </text>
+  
+  <!-- Accent Line -->
+  <rect x="400" y="290" width="400" height="4" fill="url(#accentGradient)" rx="2"/>
+  
+  <!-- Architecture Icons -->
+  <!-- Broker-based (left side) -->
+  <g transform="translate(200, 350)">
+    <rect x="0" y="0" width="120" height="80" rx="8" fill="#0ea5e9" opacity="0.8"/>
+    <text x="60" y="45" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="white">BROKER</text>
+    <circle cx="60" cy="120" r="15" fill="#22c55e"/>
+    <circle cx="20" cy="120" r="15" fill="#22c55e"/>
+    <circle cx="100" cy="120" r="15" fill="#22c55e"/>
+    <line x1="60" y1="80" x2="60" y2="105" stroke="white" stroke-width="2"/>
+    <line x1="60" y1="80" x2="20" y2="105" stroke="white" stroke-width="2"/>
+    <line x1="60" y1="80" x2="100" y2="105" stroke="white" stroke-width="2"/>
+  </g>
+  
+  <!-- VS -->
+  <text x="600" y="420" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="url(#accentGradient)">VS</text>
+  
+  <!-- Brokerless (right side) -->
+  <g transform="translate(880, 350)">
+    <circle cx="60" cy="40" r="15" fill="#ef4444"/>
+    <circle cx="20" cy="40" r="15" fill="#ef4444"/>
+    <circle cx="100" cy="40" r="15" fill="#ef4444"/>
+    <circle cx="60" cy="120" r="15" fill="#ef4444"/>
+    <circle cx="20" cy="120" r="15" fill="#ef4444"/>
+    <circle cx="100" cy="120" r="15" fill="#ef4444"/>
+    <!-- Direct connections -->
+    <line x1="20" y1="40" x2="60" y2="120" stroke="#ef4444" stroke-width="2" opacity="0.6"/>
+    <line x1="60" y1="40" x2="20" y2="120" stroke="#ef4444" stroke-width="2" opacity="0.6"/>
+    <line x1="100" y1="40" x2="100" y2="120" stroke="#ef4444" stroke-width="2" opacity="0.6"/>
+    <line x1="60" y1="40" x2="100" y2="120" stroke="#ef4444" stroke-width="2" opacity="0.6"/>
+  </g>
+  
+  <!-- Author -->
+  <text x="600" y="580" font-family="Arial, sans-serif" font-size="18" text-anchor="middle" fill="#64748b">
+    by Thomas Kunnumpurath
+  </text>
+</svg>

@@ -122,22 +122,22 @@
           </div>
         {/if}
         <div class="prose prose-lg prose-gray dark:prose-invert max-w-none
-                    prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-headings:mb-6 prose-headings:mt-8
-                    prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-6
+                    prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-headings:mb-12 prose-headings:mt-20
+                    prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-10
                     prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-a:no-underline hover:prose-a:underline
                     prose-strong:text-gray-900 dark:prose-strong:text-white
                     prose-code:text-primary-600 dark:prose-code:text-primary-400 prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:font-mono
-                    prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700 prose-pre:rounded-lg prose-pre:mb-8
-                    prose-blockquote:border-l-primary-500 prose-blockquote:bg-gray-50 dark:prose-blockquote:bg-gray-800 prose-blockquote:py-6 prose-blockquote:px-8 prose-blockquote:rounded-r-lg prose-blockquote:my-8
-                    prose-ul:text-gray-700 dark:prose-ul:text-gray-300 prose-ul:mb-6
-                    prose-ol:text-gray-700 dark:prose-ol:text-gray-300 prose-ol:mb-6
-                    prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-li:mb-2
-                    prose-h1:text-4xl prose-h1:mb-8 prose-h1:mt-12
-                    prose-h2:text-3xl prose-h2:mb-6 prose-h2:mt-10
-                    prose-h3:text-2xl prose-h3:mb-4 prose-h3:mt-8
-                    prose-h4:text-xl prose-h4:mb-4 prose-h4:mt-6
-                    prose-img:rounded-lg prose-img:shadow-lg prose-img:my-8
-                    prose-hr:my-12 prose-hr:border-gray-300 dark:prose-hr:border-gray-600"
+                    prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700 prose-pre:rounded-lg prose-pre:mb-16 prose-pre:mt-8
+                    prose-blockquote:border-l-primary-500 prose-blockquote:bg-gray-50 dark:prose-blockquote:bg-gray-800 prose-blockquote:py-8 prose-blockquote:px-10 prose-blockquote:rounded-r-lg prose-blockquote:my-16
+                    prose-ul:text-gray-700 dark:prose-ul:text-gray-300 prose-ul:mb-10 prose-ul:mt-6
+                    prose-ol:text-gray-700 dark:prose-ol:text-gray-300 prose-ol:mb-10 prose-ol:mt-6
+                    prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-li:mb-4
+                    prose-h1:text-4xl prose-h1:mb-14 prose-h1:mt-20
+                    prose-h2:text-3xl prose-h2:mb-12 prose-h2:mt-24
+                    prose-h3:text-2xl prose-h3:mb-10 prose-h3:mt-20
+                    prose-h4:text-xl prose-h4:mb-8 prose-h4:mt-16
+                    prose-img:rounded-lg prose-img:shadow-lg prose-img:my-16 prose-img:mx-auto
+                    prose-hr:my-20 prose-hr:border-gray-300 dark:prose-hr:border-gray-600"
              style="font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;">
           <slot />
         </div>
@@ -152,13 +152,13 @@
               </div>
               <div>
                 <h3 class="font-bold text-gray-900 dark:text-white">{author}</h3>
-                <p class="text-gray-600 dark:text-gray-300 text-sm">VP of Systems Engineering at Solace</p>
+                <p class="text-gray-600 dark:text-white text-sm" style="color: {isDark ? 'white' : ''} !important;">VP of Systems Engineering at Solace</p>
               </div>
             </div>
             
             <!-- Social Share -->
             <div class="flex items-center space-x-4">
-              <span class="text-gray-600 dark:text-gray-300 text-sm">Share:</span>
+              <span class="text-gray-600 dark:text-white text-sm" style="color: {isDark ? 'white' : ''} !important;">Share:</span>
               <a 
                 href="https://www.linkedin.com/in/tkthetechie/"
                 target="_blank"

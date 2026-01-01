@@ -781,6 +781,51 @@
   @apply text-gray-900 dark:text-white font-bold;
 }
 
+/* Enhanced spacing for blog sections */
+.prose h1 {
+  @apply mt-20 mb-14;
+}
+
+.prose h2 {
+  @apply mt-24 mb-12;
+}
+
+.prose h3 {
+  @apply mt-20 mb-10;
+}
+
+.prose h4 {
+  @apply mt-16 mb-8;
+}
+
+.prose p {
+  @apply mb-10 leading-relaxed;
+}
+
+.prose ul, .prose ol {
+  @apply mb-10 mt-6;
+}
+
+.prose li {
+  @apply mb-4;
+}
+
+.prose img {
+  @apply my-16 mx-auto;
+}
+
+.prose pre {
+  @apply mt-8 mb-16;
+}
+
+.prose blockquote {
+  @apply my-16 py-8 px-10;
+}
+
+.prose hr {
+  @apply my-20;
+}
+
 .prose a {
   @apply text-primary-600 dark:text-primary-400 no-underline hover:underline;
 }
