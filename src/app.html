@@ -23,9 +23,28 @@
 		<!-- Default Title (will be overridden by page-specific ones) -->
 		<title>Thomas Kunnumpurath - TKTheTechie | VP Systems Engineering</title>
 		
+		<!-- Theme initialization script to prevent FOUC -->
+		<script>
+			(function() {
+				try {
+					const savedTheme = localStorage.getItem('theme');
+					const shouldBeDark = savedTheme === 'light' ? false : true;
+					
+					if (shouldBeDark) {
+						document.documentElement.classList.add('dark');
+					} else {
+						document.documentElement.classList.remove('dark');
+					}
+				} catch (e) {
+					// Default to dark mode if localStorage is not available
+					document.documentElement.classList.add('dark');
+				}
+			})();
+		</script>
+		
 		%sveltekit.head%
 	</head>
-	<body data-sveltekit-preload-data="hover" class="antialiased">
+	<body data-sveltekit-preload-data="hover" class="antialiased" style="background-color: #0f172a;">
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>

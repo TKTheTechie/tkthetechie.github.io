@@ -6,6 +6,7 @@ function createDarkModeStore() {
 
   return {
     subscribe,
+    set, // Expose the set method
     toggle: () => {
       if (browser) {
         update(isDark => {
@@ -34,13 +35,30 @@ function createDarkModeStore() {
         // Set initial state
         set(shouldBeDark);
         
-        // Update DOM
+        // Update DOM immediately and synchronously
         if (shouldBeDark) {
           document.documentElement.classList.add('dark');
         } else {
           document.documentElement.classList.remove('dark');
         }
       }
+    },
+    // New method to initialize theme before component mount
+    initSync: () => {
+      if (browser) {
+        const savedTheme = localStorage.getItem('theme');
+        const shouldBeDark = savedTheme === 'light' ? false : true;
+        
+        // Apply theme immediately to prevent flash
+        if (shouldBeDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        
+        return shouldBeDark;
+      }
+      return true; // Default to dark mode
     }
   };
 }
