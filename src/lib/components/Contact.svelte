@@ -42,7 +42,7 @@
   ];
 </script>
 
-<section id="contact" bind:this={contactRef} class="scroll-snap-section py-20">
+<section id="contact" bind:this={contactRef} class="py-20">
   <div class="container-max section-padding">
     <div class="max-w-4xl mx-auto">
       <!-- Section Header -->

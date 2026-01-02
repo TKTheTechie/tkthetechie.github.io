@@ -63,7 +63,7 @@
   $: parallaxReverse = `translate(${(0.5 - mouseX) * 30}px, ${(0.5 - mouseY) * 30}px)`;
 </script>
 
-<section id="home" bind:this={heroRef} class="scroll-snap-section relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-green-900">
+<section id="home" bind:this={heroRef} class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-green-900">
   <!-- Animated Background Pattern -->
   <div class="absolute inset-0 z-0">
     <div class="matrix-bg" style="transform: {parallaxLight}; transition: transform 0.1s ease-out;"></div>

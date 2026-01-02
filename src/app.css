@@ -126,140 +126,26 @@
     @apply font-sans antialiased transition-colors duration-300;
   }
   
-  /* Scroll Snap Container */
-  .scroll-snap-container {
-    scroll-snap-type: y mandatory; /* Back to mandatory for reliable snapping */
-    scroll-padding-top: 80px; /* Account for fixed navigation */
-    overflow-y: auto;
-    height: 100vh;
-  }
-  
-  /* Scroll Snap Sections */
-  .scroll-snap-section {
-    scroll-snap-align: start;
-    scroll-snap-stop: normal;
-    min-height: 100vh;
-    position: relative;
-  }
-  
-  /* Enhanced scroll snapping for better UX */
-  @media (prefers-reduced-motion: no-preference) {
-    .scroll-snap-container {
-      scroll-behavior: smooth;
-    }
-    
-    /* Smooth snap transitions */
-    .scroll-snap-section {
-      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    
-    /* Active snapping animation */
-    .scroll-snap-section.snapping-in {
-      animation: var(--animate-snap-in);
-      transform: scale(1.01);
-    }
-    
-    /* Subtle parallax effect during scroll */
-    .scroll-snap-section:not(.snapping-in) {
-      will-change: transform;
-    }
-  }
-  
-  /* Mobile scroll snapping - pure CSS, very gentle */
-  @media (max-width: 768px) {
-    .scroll-snap-container {
-      scroll-snap-type: none; /* Disable scroll snap on mobile entirely */
-      -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-      overscroll-behavior-y: auto; /* Allow natural bounce behavior */
-    }
-    
-    .scroll-snap-section {
-      scroll-snap-align: none; /* No snap alignment on mobile */
-      scroll-snap-stop: normal;
-      min-height: auto; /* Natural height on mobile */
-    }
-    
-    .scroll-snap-section#footer {
-      min-height: auto;
-      scroll-snap-align: none; /* No snapping for footer on mobile */
-    }
-  }
-  
-  /* Desktop also uses proximity for better content handling */
-  @media (min-width: 769px) {
-    .scroll-snap-container {
-      scroll-snap-type: y mandatory;
-    }
-    
-    .scroll-snap-section {
-      scroll-snap-align: start;
-      scroll-snap-stop: normal;
-    }
-  }
-  
-  /* Sections with overflowing content get special treatment */
-  .scroll-snap-section.has-overflow {
-    scroll-snap-align: start; /* Keep alignment but allow natural scrolling */
-  }
-  
-  /* Footer section gets special treatment */
-  .scroll-snap-section#footer {
-    min-height: auto; /* Footer doesn't need full height */
-    scroll-snap-align: end; /* Snap to end so it's fully visible */
-  }
-  
-  /* On mobile, long sections need different snap behavior */
-  @media (max-width: 768px) {
-    .scroll-snap-section.has-overflow {
-      scroll-snap-align: start;
-      /* Let CSS mandatory handle the snapping, but allow scrolling within */
-    }
-    
-    .scroll-snap-section#footer {
-      min-height: auto;
-      scroll-snap-align: end; /* Ensure footer is fully visible on mobile */
-    }
-  }
-
-  /* For sections with overflow content */
-  .scroll-snap-section {
-    overflow: visible; /* Allow content to overflow naturally */
+  /* Sections styling */
+  section {
     padding-top: 80px; /* Account for fixed navigation */
-    padding-bottom: 20px; /* Ensure bottom spacing */
   }
   
   /* Ensure large content sections work properly */
-  .scroll-snap-section > * {
+  section > * {
     max-width: 100%;
   }
   
-  /* Hero section specific mobile adjustments */
-  .scroll-snap-section#home {
+  /* Hero section specific adjustments */
+  section#home {
     padding-top: 100px; /* Extra top padding for mobile */
     padding-bottom: 40px;
   }
   
-  /* Make hero section less aggressive on mobile */
-  @media (max-width: 768px) {
-    .scroll-snap-section#home {
-      scroll-snap-align: start;
-      /* Less aggressive snapping for hero section */
-    }
-  }
-  
-  /* Sections with long content get extra spacing */
-  .scroll-snap-section:has(> div > div > div:nth-child(n+10)) {
-    padding-bottom: 60px; /* Extra bottom padding for sections with lots of content */
-  }
-  
   @media (min-width: 768px) {
-    .scroll-snap-section#home {
+    section#home {
       padding-top: 80px;
       padding-bottom: 20px;
-    }
-    
-    .scroll-snap-section:has(> div > div > div:nth-child(n+10)) {
-      padding-bottom: 40px;
     }
   }
   
@@ -1343,7 +1229,7 @@
   background-color: rgb(249, 250, 251) !important; /* Light gray background with higher specificity */
 }
 
-:not(.dark) section#blog.scroll-snap-section.section-light {
+:not(.dark) section#blog.section-light {
   background-color: rgb(249, 250, 251) !important; /* Maximum specificity for light mode */
 }
 

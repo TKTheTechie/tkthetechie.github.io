@@ -111,7 +111,7 @@
   ];
 </script>
 
-<section id="skills" bind:this={skillsRef} class="scroll-snap-section py-20 section-light">
+<section id="skills" bind:this={skillsRef} class="py-20 section-light">
   <div class="container-max section-padding">
     <div class="max-w-6xl mx-auto">
       <!-- Section Header -->

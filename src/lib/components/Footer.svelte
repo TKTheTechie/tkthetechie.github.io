@@ -20,7 +20,7 @@
   ];
 </script>
 
-<footer id="footer" class="scroll-snap-section py-12 transition-colors duration-300 bg-gray-100 dark:bg-slate-900 text-gray-900 dark:text-white">
+<footer id="footer" class="py-12 transition-colors duration-300 bg-gray-100 dark:bg-slate-900 text-gray-900 dark:text-white">
   <div class="container-max section-padding">
     <div class="max-w-6xl mx-auto">
       <!-- Main Footer Content -->

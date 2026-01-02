@@ -73,7 +73,7 @@
   };
 </script>
 
-<section id="blog" bind:this={blogRef} class="scroll-snap-section py-20 section-light" style="background-color: {isDark ? 'rgb(30, 41, 59)' : 'rgb(249, 250, 251)'};">
+<section id="blog" bind:this={blogRef} class="py-20 section-light" style="background-color: {isDark ? 'rgb(30, 41, 59)' : 'rgb(249, 250, 251)'};">
   <div class="container-max section-padding">
     <div class="max-w-6xl mx-auto">
       <!-- Section Header -->

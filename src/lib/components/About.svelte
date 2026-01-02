@@ -25,7 +25,7 @@
   ];
 </script>
 
-<section id="about" bind:this={aboutRef} class="scroll-snap-section py-20 section-light">
+<section id="about" bind:this={aboutRef} class="py-20 section-light">
   <div class="container-max section-padding">
     <div class="max-w-6xl mx-auto">
       <!-- Section Header -->

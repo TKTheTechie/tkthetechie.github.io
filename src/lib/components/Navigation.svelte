@@ -29,48 +29,41 @@
     };
     
     // Track current section for highlighting
-    const container = document.querySelector('.scroll-snap-container');
-    if (container) {
-      const updateCurrentSection = () => {
-        const viewportTop = container.scrollTop + 80; // Account for navigation offset
-        const sectionElements = document.querySelectorAll('.scroll-snap-section');
+    const updateCurrentSection = () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const viewportCenter = scrollTop + window.innerHeight / 2;
+      const sectionElements = document.querySelectorAll('section');
 
-        let detectedSection = 'home';
+      let detectedSection = 'home';
 
-        sectionElements.forEach((section) => {
-          const sectionTop = (section as HTMLElement).offsetTop;
-          const sectionBottom = sectionTop + section.clientHeight;
+      sectionElements.forEach((section) => {
+        const sectionTop = (section as HTMLElement).offsetTop;
+        const sectionBottom = sectionTop + section.clientHeight;
 
-          if (viewportTop >= sectionTop && viewportTop < sectionBottom) {
-            detectedSection = section.id;
-          }
-        });
-
-        // If we're past all sections, we're in the last one
-        if (viewportTop >= ((sectionElements[sectionElements.length - 1] as HTMLElement)?.offsetTop || 0)) {
-          detectedSection = sectionElements[sectionElements.length - 1]?.id || 'contact';
+        if (viewportCenter >= sectionTop && viewportCenter < sectionBottom) {
+          detectedSection = section.id;
         }
+      });
 
-        currentSection = detectedSection;
-      };
+      // If we're at the very top, ensure we're on home
+      if (scrollTop < 100) {
+        detectedSection = 'home';
+      }
 
-      container.addEventListener('scroll', updateCurrentSection, { passive: true });
-      updateCurrentSection();
-      
-      // Cleanup function will handle container listener
-      const cleanup = () => {
-        container.removeEventListener('scroll', updateCurrentSection);
-      };
-      
-      window.addEventListener('scroll', handleScroll);
-      return () => {
-        window.removeEventListener('scroll', handleScroll);
-        cleanup();
-      };
-    } else {
-      window.addEventListener('scroll', handleScroll);
-      return () => window.removeEventListener('scroll', handleScroll);
-    }
+      currentSection = detectedSection;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', updateCurrentSection, { passive: true });
+    
+    // Initial calls
+    handleScroll();
+    updateCurrentSection();
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', updateCurrentSection);
+    };
   });
   
   const toggleDarkMode = () => {
@@ -89,34 +82,15 @@
     if (hash) {
       const element = document.querySelector(`#${hash}`);
       if (element) {
-        const isMobile = window.innerWidth <= 768;
+        // Calculate the offset position accounting for fixed navigation
+        const elementTop = (element as HTMLElement).offsetTop;
+        const navHeight = 80; // Account for fixed navigation height
         
-        if (isMobile) {
-          // On mobile, use simple scrollIntoView
-          element.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start'
-          });
-        } else {
-          // Enhanced scroll behavior for snap sections on desktop
-          const container = document.querySelector('.scroll-snap-container');
-          if (container) {
-            // Calculate the offset position accounting for fixed navigation
-            const elementTop = element.offsetTop;
-            const navHeight = 80; // Account for fixed navigation height
-            
-            container.scrollTo({
-              top: elementTop - navHeight,
-              behavior: 'smooth'
-            });
-          } else {
-            // Fallback
-            element.scrollIntoView({ 
-              behavior: 'smooth',
-              block: 'start'
-            });
-          }
-        }
+        window.scrollTo({
+          top: elementTop - navHeight,
+          behavior: 'smooth'
+        });
+        
         isMobileMenuOpen = false;
       }
     }
