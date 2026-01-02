@@ -58,7 +58,6 @@
                           console.error(`Failed to load logo for ${exp.company}:`, exp.logo);
                           e.target.style.display = 'none';
                         }}
-                        on:load={() => console.log(`Successfully loaded logo for ${exp.company}`)}
                       />
                     </div>
                   </div>
