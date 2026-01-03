@@ -5,11 +5,30 @@
   let totalSections = 0;
   let scrollProgress = 0;
   let isVisible = false;
+  let isDark = false;
 
   const sections = ['home', 'about', 'experience', 'skills', 'portfolio', 'education', 'blog', 'contact'];
 
+  // Function to check if dark mode is active
+  const checkDarkMode = () => {
+    isDark = document.documentElement.classList.contains('dark');
+  };
+
   onMount(() => {
     totalSections = sections.length;
+    
+    // Initial dark mode check
+    checkDarkMode();
+    
+    // Watch for dark mode changes using MutationObserver
+    const observer = new MutationObserver(() => {
+      checkDarkMode();
+    });
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
     
     const handleScroll = () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -48,6 +67,7 @@
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
     };
   });
 
@@ -75,11 +95,17 @@
   $: strokeDasharray = circumference;
   $: strokeDashoffset = circumference - (scrollProgress * circumference);
   $: isLastSection = currentSection >= totalSections - 1;
+  
+  // Reactive styles based on theme
+  $: buttonStyle = isDark 
+    ? 'background-color: rgb(31, 41, 55); border-color: rgb(75, 85, 99);'  // Dark mode: dark background
+    : 'background-color: white; border-color: rgb(229, 231, 235);';        // Light mode: white background
 </script>
 
 {#if isVisible}
   <button
-    class="fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group hover:scale-110 border pulse-border bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-600"
+    class="scroll-indicator fixed bottom-8 right-8 z-50 w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group hover:scale-110 border pulse-border"
+    style={buttonStyle}
     on:click={scrollToNext}
     aria-label={isLastSection ? 'Back to top' : `Go to ${sections[currentSection + 1]} section`}
   >
@@ -90,7 +116,7 @@
         cy="22"
         r="20"
         fill="none"
-        stroke="#d1d5db"
+        stroke="#e5e7eb"
         stroke-width="2"
         class="dark:stroke-gray-600"
       />
@@ -99,7 +125,7 @@
         cy="22"
         r="20"
         fill="none"
-        stroke="#3b82f6"
+        stroke="#0ea5e9"
         stroke-width="2"
         stroke-dasharray={strokeDasharray}
         stroke-dashoffset={strokeDashoffset}
@@ -124,14 +150,30 @@
     </div>
     
     <!-- Tooltip -->
-    <div class="absolute right-full mr-3 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
+    <div class="tooltip absolute right-full mr-3 px-3 py-2 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
       {isLastSection ? 'Back to top' : `Go to ${sections[currentSection + 1]}`}
-      <div class="absolute top-1/2 left-full w-0 h-0 border-l-4 border-l-gray-900 dark:border-l-gray-700 border-y-4 border-y-transparent -translate-y-1/2"></div>
+      <div class="tooltip-arrow absolute top-1/2 left-full w-0 h-0 border-y-4 border-y-transparent -translate-y-1/2"></div>
     </div>
   </button>
 {/if}
 
 <style>
+  .tooltip {
+    background-color: rgb(17, 24, 39); /* gray-900 */
+  }
+  
+  :global(.dark) .tooltip {
+    background-color: rgb(55, 65, 81); /* gray-700 */
+  }
+  
+  .tooltip-arrow {
+    border-left: 4px solid rgb(17, 24, 39); /* gray-900 */
+  }
+  
+  :global(.dark) .tooltip-arrow {
+    border-left-color: rgb(55, 65, 81); /* gray-700 */
+  }
+  
   .pulse-border {
     animation: pulseBorder 2s ease-in-out infinite;
     --arrow-color: #374151; /* Default light mode color */
