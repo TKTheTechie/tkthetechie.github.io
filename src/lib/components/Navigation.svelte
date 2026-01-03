@@ -108,7 +108,6 @@
         <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-600 rounded-lg flex items-center justify-center">
           <span class="text-white font-bold text-lg">TK</span>
         </div>
-        <span class="text-xl font-bold gradient-text">TheTechie</span>
       </div>
       
       <!-- Desktop Navigation -->
