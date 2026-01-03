@@ -669,47 +669,47 @@
 
 /* Enhanced spacing for blog sections */
 .prose h1 {
-  @apply mt-20 mb-14;
+  @apply mt-12 mb-8;
 }
 
 .prose h2 {
-  @apply mt-24 mb-12;
+  @apply mt-16 mb-6;
 }
 
 .prose h3 {
-  @apply mt-20 mb-10;
+  @apply mt-12 mb-5;
 }
 
 .prose h4 {
-  @apply mt-16 mb-8;
+  @apply mt-10 mb-4;
 }
 
 .prose p {
-  @apply mb-10 leading-relaxed;
+  @apply mb-6 leading-relaxed;
 }
 
 .prose ul, .prose ol {
-  @apply mb-10 mt-6;
+  @apply mb-6 mt-4;
 }
 
 .prose li {
-  @apply mb-4;
+  @apply mb-2;
 }
 
 .prose img {
-  @apply my-16 mx-auto;
+  @apply my-8 mx-auto;
 }
 
 .prose pre {
-  @apply mt-8 mb-16;
+  @apply mt-6 mb-8;
 }
 
 .prose blockquote {
-  @apply my-16 py-8 px-10;
+  @apply my-8 py-6 px-8;
 }
 
 .prose hr {
-  @apply my-20;
+  @apply my-12;
 }
 
 .prose a {

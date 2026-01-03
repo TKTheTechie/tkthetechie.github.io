@@ -26,7 +26,6 @@
     <BlogLayout 
       title={metadata.title}
       date={metadata.date}
-      author={metadata.author || 'Thomas Kunnumpurath'}
       category={metadata.category || 'Blog'}
       headerImage={metadata.headerImage || ''}
     >

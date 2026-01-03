@@ -36,8 +36,7 @@ const fetchMarkdownPosts = async () => {
           metadata = {
             title: postName.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
             date: new Date().toISOString(),
-            category: 'Blog',
-            author: 'Thomas Kunnumpurath'
+            category: 'Blog'
           }
         }
 
@@ -46,7 +45,6 @@ const fetchMarkdownPosts = async () => {
             title: metadata.title || postName.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
             date: metadata.date || new Date().toISOString(),
             category: metadata.category || 'Blog',
-            author: metadata.author || 'Thomas Kunnumpurath',
             headerImage: metadata.headerImage || null
           },
           path: postPath,

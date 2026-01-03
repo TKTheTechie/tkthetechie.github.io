@@ -234,16 +234,9 @@
                       {post.meta?.title || 'Untitled'}
                     </h2>
                     
-                    <!-- Author and Read More -->
+                    <!-- Read More -->
                     <div class="flex items-center justify-between">
-                      <div class="flex items-center space-x-2">
-                        <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center">
-                          <span class="text-white text-sm font-bold">TK</span>
-                        </div>
-                        <span class="text-sm text-gray-600 dark:text-gray-300">
-                          {post.meta?.author || 'Thomas Kunnumpurath'}
-                        </span>
-                      </div>
+                      <div></div>
                       
                       <!-- Read More Link -->
                       <a 
