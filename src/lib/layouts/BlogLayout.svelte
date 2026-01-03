@@ -1,26 +1,32 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+  import { darkMode } from '$lib/stores/theme';
+  import { browser } from '$app/environment';
+  
   export let title: string;
   export let date: string;
   export let category: string = 'Blog';
   export let headerImage: string = '';
   
-  // Check if dark mode is active
-  let isDark = false;
+  // Use the theme store for proper dark mode detection
+  let isDark = true; // Default to dark mode for SSR
   
-  // Simple dark mode detection
-  if (typeof window !== 'undefined') {
-    isDark = document.documentElement.classList.contains('dark');
-    
-    // Watch for dark mode changes
-    const observer = new MutationObserver(() => {
-      isDark = document.documentElement.classList.contains('dark');
-    });
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class']
-    });
+  // Initialize theme synchronously if in browser
+  if (browser) {
+    isDark = darkMode.initSync();
   }
+  
+  onMount(() => {
+    // Initialize theme and subscribe to changes
+    darkMode.init();
+    
+    // Subscribe to theme changes
+    const unsubscribe = darkMode.subscribe(value => {
+      isDark = value;
+    });
+    
+    return unsubscribe;
+  });
   
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -49,7 +55,7 @@
   <meta name="description" content="Technical blog post: {title}" />
 </svelte:head>
 
-<div class="min-h-screen transition-colors duration-300" style="background: {isDark ? 'linear-gradient(to bottom right, rgb(55, 65, 81), rgb(75, 85, 99), rgb(55, 65, 81))' : 'white'}">
+<div class="min-h-screen transition-colors duration-300" style="background: {isDark ? 'linear-gradient(to bottom right, rgb(55, 65, 81), rgb(75, 85, 99), rgb(55, 65, 81))' : 'linear-gradient(to bottom right, rgb(249, 250, 251), rgb(255, 255, 255), rgb(249, 250, 251))'}">>
   <!-- Header -->
   <div class="bg-gradient-to-br from-gray-900 via-blue-900 to-green-900 text-white py-16 pt-24">
     <div class="container-max section-padding">
@@ -96,8 +102,15 @@
   </div>
   
   <!-- Article Content -->
-  <div class="py-16 transition-colors duration-300" style="background-color: {isDark ? 'rgb(75, 85, 99)' : 'white'}">
-    <div class="container-max section-padding">
+  <div class="py-16 transition-colors duration-300 relative overflow-hidden" 
+       style="background: {isDark ? 'linear-gradient(135deg, rgb(17, 24, 39) 0%, rgb(31, 41, 55) 50%, rgb(17, 24, 39) 100%)' : 'linear-gradient(135deg, rgb(249, 250, 251) 0%, rgb(243, 244, 246) 50%, rgb(249, 250, 251) 100%)'}">
+    
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 opacity-30">
+      <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25% 25%, {isDark ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.05)'} 0%, transparent 50%), radial-gradient(circle at 75% 75%, {isDark ? 'rgba(34, 197, 94, 0.1)' : 'rgba(34, 197, 94, 0.05)'} 0%, transparent 50%);"></div>
+    </div>
+    
+    <div class="container-max section-padding relative z-10">
       <div class="max-w-4xl mx-auto">
         
         <!-- Header Image -->
@@ -113,25 +126,43 @@
             </div>
           </div>
         {/if}
-        <div class="prose prose-lg prose-gray dark:prose-invert max-w-none
-                    prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-headings:mb-6 prose-headings:mt-12
-                    prose-p:text-gray-700 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-6
-                    prose-a:text-primary-600 dark:prose-a:text-primary-400 prose-a:no-underline hover:prose-a:underline
-                    prose-strong:text-gray-900 dark:prose-strong:text-white
-                    prose-code:text-primary-600 dark:prose-code:text-primary-400 prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:font-mono
-                    prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-200 dark:prose-pre:border-gray-700 prose-pre:rounded-lg prose-pre:mb-8 prose-pre:mt-6
-                    prose-blockquote:border-l-primary-500 prose-blockquote:bg-gray-50 dark:prose-blockquote:bg-gray-800 prose-blockquote:py-6 prose-blockquote:px-8 prose-blockquote:rounded-r-lg prose-blockquote:my-8
-                    prose-ul:text-gray-700 dark:prose-ul:text-gray-300 prose-ul:mb-6 prose-ul:mt-4
-                    prose-ol:text-gray-700 dark:prose-ol:text-gray-300 prose-ol:mb-6 prose-ol:mt-4
-                    prose-li:text-gray-700 dark:prose-li:text-gray-300 prose-li:mb-2
-                    prose-h1:text-4xl prose-h1:mb-8 prose-h1:mt-12
-                    prose-h2:text-3xl prose-h2:mb-6 prose-h2:mt-16
-                    prose-h3:text-2xl prose-h3:mb-5 prose-h3:mt-12
-                    prose-h4:text-xl prose-h4:mb-4 prose-h4:mt-10
-                    prose-img:rounded-lg prose-img:shadow-lg prose-img:my-8 prose-img:mx-auto
-                    prose-hr:my-12 prose-hr:border-gray-300 dark:prose-hr:border-gray-600"
-             style="font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility;">
-          <slot />
+        <!-- Blog Post Content Container with Enhanced Styling -->
+        <div class="blog-post-container relative">
+          <!-- Decorative Background Elements -->
+          <div class="absolute inset-0 -z-10 overflow-hidden">
+            <div class="absolute top-0 left-1/4 w-72 h-72 bg-gradient-to-br from-blue-100/30 to-purple-100/30 dark:from-blue-900/20 dark:to-purple-900/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gradient-to-br from-green-100/30 to-blue-100/30 dark:from-green-900/20 dark:to-blue-900/20 rounded-full blur-3xl"></div>
+          </div>
+          
+          <div class="prose prose-lg prose-gray dark:prose-invert max-w-none
+                      relative bg-white/90 dark:bg-gray-800/80 backdrop-blur-sm
+                      border border-gray-200/80 dark:border-gray-700/60 rounded-2xl
+                      shadow-xl shadow-gray-200/50 dark:shadow-gray-900/50
+                      p-8 md:p-12 lg:p-16
+                      prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-headings:mb-6 prose-headings:mt-12 prose-headings:tracking-tight
+                      prose-p:text-gray-800 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-6 prose-p:font-medium prose-p:tracking-wide
+                      prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-a:font-semibold
+                      prose-strong:text-gray-900 dark:prose-strong:text-white prose-strong:font-bold
+                      prose-code:text-blue-700 dark:prose-code:text-blue-400 prose-code:bg-blue-50 dark:prose-code:bg-gray-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:font-mono prose-code:font-semibold prose-code:border prose-code:border-blue-200 dark:prose-code:border-gray-700
+                      prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-300 dark:prose-pre:border-gray-700 prose-pre:rounded-lg prose-pre:mb-8 prose-pre:mt-6 prose-pre:shadow-lg
+                      prose-blockquote:border-l-4 prose-blockquote:border-l-blue-500 prose-blockquote:bg-gradient-to-r prose-blockquote:from-blue-50 prose-blockquote:to-indigo-50/50 dark:prose-blockquote:from-gray-800 dark:prose-blockquote:to-blue-900/30 prose-blockquote:py-6 prose-blockquote:px-8 prose-blockquote:rounded-r-lg prose-blockquote:my-8 prose-blockquote:shadow-md
+                      prose-ul:text-gray-800 dark:prose-ul:text-gray-300 prose-ul:mb-6 prose-ul:mt-4
+                      prose-ol:text-gray-800 dark:prose-ol:text-gray-300 prose-ol:mb-6 prose-ol:mt-4
+                      prose-li:text-gray-800 dark:prose-li:text-gray-300 prose-li:mb-2 prose-li:font-medium
+                      prose-h1:text-4xl prose-h1:mb-8 prose-h1:mt-12 prose-h1:font-black prose-h1:letter-spacing-tight prose-h1:text-gray-900 dark:prose-h1:text-white
+                      prose-h2:text-3xl prose-h2:mb-6 prose-h2:mt-16 prose-h2:font-bold prose-h2:tracking-tight prose-h2:text-gray-900 dark:prose-h2:text-white
+                      prose-h3:text-2xl prose-h3:mb-5 prose-h3:mt-12 prose-h3:font-bold prose-h3:tracking-tight prose-h3:text-gray-900 dark:prose-h3:text-white
+                      prose-h4:text-xl prose-h4:mb-4 prose-h4:mt-10 prose-h4:font-semibold prose-h4:tracking-tight prose-h4:text-gray-900 dark:prose-h4:text-white
+                      prose-img:rounded-xl prose-img:shadow-2xl prose-img:my-8 prose-img:mx-auto prose-img:border prose-img:border-gray-300 dark:prose-img:border-gray-700
+                      prose-hr:my-12 prose-hr:border-gray-400 dark:prose-hr:border-gray-600"
+               style="font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'ss01' 1; 
+                      -webkit-font-smoothing: antialiased; 
+                      -moz-osx-font-smoothing: grayscale; 
+                      text-rendering: optimizeLegibility;
+                      font-variant-ligatures: common-ligatures;
+                      letter-spacing: 0.01em;">
+            <slot />
+          </div>
         </div>
         
         <!-- Article Footer -->
@@ -139,7 +170,7 @@
           <div class="flex items-center justify-between">
             <!-- Social Share -->
             <div class="flex items-center space-x-4">
-              <span class="text-gray-600 dark:text-white text-sm" style="color: {isDark ? 'white' : ''} !important;">Share:</span>
+              <span class="text-gray-600 dark:text-gray-300 text-sm">Share:</span>
               <a 
                 href="https://www.linkedin.com/in/tkthetechie/"
                 target="_blank"

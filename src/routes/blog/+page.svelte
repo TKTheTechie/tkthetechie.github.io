@@ -2,13 +2,19 @@
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { darkMode } from '$lib/stores/theme';
+  import { browser } from '$app/environment';
   
   let posts: any[] = [];
   let loading = true;
   let searchTerm = '';
   let selectedCategory = 'all';
   let categories: string[] = [];
-  let isDark = false;
+  let isDark = true; // Default to dark mode for SSR
+  
+  // Initialize theme synchronously if in browser
+  if (browser) {
+    isDark = darkMode.initSync();
+  }
   
   // Subscribe to dark mode changes
   darkMode.subscribe(value => {
@@ -16,6 +22,8 @@
   });
   
   onMount(() => {
+    // Initialize theme
+    darkMode.init();
     fetchPosts();
   });
   
@@ -105,9 +113,13 @@
 </svelte:head>
 
 <div 
-  class="min-h-screen transition-colors duration-300 {isDark ? 'bg-gray-900' : 'bg-gray-50'}"
-  style="background-color: {isDark ? 'rgb(17, 24, 39)' : 'rgb(249, 250, 251)'}"
+  class="blog-listing-container min-h-screen transition-colors duration-300 relative overflow-hidden"
+  style="background: {isDark ? 'linear-gradient(135deg, rgb(17, 24, 39) 0%, rgb(31, 41, 55) 50%, rgb(17, 24, 39) 100%)' : 'linear-gradient(135deg, rgb(249, 250, 251) 0%, rgb(243, 244, 246) 50%, rgb(249, 250, 251) 100)'}"
 >
+  <!-- Background Pattern -->
+  <div class="absolute inset-0 opacity-20">
+    <div class="absolute inset-0" style="background-image: radial-gradient(circle at 20% 30%, {isDark ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.05)'} 0%, transparent 50%), radial-gradient(circle at 80% 70%, {isDark ? 'rgba(34, 197, 94, 0.1)' : 'rgba(34, 197, 94, 0.05)'} 0%, transparent 50%), radial-gradient(circle at 40% 80%, {isDark ? 'rgba(168, 85, 247, 0.08)' : 'rgba(168, 85, 247, 0.03)'} 0%, transparent 50%);"></div>
+  </div>
   <!-- Header -->
   <div class="bg-gradient-to-br from-gray-900 via-blue-900 to-green-900 text-white py-20">
     <div class="container-max section-padding">
@@ -138,7 +150,7 @@
   </div>
   
   <!-- Main Content -->
-  <div class="py-16">
+  <div class="py-16 relative z-10">
     <div class="container-max section-padding">
       <div class="max-w-6xl mx-auto">
         
@@ -198,7 +210,13 @@
             <!-- Blog Posts Grid -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {#each filteredPosts as post, index}
-                <article class="glass-effect rounded-2xl overflow-hidden hover-lift card-hover transition-all duration-300">
+                <article class="glass-effect rounded-2xl overflow-hidden hover-lift card-hover transition-all duration-300 
+                               border border-gray-200/60 dark:border-gray-700/60 
+                               shadow-xl shadow-gray-200/50 dark:shadow-gray-900/50
+                               bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm
+                               hover:shadow-2xl hover:shadow-gray-300/60 dark:hover:shadow-gray-900/70
+                               hover:border-primary-300/60 dark:hover:border-primary-600/60
+                               hover:-translate-y-1 hover:scale-[1.02]">
                   <!-- Header Image Placeholder -->
                   <div class="h-48 bg-gradient-to-br from-primary-500/20 to-accent-600/20 flex items-center justify-center">
                     {#if post.meta?.headerImage}
@@ -218,7 +236,7 @@
                   </div>
                   
                   <!-- Content -->
-                  <div class="p-6">
+                  <div class="p-6 bg-gradient-to-b from-white/90 to-white/95 dark:from-gray-800/90 dark:to-gray-800/95">
                     <!-- Category and Date -->
                     <div class="flex items-center justify-between mb-4">
                       <span class="px-3 py-1 bg-gradient-to-r {getCategoryColor(post.meta?.category)} text-white text-sm font-medium rounded-full">
@@ -230,7 +248,9 @@
                     </div>
                     
                     <!-- Title -->
-                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2">
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 
+                             tracking-tight leading-tight font-black
+                             hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
                       {post.meta?.title || 'Untitled'}
                     </h2>
                     
@@ -241,7 +261,11 @@
                       <!-- Read More Link -->
                       <a 
                         href={post.path}
-                        class="inline-flex items-center text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300 font-medium text-sm transition-colors duration-200"
+                        class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-primary-500 to-accent-600 
+                               text-white font-semibold text-sm rounded-lg
+                               hover:from-primary-600 hover:to-accent-700 
+                               transition-all duration-200 hover:shadow-lg hover:scale-105
+                               border border-primary-400/50"
                       >
                         Read More
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
