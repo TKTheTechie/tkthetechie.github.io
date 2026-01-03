@@ -10,11 +10,11 @@
       "period": "2018 - Present",
       "description": "Promoted to VP role with mandate to scale team, increase technical wins, contribute to product strategy, build product, lead partnership efforts and be a technical evangelist.",
       "achievements": [
-        "Scaled Systems Engineering team 3x from 5 to 15 engineerss",
-        "Opened new vertical markets: SaaS providers, Airlines, Manufacturing",
-        "Implemented integrations: Snowflake connector, DAPR framework, GraphQL",
-        "Executive sponsor for engagements between Solace and Oracle, AWS, GCP, Azure, Databricks and Snowflake",
-        "Regular speaker at AWS Re:Invent, Current Summit, EDA Summit",
+        "Scaled the Systems Engineering organization 3x (5 to 15 headcount) while maintaining culture and delivery velocity. Established hiring frameworks and mentorship programs to upskill the team on modern architectures.",
+        "Partnered with Sales leadership to open high-value verticals (Airlines, Manufacturing, SaaS), aligning technical pre-sales engineering with GTM strategy to exceed regional revenue targets.",
+        "Played a key role, with both architecture guidance and hands on coding, in the delivery of critical connectors (Databricks, Snowflake, GraphQL, DAPR). These integrations expanded the platform's Total Addressable Market (TAM) and reduced customer friction.",
+        "Served as Executive Sponsor for strategic alliances with major hyperscalers (AWS, GCP, Azure) and data platforms (Snowflake, Databricks). Facilitated high-level technical engagements to drive co-sell opportunities and ecosystem compatibility.",
+        "Helped define the company's voice on Event-Driven Architecture as a featured speaker at Tier-1 industry conferences (AWS re:Invent, EDA Summit) and podcasts, strengthening brand authority and developer relations.",
         "Achieved regional team targets and also received individual recognition"
       ],
       "technologies": [
@@ -34,10 +34,10 @@
       "period": "2017 - 2018",
       "description": "Manager for a new team of engineers building microservices in AWS using agile methodologies for the upmarket credit card business.",
       "achievements": [
-        "Led design and development of microservices in GoLang for startup integration",
-        "Built Java Spring Boot REST-ful microservice for credit card restrictions",
-        "Designed microservice for batched events triggering identity verification",
-        "Managed first batch of three interns, delivered working SNS/Slack integration"
+        "Architected a high-performance microservices layer in GoLang to streamline integrations with fintech startups, accelerating the bank’s partnership ecosystem and reducing vendor onboarding time.",
+        "Engineered mission-critical Java Spring Boot services for credit card controls, delivering real-time restriction capabilities that enhanced risk management and regulatory compliance.",
+        "Designed scalable, event-driven architectures for identity verification. Implemented batch processing strategies to handle high-volume authentication triggers efficiently.",
+        "Piloted the engineering internship program for the team, mentoring a team of three developers. Successfully guided the cohort to deliver internal communication tooling (SNS/Slack) used for operational alerts."
       ],
       "technologies": [
         "GoLang",
@@ -57,10 +57,10 @@
       "period": "2008 - 2017",
       "description": "Lead for enterprise messaging middleware group supporting mission critical real-time trading systems. Multi-disciplinary role encompassing client management, technical expertise, and application development.",
       "achievements": [
-        "Spearheaded firm-wide migration from TIBCO Rendezvous to Solace messaging",
-        "Architected innovative applications for middleware environment management",
-        "Front office technology lead for graduate and intern recruiting",
-        "Developed solutions using Core Java, KDB, and Aurelia JS"
+        "Spearheaded the firm-wide migration from legacy TIBCO Rendezvous to Solace messaging infrastructure. This multi-year initiative modernized the bank's trading backbone, significantly reducing latency and infrastructure TCO (Total Cost of Ownership).",
+        "Architected and delivered internal middleware management platforms, reducing operational toil and providing self-service capabilities to global application teams.",
+        "Served as the Front Office Technology Lead for graduate and intern recruitment, establishing the hiring rubric and mentoring the next generation of fintech engineers.",
+        "Engineered low-latency trading support solutions using Core Java and KDB+, ensuring real-time visibility into complex trading environments."
       ],
       "technologies": [
         "TIBCO Rendezvous",
