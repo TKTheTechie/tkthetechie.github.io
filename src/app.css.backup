@@ -2358,7 +2358,7 @@ div.bg-gradient-to-br div.flex.items-center.justify-center span {
 
 /* Light mode specific overrides for any inherited dark styles */
 :not(.dark) .prose * {
-  color: inherit;
+  border-color: rgb(229, 231, 235);
 }
 
 :not(.dark) .prose em {
@@ -2478,6 +2478,8 @@ div.bg-gradient-to-br div.flex.items-center.justify-center span {
 
 .dark .prose ::-moz-selection {
   background-color: rgb(59, 130, 246);
+  color: white;
+}
   color: white;
 }
 

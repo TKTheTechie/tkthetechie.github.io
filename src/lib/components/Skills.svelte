@@ -128,6 +128,8 @@
   :global(.dark) .skill-tag {
     --skill-text-color: white;
     color: white !important;
+    background: linear-gradient(to right, rgb(37, 99, 235), rgb(22, 163, 74)) !important;
+    border-color: rgb(59, 130, 246) !important;
   }
   
   .category-label {
@@ -199,7 +201,7 @@
                   {/if}
                   <div class="flex flex-wrap gap-2">
                     {#each category.skills as skill}
-                      <span class="skill-tag px-3 py-1 bg-gradient-to-r from-primary-100 to-accent-100 dark:from-primary-800/40 dark:to-accent-800/40 rounded-full text-sm font-medium border border-primary-200 dark:border-primary-600 badge" style="color: {isDarkMode ? 'white' : 'rgb(30 58 138)'} !important;">
+                      <span class="skill-tag px-3 py-1 bg-gradient-to-r from-primary-100 to-accent-100 dark:from-primary-600 dark:to-accent-600 rounded-full text-sm font-medium border border-primary-200 dark:border-primary-500 badge" style="color: {isDarkMode ? 'white' : 'rgb(30 58 138)'} !important;">
                         {skill}
                       </span>
                     {/each}
