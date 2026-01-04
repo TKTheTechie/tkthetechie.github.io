@@ -273,7 +273,7 @@
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: textShimmer 3s ease-in-out infinite;
+  animation: textShimmer 5s ease-in-out infinite;
 }
 
 .text-glow {
@@ -450,25 +450,29 @@
     @apply bg-gradient-to-r from-primary-500 to-accent-600 bg-clip-text text-transparent;
   }
   
-  /* Ensure gradient text stays gradient in dark mode */
+  /* Ensure gradient text stays gradient in dark mode - EXACT COPY OF LIGHT MODE */
   .dark .gradient-text {
-    background: linear-gradient(to right, rgb(14, 165, 233), rgb(22, 146, 79)) !important;
-    -webkit-background-clip: text !important;
-    background-clip: text !important;
-    color: transparent !important;
+    background: linear-gradient(135deg, #0ea5e9, #22c55e, #8b5cf6);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textShimmer 5s ease-in-out infinite;
   }
   
-  /* Extra specificity for gradient text headings in dark mode */
+  /* Extra specificity for gradient text headings in dark mode - EXACT COPY OF LIGHT MODE */
   .dark h1.gradient-text,
   .dark h2.gradient-text,
   .dark h3.gradient-text,
   .dark h4.gradient-text,
   .dark h5.gradient-text,
   .dark h6.gradient-text {
-    background: linear-gradient(to right, rgb(14, 165, 233), rgb(22, 146, 79)) !important;
-    -webkit-background-clip: text !important;
-    background-clip: text !important;
-    color: transparent !important;
+    background: linear-gradient(135deg, #0ea5e9, #22c55e, #8b5cf6);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textShimmer 5s ease-in-out infinite;
   }
   
   .glass-effect {
@@ -1383,12 +1387,14 @@
   color: rgb(255, 255, 255) !important; /* White for all semibold text */
 }
 
-/* Ensure Credentials section gradient text is visible in dark mode */
+/* Ensure Credentials section gradient text is visible in dark mode - EXACT COPY OF LIGHT MODE */
 .dark #credentials h3.gradient-text {
-  background: linear-gradient(to right, rgb(14, 165, 233), rgb(22, 146, 79)) !important;
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
-  color: transparent !important;
+  background: linear-gradient(135deg, #0ea5e9, #22c55e, #8b5cf6);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: textShimmer 5s ease-in-out infinite;
 }
 
 /* Credentials section subtitle text fix for dark mode */
