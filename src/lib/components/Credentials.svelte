@@ -164,8 +164,8 @@
                 </svg>
               </div>
               <div>
-                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Habitat for Humanity</h4>
-                <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Career services and food packing initiatives</p>
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Various</h4>
+                <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Habitat For Humanity, Career services and food packing initiatives</p>
                 <p class="text-gray-800 dark:text-gray-100 text-sm">2006-2018</p>
               </div>
             </div>
