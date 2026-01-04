@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   
-  let educationRef: HTMLElement;
+  let credentialsRef: HTMLElement;
   let isVisible = false;
   
   onMount(() => {
@@ -12,19 +12,19 @@
       { threshold: 0.2 }
     );
     
-    if (educationRef) observer.observe(educationRef);
+    if (credentialsRef) observer.observe(credentialsRef);
     
     return () => observer.disconnect();
   });
 </script>
 
-<section id="education" bind:this={educationRef} class="py-20 section-dark">
+<section id="credentials" bind:this={credentialsRef} class="py-20 section-dark">
   <div class="container-max section-padding">
     <div class="max-w-6xl mx-auto">
       <!-- Section Header -->
       <div class="text-center mb-16 {isVisible ? 'animate-slide-up' : 'opacity-0'}">
         <h2 class="text-4xl md:text-5xl font-bold mb-4">
-          Education & <span class="gradient-text">Recognition</span>
+          Credentials, Leadership, <span class="gradient-text">Awards & Volunteering</span>
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
         <p class="text-xl text-gray-800 dark:text-white max-w-3xl mx-auto">
@@ -191,12 +191,13 @@
               <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-              </svg>
-            </div>
-            <div>
-              <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Coding Camp at St. Paul's School</h4>
-              <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Volunteer instructor</p>
-              <p class="text-gray-800 dark:text-gray-100 text-sm">2022 - 2023</p>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Coding Camp at St. Paul's School</h4>
+                <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Volunteer instructor</p>
+                <p class="text-gray-800 dark:text-gray-100 text-sm">2022 - 2023</p>
+              </div>
             </div>
           </div>
         </div>

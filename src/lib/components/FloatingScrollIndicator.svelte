@@ -7,7 +7,7 @@
   let isVisible = false;
   let isDark = false;
 
-  const sections = ['home', 'about', 'experience', 'skills', 'portfolio', 'education', 'blog', 'contact'];
+  const sections = ['home', 'about', 'experience', 'skills', 'portfolio', 'credentials', 'blog', 'contact'];
 
   // Function to check if dark mode is active
   const checkDarkMode = () => {

@@ -6,7 +6,7 @@
   import ExperienceFromData from '$lib/components/ExperienceFromData.svelte';
   import Skills from '$lib/components/Skills.svelte';
   import Portfolio from '$lib/components/Portfolio.svelte';
-  import Education from '$lib/components/Education.svelte';
+  import Credentials from '$lib/components/Credentials.svelte';
   import Blog from '$lib/components/Blog.svelte';
   import Contact from '$lib/components/Contact.svelte';
   import Footer from '$lib/components/Footer.svelte';
@@ -204,7 +204,7 @@
   </ScrollRevealAnimation>
   
   <ScrollRevealAnimation direction="fade" delay={0.1}>
-    <Education />
+    <Credentials />
   </ScrollRevealAnimation>
   
   <ScrollRevealAnimation direction="up" delay={0.2}>

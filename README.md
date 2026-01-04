@@ -56,7 +56,7 @@ npm run preview
 
 ## 🌐 Live Demo
 
-Visit the live website at: [http://localhost:5173](http://localhost:5173)
+Visit the live website at: [https://tkthetechie.io](https://tkthetechie.io)
 
 ## 📄 Professional Background
 
@@ -78,7 +78,6 @@ Visit the live website at: [http://localhost:5173](http://localhost:5173)
 
 ## 📞 Contact
 
-- **Email**: thomas@tkthetechie.com
 - **LinkedIn**: [linkedin.com/in/thomaskunnumpurath](https://linkedin.com/in/thomaskunnumpurath)
 - **GitHub**: [github.com/TKTheTechie](https://github.com/TKTheTechie)
 

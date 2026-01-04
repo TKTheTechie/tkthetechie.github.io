@@ -1041,7 +1041,7 @@
 :not(.dark) #portfolio span,
 :not(.dark) #blog span,
 :not(.dark) #contact span,
-:not(.dark) #education span {
+:not(.dark) #credentials span {
   color: rgb(31, 41, 55) !important;
 }
 
@@ -1240,47 +1240,47 @@
   border: 1px solid rgb(59, 130, 246) !important;
 }
 
-/* Education section dates and text fixes */
-.dark #education p {
+/* Credentials section dates and text fixes */
+.dark #credentials p {
   color: rgb(243, 244, 246) !important; /* Light gray for all paragraph text */
 }
 
-.dark #education span {
+.dark #credentials span {
   color: rgb(243, 244, 246) !important; /* Light gray for all span text including dates */
 }
 
-/* Specific fixes for education dates and descriptions */
-.dark #education .text-xs,
-.dark #education .text-sm {
+/* Specific fixes for credentials dates and descriptions */
+.dark #credentials .text-xs,
+.dark #credentials .text-sm {
   color: rgb(243, 244, 246) !important; /* Light gray for small text like dates */
 }
 
-/* Education section titles - ensure they're dark in light mode */
-:not(.dark) #education h3,
-:not(.dark) #education h4 {
+/* Credentials section titles - ensure they're dark in light mode */
+:not(.dark) #credentials h3,
+:not(.dark) #credentials h4 {
   color: rgb(17, 24, 39) !important; /* Very dark for excellent contrast */
 }
 
-:not(.dark) #education .font-semibold {
+:not(.dark) #credentials .font-semibold {
   color: rgb(17, 24, 39) !important; /* Very dark for headings */
 }
 
-/* Education section light mode text */
-:not(.dark) #education p {
+/* Credentials section light mode text */
+:not(.dark) #credentials p {
   color: rgb(55, 65, 81) !important; /* Dark gray for paragraph text */
 }
 
-:not(.dark) #education span:not(.gradient-text):not(.text-white) {
+:not(.dark) #credentials span:not(.gradient-text):not(.text-white) {
   color: rgb(55, 65, 81) !important; /* Dark gray for span text */
 }
 
-/* Education section titles - ensure they're light in dark mode */
-.dark #education h3,
-.dark #education h4 {
+/* Credentials section titles - ensure they're light in dark mode */
+.dark #credentials h3,
+.dark #credentials h4 {
   color: rgb(255, 255, 255) !important; /* White for maximum visibility */
 }
 
-.dark #education .font-semibold {
+.dark #credentials .font-semibold {
   color: rgb(255, 255, 255) !important; /* White for headings */
 }
 
@@ -1370,34 +1370,34 @@
   color: rgb(30, 64, 175) !important;
 }
 
-/* Education section comprehensive text fixes for dark mode */
-.dark #education h3:not(.gradient-text) {
+/* Credentials section comprehensive text fixes for dark mode */
+.dark #credentials h3:not(.gradient-text) {
   color: rgb(255, 255, 255) !important; /* White for main headings */
 }
 
-.dark #education h4 {
+.dark #credentials h4 {
   color: rgb(255, 255, 255) !important; /* White for sub-headings */
 }
 
-.dark #education .font-semibold:not(.gradient-text) {
+.dark #credentials .font-semibold:not(.gradient-text) {
   color: rgb(255, 255, 255) !important; /* White for all semibold text */
 }
 
-/* Ensure Education section gradient text is visible in dark mode */
-.dark #education h3.gradient-text {
+/* Ensure Credentials section gradient text is visible in dark mode */
+.dark #credentials h3.gradient-text {
   background: linear-gradient(to right, rgb(14, 165, 233), rgb(22, 146, 79)) !important;
   -webkit-background-clip: text !important;
   background-clip: text !important;
   color: transparent !important;
 }
 
-/* Education section subtitle text fix for dark mode */
-.dark #education .text-center p {
+/* Credentials section subtitle text fix for dark mode */
+.dark #credentials .text-center p {
   color: rgb(255, 255, 255) !important;
 }
 
-/* Education section card text fix for dark mode */
-.dark #education .glass-effect p {
+/* Credentials section card text fix for dark mode */
+.dark #credentials .glass-effect p {
   color: rgb(255, 255, 255) !important;
 }
 
@@ -1709,17 +1709,17 @@ div.bg-gradient-to-br div.flex.items-center.justify-center span {
   color: rgb(255, 255, 255) !important; /* Force white text */
 }
 
-.dark #education .font-bold {
+.dark #credentials .font-bold {
   color: rgb(255, 255, 255) !important; /* White for all bold text */
 }
 
-/* Force all education headings to be white in dark mode */
-.dark #education h1,
-.dark #education h2,
-.dark #education h3,
-.dark #education h4,
-.dark #education h5,
-.dark #education h6 {
+/* Force all credentials headings to be white in dark mode */
+.dark #credentials h1,
+.dark #credentials h2,
+.dark #credentials h3,
+.dark #credentials h4,
+.dark #credentials h5,
+.dark #credentials h6 {
   color: rgb(255, 255, 255) !important;
 }
 

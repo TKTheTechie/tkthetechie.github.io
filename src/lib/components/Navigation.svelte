@@ -18,7 +18,7 @@
     { name: 'Experience', href: '/#experience', id: 'experience' },
     { name: 'Skills', href: '/#skills', id: 'skills' },
     { name: 'Portfolio', href: '/#portfolio', id: 'portfolio' },
-    { name: 'Education', href: '/#education', id: 'education' },
+    { name: 'Credentials', href: '/#credentials', id: 'credentials' },
     { name: 'Blog', href: '/#blog', id: 'blog' },
     { name: 'Contact', href: '/#contact', id: 'contact' }
   ];
