@@ -1348,11 +1348,19 @@ div.bg-gradient-to-br div.flex.items-center.justify-center span {
 
 /* Portfolio carousel arrows using CSS variables */
 #portfolio button {
-  --arrow-color: #000000; /* Black arrows in light mode */
+  --arrow-color: #374151; /* Gray arrows in light mode for better visibility */
+  background-color: white !important; /* Ensure white background in light mode */
 }
 
 .dark #portfolio button {
   --arrow-color: #ffffff; /* White arrows in dark mode */
+  background-color: rgb(31, 41, 55) !important; /* Ensure dark background in dark mode */
+}
+
+/* Portfolio hover overlay text - ensure always white */
+#portfolio .group-hover\:opacity-100 span,
+#portfolio .group-hover\:opacity-100 svg {
+  color: white !important;
 }
 
 /* Blog card author name fix for dark mode */

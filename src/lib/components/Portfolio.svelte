@@ -8,7 +8,7 @@
   let currentIndex = 0;
   let itemsPerView = 3;
   let autoplayInterval: NodeJS.Timeout;
-  let isAutoplayPaused = false;
+  let isHovered = false; // Single hover state for the entire carousel area
   
   // Calculate total slides based on items per view
   $: totalSlides = Math.ceil(portfolioData.portfolioItems.length / itemsPerView);
@@ -51,7 +51,7 @@
   });
   
   const startAutoplay = () => {
-    if (isAutoplayPaused) return;
+    if (isHovered) return; // Don't start if currently hovered
     autoplayInterval = setInterval(() => {
       nextSlide();
     }, 5000);
@@ -63,13 +63,13 @@
     }
   };
   
-  const pauseAutoplay = () => {
-    isAutoplayPaused = true;
+  const handleMouseEnter = () => {
+    isHovered = true;
     stopAutoplay();
   };
   
-  const resumeAutoplay = () => {
-    isAutoplayPaused = false;
+  const handleMouseLeave = () => {
+    isHovered = false;
     if (isVisible) {
       startAutoplay();
     }
@@ -130,8 +130,8 @@
         <!-- Carousel Wrapper -->
         <div 
           class="overflow-hidden rounded-2xl"
-          on:mouseenter={pauseAutoplay}
-          on:mouseleave={resumeAutoplay}
+          on:mouseenter={handleMouseEnter}
+          on:mouseleave={handleMouseLeave}
         >
           <div 
             bind:this={carouselContainer}
@@ -183,10 +183,10 @@
                         <!-- Hover Overlay -->
                         <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                           <div class="text-white text-center">
-                            <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-12 h-12 mx-auto mb-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
-                            <span class="text-sm font-medium">Click to View</span>
+                            <span class="text-sm font-medium text-white">Click to View</span>
                           </div>
                         </div>
                       </div>
