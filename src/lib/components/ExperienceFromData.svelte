@@ -453,6 +453,13 @@
     .logo-container {
       width: 100%;
       max-width: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .logo-container img {
+      margin: 0 auto;
     }
     
     .company-badge h3 {
@@ -499,11 +506,16 @@
     
     .logo-container {
       padding: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .logo-container img {
       width: 5rem !important;
       height: 3rem !important;
+      margin: 0 auto;
+      display: block;
     }
   }
   
