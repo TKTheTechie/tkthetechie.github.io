@@ -3,6 +3,7 @@
   
   let skillsRef: HTMLElement;
   let isVisible = false;
+  let isDarkMode = false;
   
   onMount(() => {
     const observer = new IntersectionObserver(
@@ -14,102 +15,126 @@
     
     if (skillsRef) observer.observe(skillsRef);
     
-    return () => observer.disconnect();
+    // Check for dark mode
+    const checkDarkMode = () => {
+      isDarkMode = document.documentElement.classList.contains('dark');
+    };
+    
+    checkDarkMode();
+    
+    // Watch for dark mode changes
+    const darkModeObserver = new MutationObserver(checkDarkMode);
+    darkModeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+    
+    return () => {
+      observer.disconnect();
+      darkModeObserver.disconnect();
+    };
   });
   
-  const skillCategories = [
+  const topSkillSections = [
     {
-      title: 'Leadership & Strategy',
+      title: 'Strategic Leadership & Revenue Growth',
       icon: '👥',
       skills: [
-        'Team Scaling',
-        'Technical Strategy',
-        'Product Management',
-        'Public Speaking'
-      ]
-    },
-    {
-      title: 'Programming Languages',
-      icon: '💻',
-      skills: [
-        'Java',
-        'JavaScript',
-        'GoLang',
-        'Elixir',
-        'Rust'
-      ]
-    },
-    {
-      title: 'Frameworks & Libraries',
-      icon: '🔧',
-      skills: [
-        'Spring Framework',
-        'Spring Cloud Stream',
-        'Spring Boot',
-        'AureliaJS',
-        'Svelte',
-        'VueJS',
-        'TailwindCSS'
-      ]
-    },
-    {
-      title: 'Cloud Platforms',
-      icon: '☁️',
-      skills: [
-        'AWS',
-        'Azure',
-        'GCP'
-      ]
-    },
-    {
-      title: 'Event Brokers',
-      icon: '📡',
-      skills: [
-        'Solace PubSub+',
-        'Apache Kafka',
-        'Redpanda',
-        'TIBCO EMS',
-        'TIBCO RV'
-      ]
-    },
-    {
-      title: 'Integration Platforms',
-      icon: '🔗',
-      skills: [
-        'Dell Boomi',
-        'MuleSoft'
-      ]
-    },
-    {
-      title: 'Analytics Platforms',
-      icon: '📊',
-      skills: [
-        'Snowflake',
-        'Databricks'
-      ]
-    },
-    {
-      title: 'Architecture & Design',
-      icon: '🏗️',
-      skills: [
-        'Event Driven Architecture',
-        'Microservices',
-        'Cloud Architecture',
-        'System Design'
-      ]
-    },
-    {
-      title: 'Business Impact',
-      icon: '📈',
-      skills: [
-        'Customer Engagement',
+        'Organizational Scaling',
+        'Pre-Sales Strategy & Revenue Growth',
         'Partnership Development',
-        'Technical Evangelism',
-        'Solution Architecture'
+        'Technical Evangelism & Public Speaking'
+      ]
+    },
+    {
+      title: 'Systems Architecture & Vision',
+      icon: '⚖️',
+      skills: [
+        'Event-Driven Architecture (EDA)',
+        'Cloud-Native & Microservices Design',
+        'High-Throughput Streaming Systems',
+        'Enterprise Integration Patterns'
+      ]
+    },
+    {
+      title: 'Industry Vertical Experience',
+      icon: '🏢',
+      skills: [
+        'Capital Markets',
+        'Banking',
+        'Airlines',
+        'SaaS Providers',
+        'Fintech',
+        'Retail',
+        'Manufacturing'
+      ]
+    }
+  ];
+
+  const bottomSkillSections = [
+    {
+      title: 'Enterprise Ecosystem',
+      icon: '☁️',
+      categories: [
+        {
+          name: 'Cloud:',
+          skills: ['AWS', 'Azure', 'GCP', 'OCI', 'Cloudflare']
+        },
+        {
+          name: 'Data:',
+          skills: ['Snowflake', 'Databricks']
+        },
+        {
+          name: 'Integration:',
+          skills: ['MuleSoft', 'Boomi', 'SAP']
+        }
+      ]
+    },
+    {
+      title: 'Event Brokers/Messaging',
+      icon: '🔄',
+      categories: [
+        {
+          name: '',
+          skills: ['Solace PubSub+', 'Apache Kafka', 'Redpanda', 'TIBCO EMS', 'TIBCO RV', 'Informatica UltraMessaging']
+        }
+      ]
+    },
+    {
+      title: 'Technical Toolkit',
+      icon: '💻',
+      categories: [
+        {
+          name: 'Core:',
+          skills: ['Java', 'Go (Golang)', 'Rust', 'Node']
+        },
+        {
+          name: 'Web:',
+          skills: ['Svelte', 'React', 'TailwindCSS', 'Vue']
+        }
       ]
     }
   ];
 </script>
+
+<style>
+  .skill-tag {
+    --skill-text-color: rgb(30 58 138);
+  }
+  
+  :global(.dark) .skill-tag {
+    --skill-text-color: white;
+    color: white !important;
+  }
+  
+  .category-label {
+    color: rgb(31 41 55);
+  }
+  
+  :global(.dark) .category-label {
+    color: white !important;
+  }
+</style>
 
 <section id="skills" bind:this={skillsRef} class="py-20 section-light">
   <div class="container-max section-padding">
@@ -127,22 +152,54 @@
       </div>
       
       <!-- Skills Grid -->
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {#each skillCategories as category, categoryIndex}
-          <div class="glass-effect rounded-2xl p-8 hover-lift card-hover {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: {0.2 * categoryIndex}s;">
-            <!-- Category Header -->
+      <!-- Top Section - Three Main Cards -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        {#each topSkillSections as section, sectionIndex}
+          <div class="glass-effect rounded-2xl p-8 hover-lift card-hover {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: {0.2 * sectionIndex}s;">
+            <!-- Section Header -->
             <div class="flex items-center space-x-3 mb-6">
-              <span class="text-3xl">{category.icon}</span>
-              <h3 class="text-2xl font-bold gradient-text">{category.title}</h3>
+              <span class="text-3xl">{section.icon}</span>
+              <h3 class="text-2xl font-bold gradient-text">{section.title}</h3>
             </div>
             
             <!-- Skills List -->
-            <div class="space-y-3">
-              {#each category.skills as skill, skillIndex}
-                <div class="skill-item {isVisible ? 'animate-slide-up' : 'opacity-0'}" style="animation-delay: {0.1 * (categoryIndex * 4 + skillIndex)}s;">
-                  <div class="flex items-center space-x-3">
-                    <div class="w-2 h-2 bg-gradient-to-r from-primary-500 to-accent-600 rounded-full"></div>
-                    <span class="font-medium text-gray-900 dark:text-white">{skill}</span>
+            <div class="space-y-4">
+              {#each section.skills as skill, skillIndex}
+                <div class="skill-item {isVisible ? 'animate-slide-up' : 'opacity-0'}" style="animation-delay: {0.1 * (sectionIndex * 4 + skillIndex)}s;">
+                  <div class="flex items-start space-x-3">
+                    <div class="w-2 h-2 bg-gradient-to-r from-primary-500 to-accent-600 rounded-full mt-2 flex-shrink-0"></div>
+                    <span class="font-medium text-gray-900 dark:text-white leading-relaxed">{skill}</span>
+                  </div>
+                </div>
+              {/each}
+            </div>
+          </div>
+        {/each}
+      </div>
+
+      <!-- Bottom Section - Three Cards -->
+      <div class="grid md:grid-cols-3 gap-8">
+        {#each bottomSkillSections as section, sectionIndex}
+          <div class="glass-effect rounded-2xl p-8 hover-lift card-hover {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: {0.4 + 0.2 * sectionIndex}s;">
+            <!-- Section Header -->
+            <div class="flex items-center space-x-3 mb-6">
+              <span class="text-3xl">{section.icon}</span>
+              <h3 class="text-xl font-bold gradient-text">{section.title}</h3>
+            </div>
+            
+            <!-- Categories and Skills -->
+            <div class="space-y-4">
+              {#each section.categories as category, categoryIndex}
+                <div class="skill-category {isVisible ? 'animate-slide-up' : 'opacity-0'}" style="animation-delay: {0.1 * (sectionIndex * 3 + categoryIndex)}s;">
+                  {#if category.name}
+                    <div class="category-label font-semibold mb-2">{category.name}</div>
+                  {/if}
+                  <div class="flex flex-wrap gap-2">
+                    {#each category.skills as skill}
+                      <span class="skill-tag px-3 py-1 bg-gradient-to-r from-primary-100 to-accent-100 dark:from-primary-800/40 dark:to-accent-800/40 rounded-full text-sm font-medium border border-primary-200 dark:border-primary-600" style="color: {isDarkMode ? 'white' : 'rgb(30 58 138)'} !important;">
+                        {skill}
+                      </span>
+                    {/each}
                   </div>
                 </div>
               {/each}
