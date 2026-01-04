@@ -155,10 +155,10 @@
       <!-- Top Section - Three Main Cards -->
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
         {#each topSkillSections as section, sectionIndex}
-          <div class="glass-effect rounded-2xl p-8 hover-lift card-hover {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: {0.2 * sectionIndex}s;">
+          <div class="glass-effect rounded-2xl p-8 hover-lift card-hover micro-animate {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: {0.2 * sectionIndex}s;">
             <!-- Section Header -->
             <div class="flex items-center space-x-3 mb-6">
-              <span class="text-3xl">{section.icon}</span>
+              <span class="text-3xl hover-bounce">{section.icon}</span>
               <h3 class="text-2xl font-bold gradient-text">{section.title}</h3>
             </div>
             
@@ -180,10 +180,10 @@
       <!-- Bottom Section - Three Cards -->
       <div class="grid md:grid-cols-3 gap-8">
         {#each bottomSkillSections as section, sectionIndex}
-          <div class="glass-effect rounded-2xl p-8 hover-lift card-hover {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: {0.4 + 0.2 * sectionIndex}s;">
+          <div class="glass-effect rounded-2xl p-8 hover-lift card-hover micro-animate {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: {0.4 + 0.2 * sectionIndex}s;">
             <!-- Section Header -->
             <div class="flex items-center space-x-3 mb-6">
-              <span class="text-3xl">{section.icon}</span>
+              <span class="text-3xl hover-bounce">{section.icon}</span>
               <h3 class="text-xl font-bold gradient-text">{section.title}</h3>
             </div>
             
@@ -196,7 +196,7 @@
                   {/if}
                   <div class="flex flex-wrap gap-2">
                     {#each category.skills as skill}
-                      <span class="skill-tag px-3 py-1 bg-gradient-to-r from-primary-100 to-accent-100 dark:from-primary-800/40 dark:to-accent-800/40 rounded-full text-sm font-medium border border-primary-200 dark:border-primary-600" style="color: {isDarkMode ? 'white' : 'rgb(30 58 138)'} !important;">
+                      <span class="skill-tag px-3 py-1 bg-gradient-to-r from-primary-100 to-accent-100 dark:from-primary-800/40 dark:to-accent-800/40 rounded-full text-sm font-medium border border-primary-200 dark:border-primary-600 badge" style="color: {isDarkMode ? 'white' : 'rgb(30 58 138)'} !important;">
                         {skill}
                       </span>
                     {/each}

@@ -11,9 +11,20 @@
   import Contact from '$lib/components/Contact.svelte';
   import Footer from '$lib/components/Footer.svelte';
   import FloatingScrollIndicator from '$lib/components/FloatingScrollIndicator.svelte';
+  import ScrollRevealAnimation from '$lib/components/ScrollRevealAnimation.svelte';
+  import MicroInteractions from '$lib/components/MicroInteractions.svelte';
+  import PerformanceOptimizer from '$lib/components/PerformanceOptimizer.svelte';
+  import ImmersiveLoader from '$lib/components/ImmersiveLoader.svelte';
 
   onMount(() => {
-    // No scroll snap functionality needed
+    // Add smooth scrolling behavior
+    document.documentElement.style.scrollBehavior = 'smooth';
+    
+    // Preload critical animations
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'style';
+    document.head.appendChild(link);
   });
 </script>
 
@@ -160,16 +171,49 @@
   </script>
 </svelte:head>
 
+<!-- Immersive Loading Experience -->
+<ImmersiveLoader />
+
+<!-- Micro-interactions Enhancement -->
+<MicroInteractions />
+
+<!-- Performance Optimization -->
+<PerformanceOptimizer />
+
 <Navigation />
 <FloatingScrollIndicator />
 <main role="main" aria-label="Main content">
-  <Hero />
-  <About />
-  <ExperienceFromData />
-  <Skills />
-  <Portfolio />
-  <Education />
-  <Blog />
-  <Contact />
+  <ScrollRevealAnimation direction="fade" duration={1.2}>
+    <Hero />
+  </ScrollRevealAnimation>
+  
+  <ScrollRevealAnimation direction="up" delay={0.2} cascade={true}>
+    <About />
+  </ScrollRevealAnimation>
+  
+  <ScrollRevealAnimation direction="left" delay={0.1}>
+    <ExperienceFromData />
+  </ScrollRevealAnimation>
+  
+  <ScrollRevealAnimation direction="right" delay={0.1}>
+    <Skills />
+  </ScrollRevealAnimation>
+  
+  <ScrollRevealAnimation direction="up" delay={0.2} cascade={true}>
+    <Portfolio />
+  </ScrollRevealAnimation>
+  
+  <ScrollRevealAnimation direction="fade" delay={0.1}>
+    <Education />
+  </ScrollRevealAnimation>
+  
+  <ScrollRevealAnimation direction="up" delay={0.2}>
+    <Blog />
+  </ScrollRevealAnimation>
+  
+  <ScrollRevealAnimation direction="fade" delay={0.1}>
+    <Contact />
+  </ScrollRevealAnimation>
+  
   <Footer />
 </main>

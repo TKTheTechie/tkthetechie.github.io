@@ -1,11 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import InteractiveParticles from './InteractiveParticles.svelte';
+  import MagneticElement from './MagneticElement.svelte';
+  import MorphingButton from './MorphingButton.svelte';
   
   let heroRef: HTMLElement;
   let isVisible = false;
   let mouseX = 0;
   let mouseY = 0;
   let isMouseInside = false;
+  let mouseTrackingParticle: HTMLElement;
   
   onMount(() => {
     const observer = new IntersectionObserver(
@@ -17,7 +21,7 @@
     
     if (heroRef) observer.observe(heroRef);
     
-    // Mouse tracking for parallax effects
+    // Mouse tracking for parallax effects and particle
     const handleMouseMove = (e: MouseEvent) => {
       if (!heroRef) return;
       
@@ -25,8 +29,13 @@
       mouseX = (e.clientX - rect.left) / rect.width;
       mouseY = (e.clientY - rect.top) / rect.height;
       
-      // Optional: Add subtle console logging for debugging (remove in production)
-      // console.log('Mouse position:', { mouseX: mouseX.toFixed(2), mouseY: mouseY.toFixed(2) });
+      // Update mouse tracking particle position
+      if (mouseTrackingParticle && isMouseInside) {
+        const actualX = e.clientX - rect.left;
+        const actualY = e.clientY - rect.top;
+        mouseTrackingParticle.style.left = `${actualX}px`;
+        mouseTrackingParticle.style.top = `${actualY}px`;
+      }
     };
     
     const handleMouseEnter = () => {
@@ -61,11 +70,19 @@
   $: parallaxMedium = `translate(${(mouseX - 0.5) * 40}px, ${(mouseY - 0.5) * 40}px)`;
   $: parallaxLight = `translate(${(mouseX - 0.5) * 20}px, ${(mouseY - 0.5) * 20}px)`;
   $: parallaxReverse = `translate(${(0.5 - mouseX) * 30}px, ${(0.5 - mouseY) * 30}px)`;
+  
+  function scrollToSection(sectionId: string) {
+    const element = document.querySelector(sectionId);
+    element?.scrollIntoView({ behavior: 'smooth' });
+  }
 </script>
 
 <section id="home" bind:this={heroRef} class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-green-900">
   <!-- Animated Background Pattern -->
   <div class="absolute inset-0 z-0">
+    <!-- Interactive Particles Layer -->
+    <InteractiveParticles particleCount={80} connectionDistance={150} mouseRadius={200} />
+    
     <div class="matrix-bg" style="transform: {parallaxLight}; transition: transform 0.1s ease-out;"></div>
     
     <!-- Floating Orbs with enhanced movement and mouse tracking -->
@@ -94,6 +111,14 @@
     <div class="gradient-wave wave-1 enhanced-wave" style="transform: {parallaxReverse}; transition: transform 0.25s ease-out;"></div>
     <div class="gradient-wave wave-2 enhanced-wave" style="transform: {parallaxMedium}; transition: transform 0.2s ease-out;"></div>
     
+    <!-- New: Mouse tracking blurred particle -->
+    {#if isMouseInside}
+      <div 
+        bind:this={mouseTrackingParticle}
+        class="mouse-tracking-particle"
+      ></div>
+    {/if}
+    
     <!-- New: Interactive cursor glow effect -->
     {#if isMouseInside}
       <div 
@@ -112,15 +137,17 @@
     <div class="lg:hidden flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 text-center">
       <!-- Profile Picture -->
       <div class="mb-6 {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.1s;">
-        <div class="w-40 h-40 sm:w-48 sm:h-48 mx-auto mb-4 relative">
-          <div class="absolute inset-0 rounded-full animate-pulse-border" style="animation: pulseBorder 2s ease-in-out infinite;"></div>
-          <img 
-            src="/profile-pic.png" 
-            alt="Thomas Kunnumpurath" 
-            class="w-full h-full object-cover object-top rounded-full border-2 sm:border-3 border-white/30 shadow-2xl backdrop-blur-sm relative z-10"
-          />
-          <div class="absolute inset-0 rounded-full bg-gradient-to-br from-primary-500/20 to-accent-600/20"></div>
-        </div>
+        <MagneticElement strength={0.2} distance={80}>
+          <div class="w-40 h-40 sm:w-48 sm:h-48 mx-auto mb-4 relative">
+            <div class="absolute inset-0 rounded-full animate-pulse-border" style="animation: pulseBorder 2s ease-in-out infinite;"></div>
+            <img 
+              src="/profile-pic.png" 
+              alt="Thomas Kunnumpurath" 
+              class="w-full h-full object-cover object-top rounded-full border-2 sm:border-3 border-white/30 shadow-2xl backdrop-blur-sm relative z-10"
+            />
+            <div class="absolute inset-0 rounded-full bg-gradient-to-br from-primary-500/20 to-accent-600/20"></div>
+          </div>
+        </MagneticElement>
       </div>
       
       <!-- Text Content -->
@@ -160,40 +187,20 @@
         
         <!-- CTA Buttons -->
         <div class="flex flex-col sm:flex-row gap-3 justify-center {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.7s;">
-          <button
-            on:click={() => {
-              const container = document.querySelector('.scroll-snap-container');
-              const element = document.querySelector('#experience');
-              if (container && element) {
-                container.scrollTo({
-                  top: element.offsetTop - 80,
-                  behavior: 'smooth'
-                });
-              } else {
-                element?.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            class="px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg font-semibold hover:from-primary-600 hover:to-primary-700 transition-all duration-300 hover-lift neon-border shadow-xl text-sm"
+          <MorphingButton 
+            variant="primary" 
+            size="md" 
+            on:click={() => scrollToSection('#experience')}
           >
             View Experience
-          </button>
-          <button
-            on:click={() => {
-              const container = document.querySelector('.scroll-snap-container');
-              const element = document.querySelector('#contact');
-              if (container && element) {
-                container.scrollTo({
-                  top: element.offsetTop - 80,
-                  behavior: 'smooth'
-                });
-              } else {
-                element?.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            class="px-6 py-3 glass-effect text-black dark:text-white rounded-lg font-semibold hover:bg-white/20 dark:hover:bg-white/20 hover:text-black dark:hover:text-white transition-all duration-300 hover-lift shadow-xl border border-white/30 text-sm"
+          </MorphingButton>
+          <MorphingButton 
+            variant="secondary" 
+            size="md" 
+            on:click={() => scrollToSection('#contact')}
           >
             Get In Touch
-          </button>
+          </MorphingButton>
         </div>
       </div>
     </div>
@@ -202,20 +209,22 @@
     <div class="hidden lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center lg:justify-center lg:min-h-screen lg:px-8 xl:px-16">
       <!-- Left Half - Profile Picture -->
       <div class="flex items-center justify-center {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.1s;">
-        <div class="relative">
-          <div class="w-80 h-80 xl:w-96 xl:h-96 relative">
-            <div class="absolute inset-0 rounded-full animate-pulse-border" style="animation: pulseBorder 2s ease-in-out infinite;"></div>
-            <img 
-              src="/profile-pic.png" 
-              alt="Thomas Kunnumpurath" 
-              class="w-full h-full object-cover object-top rounded-full border-4 border-white/30 shadow-2xl backdrop-blur-sm relative z-10"
-            />
-            <div class="absolute inset-0 rounded-full bg-gradient-to-br from-primary-500/20 to-accent-600/20"></div>
+        <MagneticElement strength={0.3} distance={120}>
+          <div class="relative">
+            <div class="w-80 h-80 xl:w-96 xl:h-96 relative">
+              <div class="absolute inset-0 rounded-full animate-pulse-border" style="animation: pulseBorder 2s ease-in-out infinite;"></div>
+              <img 
+                src="/profile-pic.png" 
+                alt="Thomas Kunnumpurath" 
+                class="w-full h-full object-cover object-top rounded-full border-4 border-white/30 shadow-2xl backdrop-blur-sm relative z-10"
+              />
+              <div class="absolute inset-0 rounded-full bg-gradient-to-br from-primary-500/20 to-accent-600/20"></div>
+            </div>
+            <!-- Decorative elements -->
+            <div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-primary-500/30 to-accent-600/30 rounded-full blur-xl"></div>
+            <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-accent-500/20 to-primary-600/20 rounded-full blur-xl"></div>
           </div>
-          <!-- Decorative elements -->
-          <div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-primary-500/30 to-accent-600/30 rounded-full blur-xl"></div>
-          <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-accent-500/20 to-primary-600/20 rounded-full blur-xl"></div>
-        </div>
+        </MagneticElement>
       </div>
 
       <!-- Right Half - Text Content -->
@@ -255,42 +264,89 @@
         
         <!-- CTA Buttons -->
         <div class="flex flex-row gap-4 {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.7s;">
-          <button
-            on:click={() => {
-              const container = document.querySelector('.scroll-snap-container');
-              const element = document.querySelector('#experience');
-              if (container && element) {
-                container.scrollTo({
-                  top: element.offsetTop - 80,
-                  behavior: 'smooth'
-                });
-              } else {
-                element?.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            class="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg font-semibold hover:from-primary-600 hover:to-primary-700 transition-all duration-300 hover-lift neon-border shadow-xl"
+          <MorphingButton 
+            variant="primary" 
+            size="lg" 
+            on:click={() => scrollToSection('#experience')}
           >
             View Experience
-          </button>
-          <button
-            on:click={() => {
-              const container = document.querySelector('.scroll-snap-container');
-              const element = document.querySelector('#contact');
-              if (container && element) {
-                container.scrollTo({
-                  top: element.offsetTop - 80,
-                  behavior: 'smooth'
-                });
-              } else {
-                element?.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-            class="px-8 py-4 glass-effect text-black dark:text-white rounded-lg font-semibold hover:bg-white/20 dark:hover:bg-white/20 hover:text-black dark:hover:text-white transition-all duration-300 hover-lift shadow-xl border border-white/30"
+          </MorphingButton>
+          <MorphingButton 
+            variant="secondary" 
+            size="lg" 
+            on:click={() => scrollToSection('#contact')}
           >
             Get In Touch
-          </button>
+          </MorphingButton>
         </div>
       </div>
     </div>
   </div>
 </section>
+
+<style>
+  /* Mouse tracking blurred particle */
+  .mouse-tracking-particle {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.4) 0%, rgba(34, 197, 94, 0.3) 50%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 15;
+    transform: translate(-50%, -50%);
+    filter: blur(20px);
+    animation: particlePulse 3s ease-in-out infinite;
+  }
+  
+  .mouse-tracking-particle::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.6) 0%, rgba(14, 165, 233, 0.4) 100%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(10px);
+    animation: particlePulse 2s ease-in-out infinite reverse;
+  }
+  
+  .mouse-tracking-particle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 30%;
+    height: 30%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(34, 197, 94, 0.6) 100%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(5px);
+    animation: particlePulse 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes particlePulse {
+    0%, 100% {
+      opacity: 0.6;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+  }
+  
+  /* Enhanced cursor glow */
+  .cursor-glow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, rgba(34, 197, 94, 0.1) 40%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 5;
+    filter: blur(30px);
+  }
+</style>
