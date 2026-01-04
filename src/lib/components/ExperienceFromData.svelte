@@ -134,13 +134,13 @@
                 
                 <!-- Header with Enhanced Logo -->
                 <div class="mb-10">
-                  <div class="flex flex-wrap items-start gap-6 mb-6">
-                    <div class="logo-container bg-white rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-300 transition-all duration-300 hover:scale-105"
+                  <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-start gap-4 sm:gap-6 mb-6">
+                    <div class="logo-container bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-200 dark:border-gray-300 transition-all duration-300 hover:scale-105 mx-auto sm:mx-0"
                          class:logo-spotlight={activeCard === i}>
                       <img 
                         src={exp.logo} 
                         alt="{exp.company} logo" 
-                        class="w-32 h-20 object-contain transition-all duration-300"
+                        class="w-24 h-16 sm:w-32 sm:h-20 object-contain transition-all duration-300"
                         on:error={(e) => {
                           console.error(`Failed to load logo for ${exp.company}:`, exp.logo);
                           e.target.style.display = 'none';
@@ -148,25 +148,25 @@
                       />
                     </div>
                     <!-- Company Badge -->
-                    <div class="company-badge flex-1 min-w-0">
-                      <h3 class="text-3xl font-extrabold gradient-text mb-2 tracking-tight">{exp.company}</h3>
-                      <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 rounded-full mb-3"></div>
-                      <h4 class="text-xl font-semibold text-gray-900 dark:text-white mb-3 leading-snug">{exp.position}</h4>
+                    <div class="company-badge flex-1 min-w-0 text-center sm:text-left">
+                      <h3 class="text-2xl sm:text-3xl font-extrabold gradient-text mb-2 tracking-tight break-words">{exp.company}</h3>
+                      <div class="h-1 w-16 sm:w-20 bg-gradient-to-r from-primary-500 to-accent-600 rounded-full mb-3 mx-auto sm:mx-0"></div>
+                      <h4 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3 leading-snug break-words">{exp.position}</h4>
                     </div>
                   </div>
                   
-                  <div class="flex flex-wrap items-center gap-6 text-sm font-medium text-gray-600 dark:text-gray-400">
-                    <span class="flex items-center gap-2">
-                      <svg class="w-4 h-4 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
+                  <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-6 text-sm font-medium text-gray-600 dark:text-gray-400">
+                    <span class="flex items-center justify-center sm:justify-start gap-2">
+                      <svg class="w-4 h-4 text-primary-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
                       </svg>
-                      <span class="font-semibold">{exp.location}</span>
+                      <span class="font-semibold break-words">{exp.location}</span>
                     </span>
-                    <span class="flex items-center gap-2">
-                      <svg class="w-4 h-4 text-accent-500" fill="currentColor" viewBox="0 0 20 20">
+                    <span class="flex items-center justify-center sm:justify-start gap-2">
+                      <svg class="w-4 h-4 text-accent-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
                       </svg>
-                      <span class="font-semibold">{exp.period}</span>
+                      <span class="font-semibold break-words">{exp.period}</span>
                     </span>
                   </div>
                 </div>
@@ -447,11 +447,63 @@
     .experience-card {
       margin-left: 0;
       margin-right: 0;
+      padding: 1.5rem;
     }
     
     .logo-container {
       width: 100%;
       max-width: 200px;
+    }
+    
+    .company-badge h3 {
+      font-size: 1.5rem !important;
+      line-height: 1.2;
+      word-break: break-word;
+      hyphens: auto;
+    }
+    
+    .company-badge h4 {
+      font-size: 1rem !important;
+      line-height: 1.3;
+      word-break: break-word;
+      hyphens: auto;
+    }
+    
+    .description-section p {
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    
+    .achievements-section h5 {
+      font-size: 1rem !important;
+    }
+    
+    .achievement-item span {
+      font-size: 0.8125rem;
+      line-height: 1.5;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .experience-card {
+      padding: 1rem;
+    }
+    
+    .company-badge h3 {
+      font-size: 1.375rem !important;
+    }
+    
+    .company-badge h4 {
+      font-size: 0.9375rem !important;
+    }
+    
+    .logo-container {
+      padding: 0.75rem;
+    }
+    
+    .logo-container img {
+      width: 5rem !important;
+      height: 3rem !important;
     }
   }
   
