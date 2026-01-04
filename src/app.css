@@ -1860,7 +1860,7 @@ div.bg-gradient-to-br div.flex.items-center.justify-center span {
 }
 
 .dark p,
-.dark span:not(.gradient-text),
+.dark span:not(.gradient-text):not(.share-text),
 .dark div {
   color: rgb(226, 232, 240) !important;
 }
