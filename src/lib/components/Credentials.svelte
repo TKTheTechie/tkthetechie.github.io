@@ -24,7 +24,7 @@
       <!-- Section Header -->
       <div class="text-center mb-16 {isVisible ? 'animate-slide-up' : 'opacity-0'}">
         <h2 class="text-4xl md:text-5xl font-bold mb-4">
-          Credentials, Leadership, <span class="gradient-text">Awards & Volunteering</span>
+          Credentials, <span class="gradient-text">Awards & Volunteering</span>
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
         <p class="text-xl text-gray-800 dark:text-white max-w-3xl mx-auto">
@@ -180,7 +180,7 @@
               </div>
               <div>
                 <h4 class="font-semibold text-gray-900 dark:text-white mb-2">C1 Coders</h4>
-                <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Coding lessons to middle schoolers</p>
+                <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Coding lessons to under-served middle schoolers in NYC</p>
                 <p class="text-gray-800 dark:text-gray-100 text-sm">2017</p>
               </div>
             </div>
