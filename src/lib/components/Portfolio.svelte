@@ -290,4 +290,15 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  
+  /* Portfolio navigation arrows cursor */
+  button[aria-label="Previous slide"],
+  button[aria-label="Next slide"] {
+    cursor: pointer;
+  }
+  
+  /* Dot indicators cursor */
+  button[aria-label^="Go to slide"] {
+    cursor: pointer;
+  }
 </style>
