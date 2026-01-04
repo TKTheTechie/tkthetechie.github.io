@@ -18,9 +18,9 @@
   });
   
   const stats = [
-    { number: '15+', label: 'Years Experience' },
-    { number: '3x', label: 'Team Growth' },
-    { number: '10+', label: 'Speaking Events' },
+    { number: '15+', label: 'Years of Tech Leadership' },
+    { number: '3x', label: 'Org Scaling' },
+    { number: '10+', label: 'Conference Speaking & Thought Leadership Events' },
     { number: '100+', label: 'Customer Engagements' }
   ];
 </script>
@@ -35,8 +35,9 @@
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
         <p class="text-xl text-gray-800 dark:text-gray-100 max-w-3xl mx-auto">
-          A passionate technical leader with a proven track record of scaling teams, 
-          driving innovation, and delivering enterprise-grade solutions.
+          Engineering Executive bridging technical strategy and business growth by 
+          scaling high-performance teams, modernizing enterprise architecture, 
+          and driving revenue through technical innovation.
         </p>
       </div>
       
@@ -47,7 +48,8 @@
             <p class="text-secondary leading-relaxed mb-6">
               As Vice President of Systems Engineering at Solace, I lead a team of 15 engineers 
               across the Americas, focusing on Event Driven Architecture and cloud-native solutions. 
-              My journey spans over 15 years in the financial services and technology sectors.
+              My journey spans over 15 years engineering mission-critical systems for global financial 
+              institutions and high-growth tech firms.
             </p>
             
             <p class="text-secondary leading-relaxed mb-6">
@@ -73,21 +75,46 @@
         </div>
       </div>
       
-      <!-- Education -->
+      <!-- Leadership Philosophy -->
       <div class="mt-16 {isVisible ? 'animate-slide-up' : 'opacity-0'}" style="animation-delay: 0.6s;">
-        <div class="glass-effect rounded-2xl p-8 card-hover">
-          <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white" style="color: inherit;">Education</h3>
-          <div class="flex items-center space-x-4">
-            <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center">
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-              </svg>
+        <div class="glass-effect leadership-quote rounded-2xl p-8 card-hover relative overflow-hidden">
+          <!-- Decorative Quote Icon -->
+          <div class="absolute top-4 right-4 opacity-10">
+            <svg class="w-16 h-16 text-primary-500" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/>
+            </svg>
+          </div>
+          
+          <div class="relative z-10">
+            <h3 class="text-2xl font-bold mb-6 gradient-text">Leadership Philosophy</h3>
+            
+            <!-- Quote Content -->
+            <blockquote class="relative">
+              <div class="absolute -left-2 -top-2 text-4xl text-primary-500 opacity-30 font-serif quote-mark">"</div>
+              <p class="text-lg text-gray-800 dark:text-white leading-relaxed italic pl-6 pr-4" style="color: inherit;">
+                I believe in Servant Leadership backed by Engineering Excellence. My goal is to build psychological safety that empowers teams to take technical risks, while implementing the rigorous architectural standards required for enterprise scale.
+              </p>
+              <div class="absolute -right-2 -bottom-2 text-4xl text-primary-500 opacity-30 font-serif quote-mark">"</div>
+            </blockquote>
+            
+            <!-- Attribution -->
+            <div class="mt-6 flex items-center justify-end attribution">
+              <div class="flex items-center space-x-3">
+                <div class="w-1 h-8 bg-gradient-to-b from-primary-500 to-accent-500 rounded-full"></div>
+                <div class="text-right">
+                  <div class="font-semibold text-gray-900 dark:text-white">Thomas Kunnumpurath</div>
+                  <div class="text-sm text-gray-600 dark:text-gray-400">VP Systems Engineering</div>
+                </div>
+              </div>
             </div>
-            <div>
-              <h4 class="text-xl font-semibold text-gray-900 dark:text-white" style="color: inherit;">Bachelor of Science, Computer Science</h4>
-              <p class="text-gray-800 dark:text-white" style="color: inherit;">New Jersey Institute of Technology • 2005 • 4.0 Major GPA</p>
-            </div>
+          </div>
+          
+          <!-- Subtle Background Pattern -->
+          <div class="absolute inset-0 opacity-5">
+            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary-500/10 to-accent-500/10"></div>
+            <div class="absolute top-4 left-4 w-8 h-8 border border-primary-500/20 rounded-full decorative-circle"></div>
+            <div class="absolute bottom-8 right-8 w-12 h-12 border border-accent-500/20 rounded-full decorative-circle"></div>
+            <div class="absolute top-1/2 left-8 w-6 h-6 border border-primary-500/20 rounded-full decorative-circle"></div>
           </div>
         </div>
       </div>
