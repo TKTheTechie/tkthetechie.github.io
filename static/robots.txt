@@ -1,5 +1,3 @@
-# Thomas Kunnumpurath - TKTheTechie.io
-# Allow crawling everything by default
 User-agent: *
 Allow: /
 
@@ -22,12 +20,7 @@ Allow: /
 User-agent: DuckDuckBot
 Allow: /
 
-# Block common bot patterns that aren't search engines
-User-agent: AhrefsBot
-Disallow: /
-
-User-agent: MJ12bot
-Disallow: /
-
-User-agent: DotBot
-Disallow: /
+# Block unnecessary crawling of build artifacts
+Disallow: /_app/
+Disallow: /node_modules/
+Disallow: /.svelte-kit/

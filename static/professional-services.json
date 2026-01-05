@@ -1,0 +1,137 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://tkthetechie.io/#person",
+      "name": "Thomas Kunnumpurath",
+      "alternateName": "TKTheTechie",
+      "url": "https://tkthetechie.io",
+      "image": "https://tkthetechie.io/profile-pic.png",
+      "sameAs": [
+        "https://www.linkedin.com/in/thomas-kunnumpurath/",
+        "https://github.com/TKTheTechie",
+        "https://twitter.com/TKTheTechie"
+      ],
+      "jobTitle": [
+        "Vice President of Systems Engineering",
+        "Pre Sales Engineering Leader",
+        "Solutions Architect",
+        "Financial Services Engineering Leader"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Solace"
+      },
+      "hasOccupation": [
+        {
+          "@type": "Occupation",
+          "name": "Pre Sales Engineering Leader",
+          "occupationLocation": {
+            "@type": "Country",
+            "name": "United States"
+          },
+          "skills": [
+            "Pre Sales Engineering",
+            "Technical Sales Leadership",
+            "Revenue Growth",
+            "Team Scaling",
+            "Enterprise Architecture"
+          ]
+        },
+        {
+          "@type": "Occupation",
+          "name": "Solutions Architect for SMBs",
+          "occupationLocation": {
+            "@type": "Country",
+            "name": "United States"
+          },
+          "skills": [
+            "Solutions Architecture",
+            "SMB Enterprise Solutions",
+            "Cloud Architecture",
+            "Microservices",
+            "Event Driven Architecture"
+          ]
+        },
+        {
+          "@type": "Occupation",
+          "name": "Financial Services Engineering Leader",
+          "occupationLocation": {
+            "@type": "Country",
+            "name": "United States"
+          },
+          "skills": [
+            "Banking Technology",
+            "Trading Systems",
+            "Payment Processing",
+            "Risk Management",
+            "Regulatory Compliance"
+          ]
+        }
+      ]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://tkthetechie.io/#service",
+      "name": "Thomas Kunnumpurath - Technical Leadership & Architecture Services",
+      "url": "https://tkthetechie.io",
+      "description": "Pre Sales Engineering leadership, Solutions Architecture for SMBs, and Engineering Leadership for Financial Institutions",
+      "provider": {
+        "@id": "https://tkthetechie.io/#person"
+      },
+      "areaServed": [
+        {
+          "@type": "Country",
+          "name": "United States"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "North America"
+        }
+      ],
+      "serviceType": [
+        "Pre Sales Engineering Leadership",
+        "Solutions Architecture",
+        "Technical Sales Leadership",
+        "Financial Services Technology Consulting",
+        "SMB Enterprise Architecture",
+        "Event Driven Architecture",
+        "Team Scaling & Management",
+        "Revenue Engineering"
+      ],
+      "audience": [
+        {
+          "@type": "Audience",
+          "audienceType": "Small to Medium Businesses",
+          "name": "SMB Technology Leaders"
+        },
+        {
+          "@type": "Audience",
+          "audienceType": "Financial Institutions",
+          "name": "Banking & Capital Markets"
+        },
+        {
+          "@type": "Audience",
+          "audienceType": "Technology Companies",
+          "name": "Pre Sales & Solutions Teams"
+        }
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://tkthetechie.io/#website",
+      "url": "https://tkthetechie.io",
+      "name": "TKTheTechie - Thomas Kunnumpurath",
+      "description": "Pre Sales Engineering Leader & Solutions Architect specializing in SMBs and Financial Services",
+      "publisher": {
+        "@id": "https://tkthetechie.io/#person"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://tkthetechie.io/blog?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  ]
+}

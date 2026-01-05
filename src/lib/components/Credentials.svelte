@@ -166,7 +166,7 @@
               <div>
                 <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Various</h4>
                 <p class="text-gray-800 dark:text-gray-100 text-sm mb-1">Habitat For Humanity, Career services and food packing initiatives</p>
-                <p class="text-gray-800 dark:text-gray-100 text-sm">2006-2018</p>
+                <p class="text-gray-800 dark:text-gray-100 text-sm">2008-2017</p>
               </div>
             </div>
           </div>
