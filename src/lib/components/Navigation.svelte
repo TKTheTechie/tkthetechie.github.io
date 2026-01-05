@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { pushState } from '$app/navigation';
   import { darkMode } from '$lib/stores/theme';
   
   let isScrolled = false;
@@ -53,16 +54,37 @@
       currentSection = detectedSection;
     };
 
+    // Handle direct navigation to hash URLs
+    const handleHashNavigation = () => {
+      const hash = window.location.hash.slice(1);
+      if (hash) {
+        // Small delay to ensure page is loaded
+        setTimeout(() => {
+          scrollToSection(hash);
+        }, 100);
+      }
+    };
+
+    // Handle browser back/forward navigation
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state && event.state.section) {
+        scrollToSection(event.state.section);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('scroll', updateCurrentSection, { passive: true });
+    window.addEventListener('popstate', handlePopState);
     
     // Initial calls
     handleScroll();
     updateCurrentSection();
+    handleHashNavigation();
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('scroll', updateCurrentSection);
+      window.removeEventListener('popstate', handlePopState);
     };
   });
   
@@ -70,29 +92,34 @@
     darkMode.toggle();
   };
   
-  const scrollToSection = (href: string) => {
-    // If we're not on the home page, navigate to the home page with the hash
-    if (window.location.pathname !== '/') {
-      window.location.href = href;
-      return;
+  const scrollToSection = (sectionId: string, event?: Event) => {
+    // Prevent default behavior if event is provided
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
     }
     
-    // Extract the hash part (e.g., '#blog' from '/#blog')
-    const hash = href.split('#')[1];
-    if (hash) {
-      const element = document.querySelector(`#${hash}`);
-      if (element) {
-        // Calculate the offset position accounting for fixed navigation
-        const elementTop = (element as HTMLElement).offsetTop;
-        const navHeight = 80; // Account for fixed navigation height
-        
-        window.scrollTo({
-          top: elementTop - navHeight,
-          behavior: 'smooth'
-        });
-        
-        isMobileMenuOpen = false;
-      }
+    // Find the element directly by ID
+    const element = document.getElementById(sectionId);
+    if (element) {
+      // Update the URL with the hash using SvelteKit's pushState
+      const url = new URL(window.location.href);
+      url.hash = sectionId;
+      pushState(url.toString(), { section: sectionId });
+      
+      // Calculate the offset position accounting for fixed navigation
+      const elementTop = element.offsetTop;
+      const navHeight = 80; // Account for fixed navigation height
+      
+      // Use a simple, reliable scroll method
+      window.scrollTo({
+        top: elementTop - navHeight,
+        behavior: 'smooth'
+      });
+      
+      // Update current section
+      currentSection = sectionId;
+      isMobileMenuOpen = false;
     }
   };
 </script>
@@ -114,7 +141,8 @@
       <div class="hidden md:flex items-center space-x-8">
         {#each navItems as item}
           <button
-            on:click={() => scrollToSection(item.href)}
+            type="button"
+            on:click={(event) => scrollToSection(item.id, event)}
             class="relative text-gray-900 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold cursor-pointer {
               currentSection === item.id 
                 ? 'text-primary-500 dark:text-primary-400' 
@@ -181,7 +209,8 @@
         <div class="flex flex-col space-y-3 pt-4">
           {#each navItems as item}
             <button
-              on:click={() => scrollToSection(item.href)}
+              type="button"
+              on:click={(event) => scrollToSection(item.id, event)}
               class="relative text-left text-gray-900 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold py-2 cursor-pointer {
                 currentSection === item.id 
                   ? 'text-primary-500 dark:text-primary-400' 

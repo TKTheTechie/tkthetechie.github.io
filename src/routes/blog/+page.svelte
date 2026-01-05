@@ -110,6 +110,45 @@
 <svelte:head>
   <title>Blog - Thomas Kunnumpurath | Technical Insights & Tutorials</title>
   <meta name="description" content="Technical blog posts on event-driven architecture, modern development practices, and emerging technologies by Thomas Kunnumpurath." />
+  <meta name="keywords" content="Event Driven Architecture, Technical Blog, Software Engineering, Microservices, Cloud Architecture, Pre Sales Engineering, Solutions Architecture, Financial Technology, Thomas Kunnumpurath" />
+  <meta name="author" content="Thomas Kunnumpurath" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://tkthetechie.io/blog/" />
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tkthetechie.io/blog/" />
+  <meta property="og:title" content="Technical Blog - Thomas Kunnumpurath" />
+  <meta property="og:description" content="Technical blog posts on event-driven architecture, modern development practices, and emerging technologies." />
+  <meta property="og:image" content="https://tkthetechie.io/profile-pic.png" />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://tkthetechie.io/blog/" />
+  <meta property="twitter:title" content="Technical Blog - Thomas Kunnumpurath" />
+  <meta property="twitter:description" content="Technical blog posts on event-driven architecture, modern development practices, and emerging technologies." />
+  <meta property="twitter:image" content="https://tkthetechie.io/profile-pic.png" />
+  
+  <!-- Structured Data - Blog Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "name": "Thomas Kunnumpurath Technical Blog",
+      "url": "https://tkthetechie.io/blog/",
+      "description": "Technical blog posts on event-driven architecture, modern development practices, and emerging technologies",
+      "author": {
+        "@type": "Person",
+        "name": "Thomas Kunnumpurath",
+        "url": "https://tkthetechie.io"
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Thomas Kunnumpurath"
+      },
+      "inLanguage": "en-US"
+    }
+  </script>
 </svelte:head>
 
 <div 

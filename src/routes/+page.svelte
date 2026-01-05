@@ -17,14 +17,7 @@
   import ImmersiveLoader from '$lib/components/ImmersiveLoader.svelte';
 
   onMount(() => {
-    // Add smooth scrolling behavior
-    document.documentElement.style.scrollBehavior = 'smooth';
-    
-    // Preload critical animations
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.as = 'style';
-    document.head.appendChild(link);
+    // Component initialization - no preload needed as styles are already bundled
   });
 </script>
 
@@ -292,6 +285,73 @@
           }
         }
       ]
+    }
+  </script>
+
+  <!-- Structured Data - Website Navigation Schema -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Thomas Kunnumpurath - Pre Sales Engineering Leader & Solutions Architect",
+      "url": "https://tkthetechie.io",
+      "mainEntity": {
+        "@type": "Person",
+        "name": "Thomas Kunnumpurath"
+      },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://tkthetechie.io/#home"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "About",
+            "item": "https://tkthetechie.io/#about"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Experience",
+            "item": "https://tkthetechie.io/#experience"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "Skills",
+            "item": "https://tkthetechie.io/#skills"
+          },
+          {
+            "@type": "ListItem",
+            "position": 5,
+            "name": "Portfolio",
+            "item": "https://tkthetechie.io/#portfolio"
+          },
+          {
+            "@type": "ListItem",
+            "position": 6,
+            "name": "Credentials",
+            "item": "https://tkthetechie.io/#credentials"
+          },
+          {
+            "@type": "ListItem",
+            "position": 7,
+            "name": "Blog",
+            "item": "https://tkthetechie.io/blog/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 8,
+            "name": "Contact",
+            "item": "https://tkthetechie.io/#contact"
+          }
+        ]
+      }
     }
   </script>
 </svelte:head>
