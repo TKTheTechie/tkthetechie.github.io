@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { pushState } from '$app/navigation';
+  import { pushState, replaceState } from '$app/navigation';
   import { darkMode } from '$lib/stores/theme';
   
   let isScrolled = false;
@@ -29,29 +29,67 @@
       isScrolled = window.scrollY > 50;
     };
     
-    // Track current section for highlighting
+    // Throttle the section update to improve performance
+    let ticking = false;
+    const throttledUpdateCurrentSection = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateCurrentSection();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    
+    // Track current section for highlighting and URL updates
     const updateCurrentSection = () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const viewportCenter = scrollTop + window.innerHeight / 2;
-      const sectionElements = document.querySelectorAll('section');
+      const sectionElements = document.querySelectorAll('section[id]');
 
       let detectedSection = 'home';
+      let closestSection = null;
+      let closestDistance = Infinity;
 
       sectionElements.forEach((section) => {
         const sectionTop = (section as HTMLElement).offsetTop;
-        const sectionBottom = sectionTop + section.clientHeight;
-
-        if (viewportCenter >= sectionTop && viewportCenter < sectionBottom) {
-          detectedSection = section.id;
+        const sectionHeight = section.clientHeight;
+        const sectionCenter = sectionTop + sectionHeight / 2;
+        const viewportCenter = scrollTop + window.innerHeight / 2;
+        
+        // Calculate distance from viewport center to section center
+        const distance = Math.abs(viewportCenter - sectionCenter);
+        
+        // Also check if we're within the section bounds
+        const isInSection = scrollTop >= sectionTop - 100 && scrollTop < sectionTop + sectionHeight - 100;
+        
+        if (isInSection && distance < closestDistance) {
+          closestDistance = distance;
+          closestSection = section.id;
         }
       });
+
+      // If we found a close section, use it
+      if (closestSection) {
+        detectedSection = closestSection;
+      }
 
       // If we're at the very top, ensure we're on home
       if (scrollTop < 100) {
         detectedSection = 'home';
       }
 
-      currentSection = detectedSection;
+      // Only update if section has changed
+      if (currentSection !== detectedSection) {
+        currentSection = detectedSection;
+        
+        // Update URL hash to reflect current section
+        const url = new URL(window.location.href);
+        url.hash = detectedSection;
+        
+        // Use replaceState to update URL without adding to history
+        // This prevents back button issues when scrolling through sections
+        replaceState(url.toString(), { section: detectedSection });
+      }
     };
 
     // Handle direct navigation to hash URLs
@@ -73,7 +111,7 @@
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('scroll', updateCurrentSection, { passive: true });
+    window.addEventListener('scroll', throttledUpdateCurrentSection, { passive: true });
     window.addEventListener('popstate', handlePopState);
     
     // Initial calls
@@ -83,7 +121,7 @@
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('scroll', updateCurrentSection);
+      window.removeEventListener('scroll', throttledUpdateCurrentSection);
       window.removeEventListener('popstate', handlePopState);
     };
   });
