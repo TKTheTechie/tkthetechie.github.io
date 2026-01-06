@@ -305,9 +305,13 @@
     color: #374151 !important; /* Gray arrows in light mode for visibility on white background */
   }
   
-  /* Dark mode keeps the existing styling */
+  /* Dark mode: dark background and white arrows */
+  :global(.dark) .portfolio-nav-btn {
+    background-color: rgb(31, 41, 55) !important; /* Dark gray background in dark mode */
+  }
+  
   :global(.dark) .portfolio-nav-arrow {
-    color: #ffffff; /* White arrows in dark mode */
+    color: #ffffff !important; /* White arrows in dark mode */
   }
   
   /* Dot indicators cursor */
