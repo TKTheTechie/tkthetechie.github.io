@@ -119,7 +119,7 @@
           Featured <span class="gradient-text">Portfolio</span>
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-500 mx-auto rounded-full mb-6"></div>
-        <p class="text-xl text-gray-800 dark:text-gray-100 max-w-3xl mx-auto">
+        <p class="text-xl text-black dark:text-gray-100 max-w-3xl mx-auto">
           A showcase of my contributions to the tech community through open source projects, 
           speaking engagements, publications, and educational content.
         </p>
@@ -201,12 +201,12 @@
                         </div>
                         
                         <!-- Title -->
-                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-3 line-clamp-3 leading-tight group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors duration-300">
+                        <h3 class="text-lg font-bold text-black dark:text-white mb-3 line-clamp-3 leading-tight group-hover:text-primary-500 dark:group-hover:text-primary-400 transition-colors duration-300">
                           {item.title}
                         </h3>
                         
                         <!-- Description -->
-                        <p class="text-gray-800 dark:text-gray-300 text-sm mb-4 line-clamp-4 leading-relaxed">
+                        <p class="text-black dark:text-gray-300 text-sm mb-4 line-clamp-4 leading-relaxed">
                           {item.description}
                         </p>
                         
@@ -242,21 +242,21 @@
         
         <!-- Navigation Arrows -->
         <button 
-          class="absolute left-0 md:-left-6 lg:-left-12 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white dark:bg-gray-800 backdrop-blur-sm rounded-full shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 flex items-center justify-center group z-10 border border-gray-200 dark:border-gray-600"
+          class="portfolio-nav-btn absolute left-0 md:-left-6 lg:-left-12 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white dark:bg-gray-800 backdrop-blur-sm rounded-full shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 flex items-center justify-center group z-10 border border-gray-200 dark:border-gray-600"
           on:click={prevSlide}
           aria-label="Previous slide"
         >
-          <svg class="w-8 h-8" viewBox="0 0 24 24" style="fill: var(--arrow-color, #000000);">
+          <svg class="w-8 h-8 portfolio-nav-arrow" viewBox="0 0 24 24" fill="currentColor">
             <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
           </svg>
         </button>
         
         <button 
-          class="absolute right-0 md:-right-6 lg:-right-12 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white dark:bg-gray-800 backdrop-blur-sm rounded-full shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 flex items-center justify-center group z-10 border border-gray-200 dark:border-gray-600"
+          class="portfolio-nav-btn absolute right-0 md:-right-6 lg:-right-12 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-white dark:bg-gray-800 backdrop-blur-sm rounded-full shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300 flex items-center justify-center group z-10 border border-gray-200 dark:border-gray-600"
           on:click={nextSlide}
           aria-label="Next slide"
         >
-          <svg class="w-8 h-8" viewBox="0 0 24 24" style="fill: var(--arrow-color, #000000);">
+          <svg class="w-8 h-8 portfolio-nav-arrow" viewBox="0 0 24 24" fill="currentColor">
             <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
           </svg>
         </button>
@@ -291,16 +291,23 @@
     overflow: hidden;
   }
   
-  /* Portfolio navigation arrows cursor */
-  button[aria-label="Previous slide"],
-  button[aria-label="Next slide"] {
+  /* Portfolio navigation arrows - component override */
+  .portfolio-nav-btn {
     cursor: pointer;
-    --arrow-color: #374151; /* Default light mode color */
   }
   
-  :global(.dark) button[aria-label="Previous slide"],
-  :global(.dark) button[aria-label="Next slide"] {
-    --arrow-color: #ffffff; /* White for dark mode */
+  /* Light mode: ensure white background and gray arrows */
+  :root:not(.dark) .portfolio-nav-btn {
+    background-color: white !important;
+  }
+  
+  :root:not(.dark) .portfolio-nav-arrow {
+    color: #374151 !important; /* Gray arrows in light mode for visibility on white background */
+  }
+  
+  /* Dark mode keeps the existing styling */
+  :global(.dark) .portfolio-nav-arrow {
+    color: #ffffff; /* White arrows in dark mode */
   }
   
   /* Dot indicators cursor */

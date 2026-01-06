@@ -73,7 +73,7 @@
   };
 </script>
 
-<section id="blog" bind:this={blogRef} class="py-20 section-light" style="background-color: {isDark ? 'rgb(30, 41, 59)' : 'rgb(249, 250, 251)'};">
+<section id="blog" bind:this={blogRef} class="py-20 section-dark" style="background-color: {isDark ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)'};">
   <div class="container-max section-padding">
     <div class="max-w-6xl mx-auto">
       <!-- Section Header -->
@@ -82,7 +82,7 @@
           Latest <span class="gradient-text">Blog Posts</span>
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
-        <p class="text-xl text-gray-800 dark:text-white max-w-3xl mx-auto">
+        <p class="text-xl text-black dark:text-white max-w-3xl mx-auto">
           Insights on event-driven architecture, modern development practices, and emerging technologies.
           Sharing knowledge from real-world implementations and industry experience.
         </p>

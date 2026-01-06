@@ -285,6 +285,19 @@
 </section>
 
 <style>
+  /* Hero section should always have white text (dark background) */
+  #home p,
+  #home span,
+  #home div:not(.gradient-text),
+  #home h1:not(.gradient-text),
+  #home h2:not(.gradient-text),
+  #home h3:not(.gradient-text),
+  #home h4:not(.gradient-text),
+  #home h5:not(.gradient-text),
+  #home h6:not(.gradient-text) {
+    color: white !important;
+  }
+
   /* Hero-specific background effects */
   .matrix-bg {
     position: absolute;

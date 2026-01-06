@@ -34,7 +34,7 @@
           <span class="gradient-text">About</span> Me
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
-        <p class="text-xl text-gray-800 dark:text-gray-100 max-w-3xl mx-auto">
+        <p class="text-xl text-black dark:text-gray-100 max-w-3xl mx-auto">
           Engineering Executive bridging technical strategy and business growth by 
           scaling high-performance teams, modernizing enterprise architecture, 
           and driving revenue through technical innovation.
@@ -45,14 +45,14 @@
         <!-- Content -->
         <div class="{isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.2s;">
           <div class="prose prose-lg max-w-none">
-            <p class="text-secondary leading-relaxed mb-6">
+            <p class="text-black dark:text-gray-100 leading-relaxed mb-6">
               As Vice President of Systems Engineering at Solace, I lead a team of 15 engineers 
               across the Americas, focusing on Event Driven Architecture and cloud-native solutions. 
               My journey spans over 15 years engineering mission-critical systems for global financial 
               institutions and high-growth tech firms.
             </p>
             
-            <p class="text-secondary leading-relaxed mb-6">
+            <p class="text-black dark:text-gray-100 leading-relaxed mb-6">
               I'm passionate about building scalable systems, mentoring engineering talent, and 
               evangelizing modern architectural patterns. My experience ranges from hands-on 
               development to executive-level technical strategy.
@@ -67,7 +67,7 @@
               <div class="text-3xl md:text-4xl font-bold gradient-text mb-2">
                 {stat.number}
               </div>
-              <div class="text-gray-800 dark:text-gray-300 font-medium">
+              <div class="text-black dark:text-gray-300 font-medium">
                 {stat.label}
               </div>
             </div>
@@ -91,7 +91,7 @@
             <!-- Quote Content -->
             <blockquote class="relative">
               <div class="absolute -left-2 -top-2 text-4xl text-primary-500 opacity-30 font-serif quote-mark">"</div>
-              <p class="text-lg text-gray-800 dark:text-white leading-relaxed italic pl-6 pr-4" style="color: inherit;">
+              <p class="text-lg text-black dark:text-white leading-relaxed italic pl-6 pr-4" style="color: inherit;">
                 I believe in Servant Leadership backed by Engineering Excellence. My goal is to build psychological safety that empowers teams to take technical risks, while implementing the rigorous architectural standards required for enterprise scale.
               </p>
               <div class="absolute -right-2 -bottom-2 text-4xl text-primary-500 opacity-30 font-serif quote-mark">"</div>
@@ -102,7 +102,7 @@
               <div class="flex items-center space-x-3">
                 <div class="w-1 h-8 bg-gradient-to-b from-primary-500 to-accent-500 rounded-full"></div>
                 <div class="text-right">
-                  <div class="font-semibold text-gray-900 dark:text-white">Thomas Kunnumpurath</div>
+                  <div class="font-semibold text-black dark:text-white">Thomas Kunnumpurath</div>
                   <div class="text-sm text-gray-600 dark:text-gray-400">VP Systems Engineering</div>
                 </div>
               </div>
@@ -121,3 +121,29 @@
     </div>
   </div>
 </section>
+<style>
+  /* About section text colors - black in light mode, white in dark mode */
+  :root:not(.dark) #about p,
+  :root:not(.dark) #about span,
+  :root:not(.dark) #about div:not(.gradient-text),
+  :root:not(.dark) #about h1:not(.gradient-text),
+  :root:not(.dark) #about h2:not(.gradient-text),
+  :root:not(.dark) #about h3:not(.gradient-text),
+  :root:not(.dark) #about h4:not(.gradient-text),
+  :root:not(.dark) #about h5:not(.gradient-text),
+  :root:not(.dark) #about h6:not(.gradient-text) {
+    color: black !important;
+  }
+  
+  .dark #about p,
+  .dark #about span,
+  .dark #about div:not(.gradient-text),
+  .dark #about h1:not(.gradient-text),
+  .dark #about h2:not(.gradient-text),
+  .dark #about h3:not(.gradient-text),
+  .dark #about h4:not(.gradient-text),
+  .dark #about h5:not(.gradient-text),
+  .dark #about h6:not(.gradient-text) {
+    color: white !important;
+  }
+</style>

@@ -189,7 +189,7 @@
           <button
             type="button"
             on:click={(event) => scrollToSection(item.id, event)}
-            class="relative text-gray-900 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold cursor-pointer {
+            class="relative text-black dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold cursor-pointer {
               currentSection === item.id 
                 ? 'text-primary-500 dark:text-primary-400' 
                 : ''
@@ -257,7 +257,7 @@
             <button
               type="button"
               on:click={(event) => scrollToSection(item.id, event)}
-              class="relative text-left text-gray-900 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold py-2 cursor-pointer {
+              class="relative text-left text-black dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold py-2 cursor-pointer {
                 currentSection === item.id 
                   ? 'text-primary-500 dark:text-primary-400' 
                   : ''

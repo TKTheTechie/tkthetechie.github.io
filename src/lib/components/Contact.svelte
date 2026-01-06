@@ -1,8 +1,15 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { darkMode } from '$lib/stores/theme';
   
   let contactRef: HTMLElement;
   let isVisible = false;
+  let isDark = false;
+  
+  // Subscribe to dark mode changes
+  darkMode.subscribe(value => {
+    isDark = value;
+  });
   
   onMount(() => {
     const observer = new IntersectionObserver(
@@ -42,7 +49,7 @@
   ];
 </script>
 
-<section id="contact" bind:this={contactRef} class="py-20 section-dark">
+<section id="contact" bind:this={contactRef} class="py-20 section-light" style="background-color: {isDark ? 'rgb(0, 0, 0)' : 'rgb(249, 250, 251)'};">
   <div class="container-max section-padding">
     <div class="max-w-4xl mx-auto">
       <!-- Section Header -->
@@ -51,7 +58,7 @@
           Get In <span class="gradient-text">Touch</span>
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
-        <p class="text-xl text-gray-800 dark:text-gray-100 max-w-3xl mx-auto">
+        <p class="text-xl text-black dark:text-gray-100 max-w-3xl mx-auto">
           Let's discuss opportunities, collaborations, or speaking engagements. 
           I'm always interested in connecting with fellow technologists and industry leaders.
         </p>
@@ -74,10 +81,10 @@
                   <path d={social.icon} />
                 </svg>
               </div>
-              <span class="font-semibold text-gray-900 dark:text-white group-hover:text-primary-500 transition-colors">
+              <span class="font-semibold text-black dark:text-white group-hover:text-primary-500 transition-colors">
                 {social.name}
               </span>
-              <span class="text-sm text-gray-800 dark:text-white text-center">
+              <span class="text-sm text-black dark:text-white text-center">
                 {social.description}
               </span>
             </a>
@@ -87,3 +94,38 @@
     </div>
   </div>
 </section>
+<style>
+  /* Contact section background - white in light mode, black in dark mode */
+  :root:not(.dark) #contact {
+    background-color: rgb(249, 250, 251) !important;
+  }
+  
+  .dark #contact {
+    background-color: rgb(0, 0, 0) !important;
+  }
+  
+  /* Contact section text colors - black in light mode, white in dark mode */
+  :root:not(.dark) #contact p,
+  :root:not(.dark) #contact span,
+  :root:not(.dark) #contact div:not(.gradient-text),
+  :root:not(.dark) #contact h1:not(.gradient-text),
+  :root:not(.dark) #contact h2:not(.gradient-text),
+  :root:not(.dark) #contact h3:not(.gradient-text),
+  :root:not(.dark) #contact h4:not(.gradient-text),
+  :root:not(.dark) #contact h5:not(.gradient-text),
+  :root:not(.dark) #contact h6:not(.gradient-text) {
+    color: black !important;
+  }
+  
+  .dark #contact p,
+  .dark #contact span,
+  .dark #contact div:not(.gradient-text),
+  .dark #contact h1:not(.gradient-text),
+  .dark #contact h2:not(.gradient-text),
+  .dark #contact h3:not(.gradient-text),
+  .dark #contact h4:not(.gradient-text),
+  .dark #contact h5:not(.gradient-text),
+  .dark #contact h6:not(.gradient-text) {
+    color: white !important;
+  }
+</style>

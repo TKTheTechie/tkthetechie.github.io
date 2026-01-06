@@ -20,7 +20,7 @@
   ];
 </script>
 
-<footer id="footer" class="py-12 transition-colors duration-300 bg-gray-100 dark:bg-slate-900 text-gray-900 dark:text-white">
+<footer id="footer" class="py-12 transition-colors duration-300 bg-gray-100 dark:bg-slate-900 text-black dark:text-white">
   <div class="container-max section-padding">
     <div class="max-w-6xl mx-auto">
       <!-- Main Footer Content -->
@@ -33,7 +33,7 @@
             </div>
             <span class="text-xl font-bold gradient-text">TheTechie</span>
           </div>
-          <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+          <p class="text-gray-700 dark:text-gray-400 leading-relaxed">
             Passionate about building scalable systems, leading engineering teams, 
             and evangelizing modern architectural patterns.
           </p>
@@ -41,7 +41,7 @@
         
         <!-- Quick Links -->
         <div>
-          <h3 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Links</h3>
+          <h3 class="text-lg font-semibold mb-4 text-black dark:text-white">Quick Links</h3>
           <div class="space-y-2">
             {#each ['About', 'Experience', 'Skills', 'Contact'] as link}
               <button
@@ -95,33 +95,54 @@
   </div>
 </footer>
 <style>
+  /* Footer light mode - ensure white background and dark text */
+  :root:not(.dark) #footer {
+    background-color: rgb(255, 255, 255) !important;
+    color: rgb(0, 0, 0) !important;
+  }
+  
+  :root:not(.dark) #footer .text-gray-900,
+  :root:not(.dark) #footer .text-gray-600,
+  :root:not(.dark) #footer .text-gray-700 {
+    color: rgb(0, 0, 0) !important;
+  }
+  
+  /* Social icons light mode */
+  :root:not(.dark) #footer .bg-gray-300 {
+    background-color: rgb(229, 231, 235) !important;
+  }
+  
+  :root:not(.dark) #footer .text-gray-700 {
+    color: rgb(55, 65, 81) !important;
+  }
+  
   /* Footer dark mode fixes */
-  :global(.dark) #footer {
+  .dark #footer {
     background-color: rgb(15, 23, 42) !important;
     color: rgb(255, 255, 255) !important;
   }
   
-  :global(.dark) #footer .text-gray-900 {
+  .dark #footer .text-gray-900 {
     color: rgb(255, 255, 255) !important;
   }
   
-  :global(.dark) #footer .text-gray-600 {
+  .dark #footer .text-gray-600 {
     color: rgb(156, 163, 175) !important;
   }
   
-  :global(.dark) #footer .text-gray-500 {
+  .dark #footer .text-gray-500 {
     color: rgb(107, 114, 128) !important;
   }
   
-  :global(.dark) #footer .border-gray-300 {
+  .dark #footer .border-gray-300 {
     border-color: rgb(75, 85, 99) !important;
   }
   
-  :global(.dark) #footer .bg-gray-300 {
+  .dark #footer .bg-gray-300 {
     background-color: rgb(55, 65, 81) !important;
   }
   
-  :global(.dark) #footer .text-gray-700 {
+  .dark #footer .text-gray-700 {
     color: rgb(255, 255, 255) !important;
   }
 </style>

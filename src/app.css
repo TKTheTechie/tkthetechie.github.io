@@ -50,6 +50,11 @@
   
   body {
     @apply font-sans antialiased transition-colors duration-300;
+    color: black; /* Force black text in light mode */
+  }
+  
+  .dark body {
+    color: white; /* White text in dark mode */
   }
   
   /* Sections styling */
@@ -79,9 +84,9 @@
   :root {
     --bg-primary: white;
     --bg-secondary: rgb(249, 250, 251);
-    --text-primary: rgb(17, 24, 39);
-    --text-secondary: rgb(55, 65, 81);
-    --text-muted: rgb(75, 85, 99);
+    --text-primary: black;
+    --text-secondary: rgb(17, 24, 39);
+    --text-muted: rgb(55, 65, 81);
   }
   
   /* Dark mode styles */
@@ -95,7 +100,11 @@
   
   body {
     background-color: var(--bg-primary);
-    color: var(--text-primary);
+    color: black; /* Force black text in light mode */
+  }
+  
+  .dark body {
+    color: white; /* White text in dark mode */
   }
 }
 
@@ -177,7 +186,7 @@
   }
   
   .text-secondary {
-    color: var(--text-secondary);
+    color: var(--text-primary); /* Use primary text color instead of secondary for better contrast */
   }
   
   .text-muted {
@@ -204,14 +213,14 @@
 
 /* Global prose styles */
 .prose {
-  @apply text-gray-800 dark:text-gray-300;
+  @apply text-black dark:text-gray-300;
   font-variant-numeric: oldstyle-nums;
   hyphens: auto;
   word-break: break-word;
 }
 
 .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
-  @apply text-gray-900 dark:text-white font-bold;
+  @apply text-black dark:text-white font-bold;
   font-weight: 800;
   letter-spacing: -0.025em;
   line-height: 1.2;
@@ -219,7 +228,7 @@
 }
 
 .prose p {
-  @apply mb-6 leading-relaxed;
+  @apply mb-6 leading-relaxed text-black dark:text-gray-300;
   font-weight: 450;
   letter-spacing: 0.01em;
   line-height: 1.75;
@@ -253,6 +262,31 @@
 ::-moz-selection {
   background-color: rgb(59, 130, 246);
   color: white;
+}
+
+/* Light mode text overrides - Force black text */
+:root:not(.dark) p,
+:root:not(.dark) span,
+:root:not(.dark) div:not(.gradient-text),
+:root:not(.dark) h1:not(.gradient-text),
+:root:not(.dark) h2:not(.gradient-text),
+:root:not(.dark) h3:not(.gradient-text),
+:root:not(.dark) h4:not(.gradient-text),
+:root:not(.dark) h5:not(.gradient-text),
+:root:not(.dark) h6:not(.gradient-text),
+:root:not(.dark) button {
+  color: black !important;
+}
+
+/* Navigation specific overrides */
+:root:not(.dark) nav button,
+:root:not(.dark) nav a {
+  color: black !important;
+}
+
+/* Ensure text-secondary uses black in light mode */
+:root:not(.dark) .text-secondary {
+  color: black !important;
 }
 
 /* Dark mode text visibility improvements */
@@ -318,20 +352,6 @@
 
 .dark section .text-xl {
   color: rgb(243, 244, 246) !important;
-}
-
-/* Specific section subtitle fixes for main page sections */
-.dark #about .text-xl,
-.dark #blog .text-xl,
-.dark #contact .text-xl {
-  color: rgb(243, 244, 246) !important;
-}
-
-/* Hero section text should remain white as it has dark background */
-#home p,
-#home .text-xl,
-#home .text-lg {
-  color: rgb(255, 255, 255) !important;
 }
 
 /* Blog layout specific styles */

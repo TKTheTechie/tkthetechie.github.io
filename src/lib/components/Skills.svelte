@@ -133,7 +133,7 @@
   }
   
   .category-label {
-    color: rgb(31 41 55);
+    color: black;
   }
   
   :global(.dark) .category-label {
@@ -155,7 +155,7 @@
           Skills & <span class="gradient-text">Expertise</span>
         </h2>
         <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
-        <p class="text-xl text-gray-900 dark:text-gray-100 max-w-3xl mx-auto">
+        <p class="text-xl text-black dark:text-gray-100 max-w-3xl mx-auto">
           A comprehensive skill set spanning technical leadership, architecture design, 
           and business strategy developed over 15+ years in the industry.
         </p>
@@ -178,7 +178,7 @@
                 <div class="skill-item {isVisible ? 'animate-slide-up' : 'opacity-0'}" style="animation-delay: {0.1 * (sectionIndex * 4 + skillIndex)}s;">
                   <div class="flex items-start space-x-3">
                     <div class="w-2 h-2 bg-gradient-to-r from-primary-500 to-accent-600 rounded-full mt-2 flex-shrink-0"></div>
-                    <span class="font-medium text-gray-900 dark:text-white leading-relaxed">{skill}</span>
+                    <span class="font-medium text-black dark:text-white leading-relaxed">{skill}</span>
                   </div>
                 </div>
               {/each}
