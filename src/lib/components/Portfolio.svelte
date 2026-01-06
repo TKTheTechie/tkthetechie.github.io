@@ -315,6 +315,12 @@
     cursor: pointer;
   }
   
+  /* Portfolio section glass-effect background override for dark mode */
+  :global(.dark #portfolio .glass-effect),
+  :global(html.dark #portfolio .glass-effect) {
+    background-color: rgba(30, 41, 59, 1) !important;
+  }
+  
   /* Portfolio section dark mode subtitle fix */
   :global(.dark #portfolio .text-xl) {
     color: rgb(243, 244, 246) !important;

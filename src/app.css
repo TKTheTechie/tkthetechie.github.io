@@ -152,7 +152,7 @@
   }
   
   .dark .glass-effect {
-    background-color: rgba(3, 7, 18, 0.9);
+    background-color: rgba(14, 23, 42, 1);
     border-color: rgba(71, 85, 105, 0.5);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
   }

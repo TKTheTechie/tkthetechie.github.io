@@ -190,4 +190,10 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  
+  /* Blog section glass-effect background override for dark mode */
+  :global(.dark #blog .glass-effect),
+  :global(html.dark #blog .glass-effect) {
+    background-color: rgba(30, 41, 59, 1) !important;
+  }
 </style>
