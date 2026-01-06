@@ -189,7 +189,7 @@
           <button
             type="button"
             on:click={(event) => scrollToSection(item.id, event)}
-            class="relative text-black dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold cursor-pointer {
+            class="relative text-black dark:text-white hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold cursor-pointer {
               currentSection === item.id 
                 ? 'text-primary-500 dark:text-primary-400' 
                 : ''
@@ -257,7 +257,7 @@
             <button
               type="button"
               on:click={(event) => scrollToSection(item.id, event)}
-              class="relative text-left text-black dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold py-2 cursor-pointer {
+              class="relative text-left text-black dark:text-white hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold py-2 cursor-pointer {
                 currentSection === item.id 
                   ? 'text-primary-500 dark:text-primary-400' 
                   : ''
@@ -277,3 +277,19 @@
     {/if}
   </div>
 </nav>
+
+<style>
+  /* Navigation text override for dark mode */
+  :global(.dark) nav button {
+    color: white !important;
+  }
+  
+  :global(.dark) nav button:hover {
+    color: rgb(147, 197, 253) !important; /* primary-300 */
+  }
+  
+  /* Active state override */
+  :global(.dark) nav button.text-primary-500 {
+    color: rgb(59, 130, 246) !important; /* primary-400 in dark mode */
+  }
+</style>

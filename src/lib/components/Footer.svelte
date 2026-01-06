@@ -1,5 +1,13 @@
 <script lang="ts">
+  import { darkMode } from '$lib/stores/theme';
+  
   const currentYear = new Date().getFullYear();
+  let isDark = false;
+  
+  // Subscribe to dark mode changes
+  darkMode.subscribe(value => {
+    isDark = value;
+  });
   
   const socialLinks = [
     {
@@ -20,7 +28,7 @@
   ];
 </script>
 
-<footer id="footer" class="py-12 transition-colors duration-300 bg-gray-100 dark:bg-slate-900 text-black dark:text-white">
+<footer id="footer" class="py-12 transition-colors duration-300 {isDark ? 'bg-black' : 'bg-gray-100'} text-black dark:text-white">
   <div class="container-max section-padding">
     <div class="max-w-6xl mx-auto">
       <!-- Main Footer Content -->
@@ -72,7 +80,7 @@
             href={social.href}
             target="_blank"
             rel="noopener noreferrer"
-            class="w-10 h-10 bg-gray-300 dark:bg-gray-800 hover:bg-gradient-to-br hover:from-primary-500 hover:to-accent-600 rounded-lg flex items-center justify-center transition-all duration-300 hover-lift text-gray-700 dark:text-white"
+            class="w-10 h-10 {isDark ? 'bg-gray-800' : 'bg-gray-300'} hover:bg-gradient-to-br hover:from-primary-500 hover:to-accent-600 rounded-lg flex items-center justify-center transition-all duration-300 hover-lift text-gray-700 dark:text-white"
             aria-label={social.name}
           >
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -95,30 +103,11 @@
   </div>
 </footer>
 <style>
-  /* Footer light mode - ensure white background and dark text */
-  :root:not(.dark) #footer {
-    background-color: rgb(255, 255, 255) !important;
-    color: rgb(0, 0, 0) !important;
-  }
-  
-  :root:not(.dark) #footer .text-gray-900,
-  :root:not(.dark) #footer .text-gray-600,
-  :root:not(.dark) #footer .text-gray-700 {
-    color: rgb(0, 0, 0) !important;
-  }
-  
-  /* Social icons light mode */
-  :root:not(.dark) #footer .bg-gray-300 {
-    background-color: rgb(229, 231, 235) !important;
-  }
-  
-  :root:not(.dark) #footer .text-gray-700 {
-    color: rgb(55, 65, 81) !important;
-  }
-  
-  /* Footer dark mode fixes */
+  /* Footer dark mode fixes - higher specificity */
+  :global(.dark) #footer,
+  :global(html.dark) #footer,
   .dark #footer {
-    background-color: rgb(15, 23, 42) !important;
+    background-color: rgb(0, 0, 0) !important;
     color: rgb(255, 255, 255) !important;
   }
   
@@ -144,5 +133,22 @@
   
   .dark #footer .text-gray-700 {
     color: rgb(255, 255, 255) !important;
+  }
+  
+  /* Footer light mode - ensure proper light colors */
+  :root:not(.dark) #footer {
+    background-color: rgb(249, 250, 251) !important;
+    color: rgb(0, 0, 0) !important;
+  }
+  
+  :root:not(.dark) #footer .text-gray-900,
+  :root:not(.dark) #footer .text-gray-600,
+  :root:not(.dark) #footer .text-gray-700 {
+    color: rgb(55, 65, 81) !important;
+  }
+  
+  /* Social icons light mode */
+  :root:not(.dark) #footer .bg-gray-300 {
+    background-color: rgb(229, 231, 235) !important;
   }
 </style>
