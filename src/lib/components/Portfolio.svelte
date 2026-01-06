@@ -295,10 +295,21 @@
   button[aria-label="Previous slide"],
   button[aria-label="Next slide"] {
     cursor: pointer;
+    --arrow-color: #374151; /* Default light mode color */
+  }
+  
+  :global(.dark) button[aria-label="Previous slide"],
+  :global(.dark) button[aria-label="Next slide"] {
+    --arrow-color: #ffffff; /* White for dark mode */
   }
   
   /* Dot indicators cursor */
   button[aria-label^="Go to slide"] {
     cursor: pointer;
+  }
+  
+  /* Portfolio section dark mode subtitle fix */
+  :global(.dark #portfolio .text-xl) {
+    color: rgb(243, 244, 246) !important;
   }
 </style>

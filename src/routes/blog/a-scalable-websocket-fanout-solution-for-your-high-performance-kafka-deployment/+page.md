@@ -105,7 +105,7 @@ You can retrieve the host:port and credentials from the ‘Connect’ tab of you
 or use ws://localhost:8000 for a broker deployed locally
 
 Here is an example of a market data stream sent over Solace via WebSocket to a web application –  
-![](https://res.cloudinary.com/practicaldev/image/fetch/s--jCZe1sFB--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_66%2Cw_880/https://cdn.solace.com/wp-content/uploads/2020/10/running-native-code-4.gif)
+![Market data WebSocket stream example showing real-time data flow to web application](https://res.cloudinary.com/practicaldev/image/fetch/s--jCZe1sFB--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_66%2Cw_880/https://cdn.solace.com/wp-content/uploads/2020/10/running-native-code-4.gif)
 
 ## Extending your deployment using a Solace PubSub+ Event Mesh
 

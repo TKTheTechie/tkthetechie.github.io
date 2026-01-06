@@ -549,49 +549,101 @@
     backdrop-filter: blur(15px);
   }
   
-  :global(body:not(.dark)) .experience-card h5 {
-    color: #1f2937 !important; /* Force dark text for headings in light mode */
+  /* Dark mode text fixes - Enhanced visibility */
+  :global(.dark) .experience-card h3 {
+    color: #ffffff !important;
+  }
+  
+  :global(.dark) .experience-card h4 {
+    color: rgb(243, 244, 246) !important;
   }
   
   :global(.dark) .experience-card h5 {
-    color: #ffffff !important; /* Force white text for headings in dark mode */
-  }
-  
-  :global(body:not(.dark)) .achievements-section h5,
-  :global(body:not(.dark)) .technologies-section h5 {
-    color: #111827 !important; /* Even darker for better contrast */
-  }
-  
-  :global(.dark) .achievements-section h5,
-  :global(.dark) .technologies-section h5 {
-    color: #ffffff !important; /* White text for dark mode */
-  }
-  
-  /* Additional specificity for dark mode headings */
-  :global(html.dark) .experience-card .achievements-section h5,
-  :global(html.dark) .experience-card .technologies-section h5 {
     color: #ffffff !important;
   }
   
-  /* Maximum specificity for dark mode */
-  :global(.dark .experience-card .achievements-section h5),
-  :global(.dark .experience-card .technologies-section h5) {
+  :global(.dark) .experience-card p {
+    color: rgb(243, 244, 246) !important;
+  }
+  
+  :global(.dark) .experience-card span {
+    color: rgb(243, 244, 246) !important;
+  }
+  
+  :global(.dark) .experience-card .text-gray-700 {
+    color: rgb(243, 244, 246) !important;
+  }
+  
+  :global(.dark) .experience-card .text-gray-600 {
+    color: rgb(203, 213, 225) !important;
+  }
+  
+  :global(.dark) .experience-card .text-gray-900 {
     color: #ffffff !important;
   }
   
-  :global(body:not(.dark)) .achievement-item {
-    background: rgba(0, 0, 0, 0.03);
+  :global(.dark) .experience-card .description-section p {
+    color: rgb(243, 244, 246) !important;
   }
   
-  :global(body:not(.dark)) .achievement-item:hover {
-    background: rgba(0, 0, 0, 0.06);
+  :global(.dark) .experience-card .achievement-item span {
+    color: rgb(243, 244, 246) !important;
   }
   
-  :global(.dark) .tech-badge {
-    color: white !important;
+  /* Achievement text specific fixes */
+  :global(.dark) .achievements-section span {
+    color: rgb(243, 244, 246) !important;
   }
   
-  :global(body:not(.dark)) .tech-badge {
-    color: rgb(30 58 138) !important;
+  /* Location and period text fixes - Make them more visible */
+  :global(.dark) .experience-card .text-gray-600.dark\\:text-gray-400 {
+    color: rgb(203, 213, 225) !important;
+  }
+  
+  /* Specific fixes for location and date spans */
+  :global(.dark) .experience-card .text-sm.font-medium.text-gray-600 {
+    color: rgb(203, 213, 225) !important;
+  }
+  
+  :global(.dark) .experience-card .flex.items-center span {
+    color: rgb(203, 213, 225) !important;
+  }
+  
+  /* Target the specific location and date elements */
+  :global(.dark) .experience-card .flex.items-center.justify-center span.font-semibold,
+  :global(.dark) .experience-card .flex.items-center.justify-start span.font-semibold {
+    color: rgb(203, 213, 225) !important;
+  }
+  
+  /* Target the parent container of location and date */
+  :global(.dark) .experience-card .text-sm.font-medium.text-gray-600.dark\\:text-gray-400 {
+    color: rgb(203, 213, 225) !important;
+  }
+  
+  /* More specific targeting for location and date spans */
+  :global(.dark) .experience-card div.text-sm.font-medium span.font-semibold {
+    color: rgb(203, 213, 225) !important;
+  }
+  
+  /* Light mode text fixes */
+  :global(body:not(.dark)) .experience-card h5 {
+    color: #1f2937 !important;
+  }
+  
+  :global(body:not(.dark)) .experience-card p {
+    color: rgb(55, 65, 81) !important;
+  }
+  
+  :global(body:not(.dark)) .experience-card span {
+    color: rgb(55, 65, 81) !important;
+  }
+  
+  /* Section header subtitle fix for dark mode */
+  :global(.dark) #experience .text-center p {
+    color: rgb(243, 244, 246) !important;
+  }
+  
+  :global(.dark) #experience .text-xl {
+    color: rgb(243, 244, 246) !important;
   }
 </style>

@@ -205,3 +205,9 @@
     </div>
   </div>
 </section>
+<style>
+  /* Credentials section dark mode subtitle fix */
+  :global(.dark #credentials .text-xl) {
+    color: rgb(243, 244, 246) !important;
+  }
+</style>

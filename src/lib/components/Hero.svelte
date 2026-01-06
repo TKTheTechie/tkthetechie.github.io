@@ -285,6 +285,187 @@
 </section>
 
 <style>
+  /* Hero-specific background effects */
+  .matrix-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(22, 146, 79, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(22, 146, 79, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 60% 30%, rgba(14, 165, 233, 0.08) 0%, transparent 50%);
+    opacity: 0.8;
+  }
+  
+  .matrix-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      linear-gradient(90deg, transparent 96%, rgba(22, 146, 79, 0.15) 100%),
+      linear-gradient(0deg, transparent 96%, rgba(14, 165, 233, 0.15) 100%);
+    background-size: 40px 40px;
+  }
+  
+  /* Floating Orbs */
+  .floating-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(1px);
+    opacity: 0.4;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+  }
+  
+  .orb-1 {
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.3) 0%, transparent 70%);
+    top: 10%;
+    left: 10%;
+    filter: blur(4px) brightness(1.1);
+  }
+  
+  .orb-2 {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, transparent 70%);
+    top: 20%;
+    right: 15%;
+    filter: blur(2px) brightness(1.2);
+  }
+  
+  .orb-3 {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, transparent 70%);
+    bottom: 30%;
+    left: 20%;
+    filter: blur(5px) brightness(1.0);
+  }
+  
+  .orb-4 {
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, transparent 70%);
+    bottom: 15%;
+    right: 25%;
+    filter: blur(2px) brightness(1.3);
+  }
+  
+  .orb-5 {
+    width: 90px;
+    height: 90px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, transparent 70%);
+    top: 60%;
+    left: 50%;
+    filter: blur(3px) brightness(1.1);
+  }
+  
+  /* Animated Particles */
+  .particles-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(14, 165, 233, 0.6);
+    border-radius: 50%;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  
+  .particle-1 {
+    top: 20%;
+    left: 10%;
+  }
+  
+  .particle-2 {
+    top: 40%;
+    left: 80%;
+    background: rgba(34, 197, 94, 0.6);
+  }
+  
+  .particle-3 {
+    top: 70%;
+    left: 30%;
+  }
+  
+  .particle-4 {
+    top: 15%;
+    left: 60%;
+    background: rgba(34, 197, 94, 0.6);
+  }
+  
+  .particle-5 {
+    top: 80%;
+    left: 70%;
+  }
+  
+  .particle-6 {
+    top: 50%;
+    left: 20%;
+    background: rgba(34, 197, 94, 0.6);
+  }
+  
+  .particle-7 {
+    top: 35%;
+    left: 75%;
+    background: rgba(14, 165, 233, 0.7);
+  }
+  
+  .particle-8 {
+    top: 85%;
+    left: 45%;
+    background: rgba(34, 197, 94, 0.5);
+  }
+  
+  .particle-9 {
+    top: 25%;
+    left: 35%;
+    background: rgba(14, 165, 233, 0.6);
+  }
+  
+  .particle-10 {
+    top: 75%;
+    left: 85%;
+    background: rgba(34, 197, 94, 0.7);
+  }
+  
+  /* Gradient Waves */
+  .gradient-wave {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    opacity: 0.1;
+    border-radius: 50%;
+    filter: blur(2px);
+  }
+  
+  .wave-1 {
+    background: conic-gradient(from 0deg, rgba(14, 165, 233, 0.3), rgba(34, 197, 94, 0.3), rgba(14, 165, 233, 0.3));
+    top: -50%;
+    left: -50%;
+  }
+  
+  .wave-2 {
+    background: conic-gradient(from 180deg, rgba(34, 197, 94, 0.2), rgba(14, 165, 233, 0.2), rgba(34, 197, 94, 0.2));
+    bottom: -50%;
+    right: -50%;
+  }
+
   /* Mouse tracking blurred particle */
   .mouse-tracking-particle {
     position: absolute;

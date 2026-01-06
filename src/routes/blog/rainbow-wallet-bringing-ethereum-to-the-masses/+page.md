@@ -36,7 +36,7 @@ The way Rainbow enables wallet creation is the combination of a wallet password 
 Backing up to iCloud is integrated natively into the app.  
   
 
-![](../images/blog/rainbow-wallet-1.png) ![](../images/blog/rainbow-wallet-2.png)
+![Rainbow Wallet onboarding screens showing wallet creation process](../images/blog/rainbow-wallet-1.png) ![Rainbow Wallet interface showing main wallet features](../images/blog/rainbow-wallet-2.png)
 
   
   
@@ -47,7 +47,7 @@ Now once your wallet has been setup, the next step is to fund it – specificall
 
 Once a wallet is created, these screens greet you:  
 
-![](../images/blog/IMG_49354DD2F574-1-scaled.jpeg) ![](../images/blog/IMG_0E952ECACCB4-1-scaled.jpeg)
+![Rainbow Wallet home screen showing portfolio overview](../images/blog/IMG_49354DD2F574-1-scaled.jpeg) ![Rainbow Wallet transaction history and activity feed](../images/blog/IMG_0E952ECACCB4-1-scaled.jpeg)
 
 On top of that, the app limits how much Ethereum you can buy to $500 a week/$5000 a year. This also makes it ideal for the crypto-curious to get started without the fear of losing your life savings.
 
@@ -62,7 +62,7 @@ Here is a view of the liquidity pools that you can partake in – thanks to a ni
 
   
 
-![](../images/blog/IMG_903C632AB9F0-1-scaled.jpeg)
+![Rainbow Wallet DeFi features and token swapping interface](../images/blog/IMG_903C632AB9F0-1-scaled.jpeg)
 
   
   

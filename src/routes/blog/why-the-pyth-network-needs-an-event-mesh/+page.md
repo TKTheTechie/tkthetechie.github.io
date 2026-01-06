@@ -20,7 +20,7 @@ Before we dive deeper into Pyth, lets describe what market data is and why its a
 For example, when you open CNBC.com or Robinhood, you will see a price for a stock. That price is essentially derived from MarketData.
 
   
-![aapl-md](../images/blog/IMG_21C5D4C0E8B5-1-e1648139145429.jpeg)  
+![Apple stock price display from Robinhood mobile app](../images/blog/IMG_21C5D4C0E8B5-1-e1648139145429.jpeg)  
   
 _Example of Apples stock price from the Robinhood App  
 _
@@ -81,7 +81,7 @@ Crypto.UST/USD: 1.00205 ±0.00025100000000000003
 
 Now imagine if you were just interested in the price of BitCoin (BTC) or just wanted the price of BTC denominated in your local currency. You would have to sift through all the data you receive, and pull out the information you are interested in. In addition, what if your company had traders sitting in multiple locations – they would also need to use the API to consume the market data and sift through it to find the price they were interested in. This can get prohibitively expensive in terms of both network and infrastructure costs.  
 
-![pyth-arch](../images/blog/pyth-architecture.png)  
+![Pyth Network architecture diagram showing data flow from publishers to consumers](../images/blog/pyth-architecture.png)  
   
 
 The ideal architecture would be that you consume from the pyth.network once and publish it to all globally to all interested parties on a demand basis using a highly robust, logical mesh of event brokers also known as the…
@@ -91,7 +91,7 @@ The ideal architecture would be that you consume from the pyth.network once and 
 “An event mesh is a configurable and dynamic infrastructure layer for distributing events among decoupled applications, cloud services and devices. It enables event communications to be governed, flexible, reliable and fast. An event mesh is created and enabled through a network of interconnected event brokers.” – from [solace.com](https://solace.com/what-is-an-event-mesh/)   
   
 Remember from the description of the pyth.network, consuming data in effect costs you. So consuming the pyth feed for every user can get prohibitively expensive both from an Infrastructure Perspective and a Network Perspective. This is where the event mesh would come into play, a mesh of brokers that would allow you to consume from the pyth.network once and then consume it on demand from locations around the world.  
-![pyth-event-mesh](../images/blog/pyth-event-mesh2.png)
+![Pyth Network with Event Mesh architecture showing global distribution of market data](../images/blog/pyth-event-mesh2.png)
 
 The benefits of doing this are as follows:
 

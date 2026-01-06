@@ -24,15 +24,15 @@ Here is the stack I used to build the demo:
 
 #### The Architecture
 
-Lets start with the high level architecture: ![high-level](../images/blog/cv-ml-highlevel.png)
+Lets start with the high level architecture: ![High-level architecture diagram showing event-driven machine learning components](../images/blog/cv-ml-highlevel.png)
 
 ###### UI
 
-There is a lot that actually takes place in the UI – listening to market data events, detecting gestures that take place on the webcam (via the [handtrack.js](https://victordibia.com/handtrack.js/#/) library), and sending streams over to Solace PubSub+. Key to the front-end is the [**Svelte javascript framework**](https://svelte.dev/) that binds everything together. The UI consists of multiple [**Svelte components**](https://svelte.dev/docs#component-format) that are developed in isolation. By making elaborate use of [**Svelte Stores**](https://svelte.dev/docs#run-time-svelte-store), I enabled the different components to share state. The diagram below shows some of the interaction between the various components and the associated Svelte stores: ![cv-ml-ui-arch](../images/blog/cv-ml-ui.png)
+There is a lot that actually takes place in the UI – listening to market data events, detecting gestures that take place on the webcam (via the [handtrack.js](https://victordibia.com/handtrack.js/#/) library), and sending streams over to Solace PubSub+. Key to the front-end is the [**Svelte javascript framework**](https://svelte.dev/) that binds everything together. The UI consists of multiple [**Svelte components**](https://svelte.dev/docs#component-format) that are developed in isolation. By making elaborate use of [**Svelte Stores**](https://svelte.dev/docs#run-time-svelte-store), I enabled the different components to share state. The diagram below shows some of the interaction between the various components and the associated Svelte stores: ![UI architecture diagram showing component interactions and Svelte stores](../images/blog/cv-ml-ui.png)
 
 ##### The Backend
 
-The backend consists of a Node.js server that has a few responsibilities: ![ml-cv-trade-rserver](../images/blog/ml-cv-trader-server.png)
+The backend consists of a Node.js server that has a few responsibilities: ![Backend server architecture diagram showing Node.js server components](../images/blog/ml-cv-trader-server.png)
 
 i. Produce Market Data Events  
 ii. Save trading session results  
@@ -44,7 +44,7 @@ Solace PubSub+ is an enterprise grade event broker that supports many unique fea
 
 Another rather unique feature of the Solace PubSub+ Event Broker is the ability to throttle event streams to subscribers using a feature called “[**eliding**](https://docs.solace.com/Basics/Direct-Messages.htm#Message-Eliding)”. In our instance, the back-end server is sending data updates 4 times a second – but we want to only expose the front-end client to a lower frequency of updates – in this case, once a second. By using this feature, the Solace PubSub+ Event Broker can throttle fast streams going to a client that doesn’t need it as quickly.
 
-![ml-cv-server-trading](../images/blog/ml-cv-server-eliding.png)
+![Event eliding diagram showing message throttling from server to client](../images/blog/ml-cv-server-eliding.png)
 
 #### Conclusion
 

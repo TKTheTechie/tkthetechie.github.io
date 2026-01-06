@@ -139,6 +139,11 @@
   :global(.dark) .category-label {
     color: white !important;
   }
+  
+  /* Skills section dark mode subtitle fix */
+  :global(.dark #skills .text-xl) {
+    color: rgb(243, 244, 246) !important;
+  }
 </style>
 
 <section id="skills" bind:this={skillsRef} class="py-20 section-light">

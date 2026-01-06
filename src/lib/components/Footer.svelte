@@ -94,3 +94,34 @@
     </div>
   </div>
 </footer>
+<style>
+  /* Footer dark mode fixes */
+  :global(.dark) #footer {
+    background-color: rgb(15, 23, 42) !important;
+    color: rgb(255, 255, 255) !important;
+  }
+  
+  :global(.dark) #footer .text-gray-900 {
+    color: rgb(255, 255, 255) !important;
+  }
+  
+  :global(.dark) #footer .text-gray-600 {
+    color: rgb(156, 163, 175) !important;
+  }
+  
+  :global(.dark) #footer .text-gray-500 {
+    color: rgb(107, 114, 128) !important;
+  }
+  
+  :global(.dark) #footer .border-gray-300 {
+    border-color: rgb(75, 85, 99) !important;
+  }
+  
+  :global(.dark) #footer .bg-gray-300 {
+    background-color: rgb(55, 65, 81) !important;
+  }
+  
+  :global(.dark) #footer .text-gray-700 {
+    color: rgb(255, 255, 255) !important;
+  }
+</style>

@@ -20,7 +20,7 @@ Another interesting fact for Zinc Search is that it is currently the fast growin
 
 The Solace PubSub+ Advanced Event broker is a multi-protocol event broker that comes in a variety of form factors. Hardware, Software and SaaS. A core differentiating factor of the Solace PubSub+ Event Broker is multi-protocol support – including REST – as shown below.
 
-![](../images/blog/v9-API-Protocols-Diagram-300x220.png)
+![Solace PubSub+ multi-protocol support diagram showing various APIs and protocols](../images/blog/v9-API-Protocols-Diagram-300x220.png)
 
 What this means is that you could do a REST-ful operation directly into the event broker and consume the output as an event stream, and vice versa, you could push an event into the event broker and have the event broker do a webhook out to a REST-ful endpoint.
 
@@ -48,7 +48,7 @@ You should be able to access the web interface for the broker by hitting http://
 
 ## Setting up an Event Driven Logging Architecture
 
-With the Solace PubSub+ Event Broker, you publish events using dynamic topics. Topics are simply metadata on an event and do not consume resources on a broker. A representation of a message in Solace is shown below: ![](../images/blog/SolaceMessage-300x283.png)
+With the Solace PubSub+ Event Broker, you publish events using dynamic topics. Topics are simply metadata on an event and do not consume resources on a broker. A representation of a message in Solace is shown below: ![Solace message structure diagram showing topic and payload components](../images/blog/SolaceMessage-300x283.png)
 
 ##  Publishing and Subscribing to Messages with Solace
 
@@ -57,7 +57,7 @@ You can use a [**variety of APIs**](https://solace.dev/) to interact with the So
 Assuming you used the default credentials, login to the broker ui using admin/admin. Once inside, navigate to the default VPN and click on the ‘Try Me Tab’ as shown below  
   
 
-![](../images/blog/TryMeImage-1024x254.png)
+![Solace Try Me interface showing publisher and subscriber testing tools](../images/blog/TryMeImage-1024x254.png)
 
 Once you are in the ‘Try Me’ tab – click on **Connect** on the Publisher and Subscriber which will connect to the broker using a websocket connection for testing publishing and subscribing to messages
 

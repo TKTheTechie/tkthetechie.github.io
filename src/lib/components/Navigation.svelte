@@ -140,6 +140,7 @@
     // Find the element directly by ID
     const element = document.getElementById(sectionId);
     if (element) {
+      // Element exists on current page - scroll to it
       // Update the URL with the hash using SvelteKit's pushState
       const url = new URL(window.location.href);
       url.hash = sectionId;
@@ -158,6 +159,13 @@
       // Update current section
       currentSection = sectionId;
       isMobileMenuOpen = false;
+    } else {
+      // Element doesn't exist on current page - navigate to home page with hash
+      const currentPath = window.location.pathname;
+      if (currentPath !== '/') {
+        // Navigate to home page with the section hash
+        window.location.href = `/#${sectionId}`;
+      }
     }
   };
 </script>
@@ -200,11 +208,11 @@
         <!-- Dark Mode Toggle -->
         <button
           on:click={toggleDarkMode}
-          class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
+          class="p-2 rounded-lg {isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'} transition-colors duration-200 cursor-pointer"
           aria-label="Toggle dark mode"
           title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
-          <svg class="w-5 h-5 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 {isDark ? 'text-gray-100' : 'text-gray-900'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path class="{isDark ? 'hidden' : 'block'}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
             <path class="{isDark ? 'block' : 'hidden'}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
           </svg>
@@ -215,11 +223,11 @@
       <div class="md:hidden flex items-center space-x-2">
         <button
           on:click={toggleDarkMode}
-          class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
+          class="p-2 rounded-lg {isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'} transition-colors duration-200 cursor-pointer"
           aria-label="Toggle dark mode"
           title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
-          <svg class="w-5 h-5 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 {isDark ? 'text-gray-100' : 'text-gray-900'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path class="{isDark ? 'hidden' : 'block'}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
             <path class="{isDark ? 'block' : 'hidden'}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
           </svg>
@@ -227,10 +235,10 @@
         
         <button
           on:click={() => isMobileMenuOpen = !isMobileMenuOpen}
-          class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer"
+          class="p-2 rounded-lg {isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'} transition-colors duration-200 cursor-pointer"
           aria-label="Toggle menu"
         >
-          <svg class="w-6 h-6 text-gray-700 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-6 h-6 {isDark ? 'text-gray-100' : 'text-gray-900'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             {#if !isMobileMenuOpen}
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             {:else}

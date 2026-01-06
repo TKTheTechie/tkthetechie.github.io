@@ -13,7 +13,7 @@ There is no doubt that Event Driven Architecture (EDA) is going mainstream. Ever
 Now there are many EDA Platforms out there, each with their own strengths and benefits … too numerous to cover in this blog post. An analytics use case for detecting fraud will require a very different Event Driven Architecture platform than a transactional use case that is processing payments. In this post, I will focus on an important aspect of an EDA platform for transactional use cases: Single Message Settlement (or Acknowledgement). Before we dive into that, lets start with some basics…
 
 
-## Event Driven Architecture 101 ![](../images/blog/PubSub-300x282.png)
+## Event Driven Architecture 101 ![Event Driven Architecture diagram showing publishers, event broker, and subscribers](../images/blog/PubSub-300x282.png)
 
 In an Event Driven Architecture, you will have three main participants:
 
@@ -37,7 +37,7 @@ Lets analyze how these two different patterns would work and what type of system
 
 ## Individual Message Settlement
 
-![](../images/blog/IndividualMessageSettlement.gif)
+![Individual message settlement pattern showing one-by-one acknowledgment of messages](../images/blog/IndividualMessageSettlement.gif)
 
 In this pattern, a message is individually acknowledged and the event broker keeps track of what messages haven’t been acknowledged. In the case of a failure, the event broker will only deliver messages to the consumer that haven’t been acknowledged. In addition, some event brokers have the functionality to mark a message as redelivered in the case it was sent to a consumer but not processed. These features make it simpler for microservices/applications to deal with failures.
 
@@ -45,7 +45,7 @@ Transactional systems that require individual message settlement such as credit 
 
 ## Batched Message Settlement
 
-![](../images/blog/BatchedSettlement.gif)
+![Batched message settlement pattern showing acknowledgment of multiple messages at once](../images/blog/BatchedSettlement.gif)
 
 In this pattern, the consumer will periodically send an acknowledgement back to the event broker to notify it that it is done processing a set amount of messages.
 

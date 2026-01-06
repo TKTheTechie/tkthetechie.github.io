@@ -10,7 +10,7 @@ layout: blog
 
 Have you ever wanted to tinker around with a Raspberry Pi and IoT but felt that it was too daunting? We’ve developed a set of instructions for you to build a proximity detection system using a Raspberry Pi with an ultra-sonic proximity sensor. The instructions include the materials you need to purchase, how to wire everything together, and the code required to build an application on top of it.
 
-[![](../images/blog/proximity-comic.png)](../images/blog/proximity-comic.png)
+[![Proximity detection system comic illustration showing Raspberry Pi setup](../images/blog/proximity-comic.png)](../images/blog/proximity-comic.png)
 
 ## What You Will Build
 

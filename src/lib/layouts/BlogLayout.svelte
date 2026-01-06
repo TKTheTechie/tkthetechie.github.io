@@ -52,24 +52,20 @@
       'Architecture': 'from-purple-500 to-purple-600',
       'Tutorial': 'from-orange-500 to-orange-600',
       'Crypto': 'from-yellow-500 to-yellow-600',
+      'Personal': 'from-indigo-500 to-indigo-600',
+      'Other': 'from-gray-500 to-gray-600',
       'default': 'from-gray-500 to-gray-600'
     };
+    
+    // Handle combined categories (like "Crypto, Personal")
+    if (category && category.includes(',')) {
+      const firstCategory = category.split(',')[0].trim();
+      return colors[firstCategory] || colors.default;
+    }
+    
     return colors[category] || colors.default;
   };
 </script>
-
-<style>
-  .share-text {
-    color: rgb(75, 85, 99) !important;
-  }
-  
-  /* Multiple levels of specificity to override global rules */
-  :global(.dark) .share-text,
-  :global(.dark) span.share-text,
-  :global(.dark) .flex .share-text {
-    color: rgb(255, 255, 255) !important;
-  }
-</style>
 
 <svelte:head>
   <title>{title} - Thomas Kunnumpurath</title>
@@ -147,7 +143,8 @@
             </div>
           </div>
         {/if}
-        <!-- Blog Post Content Container with Enhanced Styling -->
+        
+        <!-- Blog Post Content Container -->
         <div class="blog-post-container relative">
           <!-- Decorative Background Elements -->
           <div class="absolute inset-0 -z-10 overflow-hidden">
@@ -159,23 +156,7 @@
                       relative bg-white/90 dark:bg-gray-800/80 backdrop-blur-sm
                       border border-gray-200/80 dark:border-gray-700/60 rounded-2xl
                       shadow-xl shadow-gray-200/50 dark:shadow-gray-900/50
-                      p-8 md:p-12 lg:p-16
-                      prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white prose-headings:mb-6 prose-headings:mt-12 prose-headings:tracking-tight
-                      prose-p:text-gray-800 dark:prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-6 prose-p:font-medium prose-p:tracking-wide
-                      prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-a:font-semibold
-                      prose-strong:text-gray-900 dark:prose-strong:text-white prose-strong:font-bold
-                      prose-code:text-blue-700 dark:prose-code:text-blue-400 prose-code:bg-blue-50 dark:prose-code:bg-gray-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:font-mono prose-code:font-semibold prose-code:border prose-code:border-blue-200 dark:prose-code:border-gray-700
-                      prose-pre:bg-gray-900 dark:prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-300 dark:prose-pre:border-gray-700 prose-pre:rounded-lg prose-pre:mb-8 prose-pre:mt-6 prose-pre:shadow-lg
-                      prose-blockquote:border-l-4 prose-blockquote:border-l-blue-500 prose-blockquote:bg-gradient-to-r prose-blockquote:from-blue-50 prose-blockquote:to-indigo-50/50 dark:prose-blockquote:from-gray-800 dark:prose-blockquote:to-blue-900/30 prose-blockquote:py-6 prose-blockquote:px-8 prose-blockquote:rounded-r-lg prose-blockquote:my-8 prose-blockquote:shadow-md
-                      prose-ul:text-gray-800 dark:prose-ul:text-gray-300 prose-ul:mb-6 prose-ul:mt-4
-                      prose-ol:text-gray-800 dark:prose-ol:text-gray-300 prose-ol:mb-6 prose-ol:mt-4
-                      prose-li:text-gray-800 dark:prose-li:text-gray-300 prose-li:mb-2 prose-li:font-medium
-                      prose-h1:text-4xl prose-h1:mb-8 prose-h1:mt-12 prose-h1:font-black prose-h1:letter-spacing-tight prose-h1:text-gray-900 dark:prose-h1:text-white
-                      prose-h2:text-3xl prose-h2:mb-6 prose-h2:mt-16 prose-h2:font-bold prose-h2:tracking-tight prose-h2:text-gray-900 dark:prose-h2:text-white
-                      prose-h3:text-2xl prose-h3:mb-5 prose-h3:mt-12 prose-h3:font-bold prose-h3:tracking-tight prose-h3:text-gray-900 dark:prose-h3:text-white
-                      prose-h4:text-xl prose-h4:mb-4 prose-h4:mt-10 prose-h4:font-semibold prose-h4:tracking-tight prose-h4:text-gray-900 dark:prose-h4:text-white
-                      prose-img:rounded-xl prose-img:shadow-2xl prose-img:my-8 prose-img:mx-auto prose-img:border prose-img:border-gray-300 dark:prose-img:border-gray-700
-                      prose-hr:my-12 prose-hr:border-gray-400 dark:prose-hr:border-gray-600"
+                      p-8 md:p-12 lg:p-16"
                style="font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'ss01' 1; 
                       -webkit-font-smoothing: antialiased; 
                       -moz-osx-font-smoothing: grayscale; 
@@ -222,7 +203,7 @@
         <div class="mt-12 text-center">
           <a 
             href="/blog"
-            class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary-500 to-accent-600 text-white rounded-lg font-semibold hover:from-primary-600 hover:to-accent-700 transition-all duration-300 hover-lift shadow-lg !bg-gradient-to-r !from-primary-500 !to-accent-600 !text-white"
+            class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-primary-500 to-accent-600 text-white rounded-lg font-semibold hover:from-primary-600 hover:to-accent-700 transition-all duration-300 hover-lift shadow-lg"
           >
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -234,3 +215,230 @@
     </div>
   </div>
 </div>
+
+<style>
+  /* Blog-specific prose enhancements */
+  :global(.prose h1) {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+  }
+
+  :global(.prose h2) {
+    margin-top: 4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  :global(.prose h3) {
+    margin-top: 3rem;
+    margin-bottom: 1.25rem;
+  }
+
+  :global(.prose h4) {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  :global(.prose ul), :global(.prose ol) {
+    margin-bottom: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  :global(.prose li) {
+    margin-bottom: 0.5rem;
+    font-weight: 450;
+    letter-spacing: 0.01em;
+  }
+
+  :global(.prose ul li::marker) {
+    color: rgb(59, 130, 246);
+  }
+
+  :global(.prose ol li::marker) {
+    color: rgb(59, 130, 246);
+    font-weight: 600;
+  }
+
+  :global(.prose img) {
+    margin: 2rem auto;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  :global(.prose pre) {
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, rgb(17, 24, 39) 0%, rgb(31, 41, 55) 100%);
+    border: 1px solid rgb(75, 85, 99);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  :global(.dark .prose pre) {
+    background: linear-gradient(135deg, rgb(15, 23, 42) 0%, rgb(30, 41, 59) 100%);
+    border: 1px solid rgb(51, 65, 85);
+  }
+
+  :global(.prose blockquote) {
+    margin: 2rem 0;
+    padding: 1.5rem 2rem;
+    border-left: 4px solid rgb(59, 130, 246);
+    background-color: rgb(249, 250, 251);
+    border-radius: 0 0.5rem 0.5rem 0;
+    font-style: italic;
+    position: relative;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  :global(.dark .prose blockquote) {
+    background-color: rgb(31, 41, 55);
+  }
+
+  :global(.prose blockquote::before) {
+    content: '"';
+    position: absolute;
+    top: -0.5rem;
+    left: -0.5rem;
+    font-size: 4rem;
+    font-weight: bold;
+    color: rgb(59, 130, 246);
+    opacity: 0.3;
+    line-height: 1;
+  }
+
+  :global(.prose hr) {
+    margin: 3rem 0;
+  }
+
+  :global(.prose a:hover) {
+    text-decoration-thickness: 3px;
+    text-underline-offset: 2px;
+  }
+
+  :global(.prose a:focus) {
+    outline: 2px solid rgb(59, 130, 246);
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  :global(.prose pre code) {
+    color: rgb(243, 244, 246);
+    background-color: transparent;
+    padding: 0;
+  }
+
+  :global(.prose table) {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid rgb(209, 213, 219);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  }
+
+  :global(.dark .prose table) {
+    border-color: rgb(75, 85, 99);
+  }
+
+  :global(.prose th), :global(.prose td) {
+    border: 1px solid rgb(209, 213, 219);
+    padding: 1rem;
+  }
+
+  :global(.dark .prose th), :global(.dark .prose td) {
+    border-color: rgb(75, 85, 99);
+  }
+
+  :global(.prose th) {
+    background: linear-gradient(135deg, rgb(59, 130, 246) 0%, rgb(37, 99, 235) 100%);
+    color: white;
+    font-weight: 700;
+    letter-spacing: 0.025em;
+  }
+
+  :global(.prose td) {
+    font-weight: 450;
+  }
+
+  :global(.prose pre::-webkit-scrollbar) {
+    height: 8px;
+  }
+
+  :global(.prose pre::-webkit-scrollbar-track) {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+  }
+
+  :global(.prose pre::-webkit-scrollbar-thumb) {
+    background: rgba(59, 130, 246, 0.6);
+    border-radius: 4px;
+  }
+
+  :global(.prose pre::-webkit-scrollbar-thumb:hover) {
+    background: rgba(59, 130, 246, 0.8);
+  }
+
+  /* Blog content dark mode fixes */
+  :global(.dark .blog-post-container .prose) {
+    background-color: rgba(31, 41, 55, 0.9) !important;
+    border-color: rgba(75, 85, 99, 0.6) !important;
+  }
+
+  :global(.dark .blog-post-container .prose.prose-lg.prose-gray) {
+    background-color: rgba(31, 41, 55, 0.9) !important;
+    border-color: rgba(75, 85, 99, 0.6) !important;
+  }
+
+  :global(.dark .backdrop-blur-sm) {
+    background-color: rgba(31, 41, 55, 0.9) !important;
+    border-color: rgba(75, 85, 99, 0.6) !important;
+  }
+
+  :global(.dark .blog-post-container .prose p) {
+    color: rgb(229, 231, 235) !important;
+  }
+
+  :global(.dark .blog-post-container .prose h1),
+  :global(.dark .blog-post-container .prose h2),
+  :global(.dark .blog-post-container .prose h3),
+  :global(.dark .blog-post-container .prose h4),
+  :global(.dark .blog-post-container .prose h5),
+  :global(.dark .blog-post-container .prose h6) {
+    color: rgb(255, 255, 255) !important;
+  }
+
+  :global(.dark .blog-post-container .prose a) {
+    color: rgb(96, 165, 250) !important;
+  }
+
+  :global(.dark .blog-post-container .prose strong) {
+    color: rgb(255, 255, 255) !important;
+  }
+
+  :global(.dark .blog-post-container .prose code) {
+    background-color: rgba(55, 65, 81, 0.8) !important;
+    color: rgb(96, 165, 250) !important;
+    border-color: rgba(75, 85, 99, 0.6) !important;
+  }
+
+  :global(.dark .blog-post-container .prose pre) {
+    background-color: rgba(17, 24, 39, 0.9) !important;
+    border-color: rgba(75, 85, 99, 0.6) !important;
+  }
+
+  :global(.dark .blog-post-container .prose blockquote) {
+    background: linear-gradient(to right, rgba(31, 41, 55, 0.8), rgba(30, 58, 138, 0.3)) !important;
+    border-left-color: rgb(59, 130, 246) !important;
+    color: rgb(229, 231, 235) !important;
+  }
+
+  /* Share text styling */
+  :global(.share-text) {
+    color: rgb(75, 85, 99) !important;
+  }
+
+  :global(.dark .share-text),
+  :global(.dark span.share-text),
+  :global(.dark .flex .share-text) {
+    color: rgb(255, 255, 255) !important;
+  }
+</style>

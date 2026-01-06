@@ -10,7 +10,7 @@ layout: blog
 
 
 
-JavaScript is an enormously versatile language with a rich library of frameworks and tools to build everything from static websites (such as this site) to 3D experiences. In this post, I will explain how I created a mini game that uses a mobile device to rotate an onscreen model of a cannon and allows you to launch a cannon ball as well. ![](../images/blog/entangled-cannon-controller-image.png)
+JavaScript is an enormously versatile language with a rich library of frameworks and tools to build everything from static websites (such as this site) to 3D experiences. In this post, I will explain how I created a mini game that uses a mobile device to rotate an onscreen model of a cannon and allows you to launch a cannon ball as well. ![Entangled Cannon Controller interface showing 3D cannon model](../images/blog/entangled-cannon-controller-image.png)
 
 
 <br><br><br>
@@ -26,7 +26,7 @@ Here is the main part of the stack I used to build this application:
 
 ## Using Solace PubSub+ Topics to enable multi-session play
 
-The Solace PubSub+ Advanced Event Broker is infrastructure that allows you to publish and subscribe to messages with extremely high throughput and low latency.  A unique aspect of the Solace PubSub+ Event Broker is the ability to publish on dynamic topics that are simply part of the message as shown below: ![](../images/blog/SolaceMessage-300x283.png)
+The Solace PubSub+ Advanced Event Broker is infrastructure that allows you to publish and subscribe to messages with extremely high throughput and low latency.  A unique aspect of the Solace PubSub+ Event Broker is the ability to publish on dynamic topics that are simply part of the message as shown below: ![Solace message structure diagram showing topic and payload components](../images/blog/SolaceMessage-300x283.png)
 
 We will take advantage of this feature to create a scalable event driven architecture that can support many concurrent users by prefixing all events sent from the app with a prefix as defined below:
 
@@ -37,7 +37,7 @@ entangled-cannon/[game_session_id]/...
 Whenever a user enters the web app, a unique Game Session ID will be generated which will ensure that no two players will interrupt each others session.
 
 
-There are a variety of events that are generated from the application as listed below:![](../images/blog/entangled-cannon-event-types.png)
+There are a variety of events that are generated from the application as listed below:![Event types diagram showing different cannon controller events](../images/blog/entangled-cannon-event-types.png)
 
 
 

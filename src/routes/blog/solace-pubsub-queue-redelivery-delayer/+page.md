@@ -13,7 +13,7 @@ In this post, I’d like to give a high-level overview of an open source project
 
 ## Solace Queues
 
-[![](../images/blog/SolaceQueuePatterns-1.png)](../images/blog/SolaceQueuePatterns-1.png)
+[![Solace Queue Patterns diagram showing different queue configurations](../images/blog/SolaceQueuePatterns-1.png)](../images/blog/SolaceQueuePatterns-1.png)
 
   
 
@@ -33,7 +33,7 @@ The application stack I chose for this design was:
 
   
 
-[![](../images/blog/solace-redelivery-workflow.png)](ttps://github.com/solacecommunity/solace-redelivery-delayer/raw/main/solace-redelivery-workflow.png)
+[![Solace redelivery workflow diagram showing message processing and retry logic](../images/blog/solace-redelivery-workflow.png)](ttps://github.com/solacecommunity/solace-redelivery-delayer/raw/main/solace-redelivery-workflow.png)
 
   
 When designing the application, here the logical steps it would need to take:  
@@ -52,7 +52,7 @@ There are many ways that I could have implemented the above construct – I coul
 
 A [**DelayQueue**](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/DelayQueue.html) in Java is an extension of a BlockingQueue that adds the ability to set an expiry on an item in the queue when you submit it. When you attempt to take an item from the DelayQueue, only items that have expired will be eligible.  
 
-[![](../images/blog/delay-queue.png)](../images/blog/delay-queue.png)
+[![Java DelayQueue implementation diagram showing queue operations](../images/blog/delay-queue.png)](../images/blog/delay-queue.png)
 
 This fit the usecase I was looking for perfectly. I would add an item to the DelayQueue and an iterator would constantly iterate over the queue and simply attempt to pull a message off of it. The DelayQueue would take care of only returning messages that exceeded the set Delay Time.  
 
@@ -76,7 +76,7 @@ Java Streams is an often overlooked part of the Java programming language that s
   
 Combining Java Streams with the DelayQueue allowed me to implement the required architecture as shown below:  
 
-[![](../images/blog/delay-queue-1.png)](../images/blog/delay-queue-1.png)
+[![DelayQueue architecture with Java Streams showing message processing flow](../images/blog/delay-queue-1.png)](../images/blog/delay-queue-1.png)
 
 
 ## Conclusion
