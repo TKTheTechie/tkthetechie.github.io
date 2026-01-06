@@ -2,8 +2,8 @@
 author: Thomas Kunnumpurath
 title: "The Event-Driven Nervous System: Why Agentic AI Needs EDA to Thrive"
 date: 1/6/2026
-category: AI & Event-Driven Architecture
-headerImage: ai_blog_header_image4.jpg
+category: AI
+headerImage: ai_blog_header_image8.jpg
 layout: blog
 ---
 
