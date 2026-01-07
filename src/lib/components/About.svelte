@@ -49,7 +49,8 @@
               As Vice President of Systems Engineering at Solace, I lead a team of 15 engineers 
               across the Americas, focusing on Event Driven Architecture and cloud-native solutions. 
               My journey spans over 15 years engineering mission-critical systems for global financial 
-              institutions and high-growth tech firms.
+              institutions and high-growth tech firms, with deep expertise across capital markets, 
+              banking, airlines, SaaS providers, fintech, retail, and manufacturing.
             </p>
             
             <p class="text-black dark:text-gray-100 leading-relaxed mb-6">
@@ -122,28 +123,16 @@
   </div>
 </section>
 <style>
-  /* About section text colors - black in light mode, white in dark mode */
+  /* About section text colors - only target elements that exist */
   :root:not(.dark) #about p,
-  :root:not(.dark) #about span,
   :root:not(.dark) #about div:not(.gradient-text),
-  :root:not(.dark) #about h1:not(.gradient-text),
-  :root:not(.dark) #about h2:not(.gradient-text),
-  :root:not(.dark) #about h3:not(.gradient-text),
-  :root:not(.dark) #about h4:not(.gradient-text),
-  :root:not(.dark) #about h5:not(.gradient-text),
-  :root:not(.dark) #about h6:not(.gradient-text) {
+  :root:not(.dark) #about h3:not(.gradient-text) {
     color: black !important;
   }
   
   .dark #about p,
-  .dark #about span,
   .dark #about div:not(.gradient-text),
-  .dark #about h1:not(.gradient-text),
-  .dark #about h2:not(.gradient-text),
-  .dark #about h3:not(.gradient-text),
-  .dark #about h4:not(.gradient-text),
-  .dark #about h5:not(.gradient-text),
-  .dark #about h6:not(.gradient-text) {
+  .dark #about h3:not(.gradient-text) {
     color: white !important;
   }
 </style>
