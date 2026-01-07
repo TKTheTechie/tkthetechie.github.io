@@ -168,8 +168,7 @@
             Vice President of Systems Engineering
           </h2>
           <p class="text-base text-gray-200 leading-relaxed drop-shadow-md">
-            Technical leader specializing in Event Driven Architecture, cloud solutions, and scaling engineering teams. Currently leading Solutions Engineering for Solace Agent Mesh.
-          </p>
+            Technical leader specializing in Event Driven Architecture, cloud solutions, agentic AI implementations and scaling engineering teams.</p>
         </div>
         
         <!-- Open Source Highlight -->
