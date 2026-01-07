@@ -168,7 +168,7 @@
             Vice President of Systems Engineering
           </h2>
           <p class="text-base text-gray-200 leading-relaxed drop-shadow-md">
-            Technical leader specializing in Event Driven Architecture, cloud solutions, agentic AI implementations and scaling engineering teams.</p>
+            Engineering Executive transforming technical strategy into business value. I scale high-performance teams and architect event-driven platforms and Agentic AI solutions that accelerate revenue and digital agility.</p>
         </div>
         
         <!-- Open Source Highlight -->
