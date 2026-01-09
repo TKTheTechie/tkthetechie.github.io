@@ -10,7 +10,7 @@
   export let headerImage: string = '';
   
   // Use the theme store for proper dark mode detection
-  let isDark = true; // Default to dark mode for SSR
+  let isDark = false; // Default to light mode for SSR
   
   // Initialize theme synchronously if in browser
   if (browser) {
@@ -72,7 +72,7 @@
   <meta name="description" content="Technical blog post: {title}" />
 </svelte:head>
 
-<div class="min-h-screen transition-colors duration-300" style="background: {isDark ? 'linear-gradient(to bottom right, rgb(55, 65, 81), rgb(75, 85, 99), rgb(55, 65, 81))' : 'linear-gradient(to bottom right, rgb(249, 250, 251), rgb(255, 255, 255), rgb(249, 250, 251))'}">>
+<div class="min-h-screen transition-colors duration-300" style="background: {isDark ? 'linear-gradient(to bottom right, rgb(55, 65, 81), rgb(75, 85, 99), rgb(55, 65, 81))' : 'linear-gradient(to bottom right, rgb(249, 250, 251), rgb(255, 255, 255), rgb(249, 250, 251))'}">
   <!-- Header -->
   <div class="bg-gradient-to-br from-gray-900 via-blue-900 to-green-900 text-white py-16 pt-24">
     <div class="container-max section-padding">
@@ -388,9 +388,25 @@
     border-color: rgba(75, 85, 99, 0.6) !important;
   }
 
-  :global(.dark .backdrop-blur-sm) {
+  :global(.dark .blog-post-container .backdrop-blur-sm) {
     background-color: rgba(31, 41, 55, 0.9) !important;
     border-color: rgba(75, 85, 99, 0.6) !important;
+  }
+
+  /* Blog content light mode fixes */
+  :global(.blog-post-container .prose) {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border-color: rgba(229, 231, 235, 0.8) !important;
+  }
+
+  :global(.blog-post-container .prose.prose-lg.prose-gray) {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border-color: rgba(229, 231, 235, 0.8) !important;
+  }
+
+  :global(.blog-post-container .backdrop-blur-sm) {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border-color: rgba(229, 231, 235, 0.8) !important;
   }
 
   :global(.dark .blog-post-container .prose p) {
@@ -433,15 +449,15 @@
 
   /* List items dark mode fix */
   :global(.dark .blog-post-container .prose li) {
-    color: rgb(229, 231, 235) !important;
+    color: rgb(255, 255, 255) !important;
   }
 
   :global(.dark .blog-post-container .prose ul li) {
-    color: rgb(229, 231, 235) !important;
+    color: rgb(255, 255, 255) !important;
   }
 
   :global(.dark .blog-post-container .prose ol li) {
-    color: rgb(229, 231, 235) !important;
+    color: rgb(255, 255, 255) !important;
   }
 
   /* Share text styling */
