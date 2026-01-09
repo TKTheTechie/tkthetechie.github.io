@@ -100,7 +100,7 @@
           </div>
           
           <!-- Title -->
-          <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+          <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white" style="color: white !important;">
             {title}
           </h1>
           
@@ -469,5 +469,14 @@
   :global(.dark span.share-text),
   :global(.dark .flex .share-text) {
     color: rgb(255, 255, 255) !important;
+  }
+
+  /* Blog title should always be white (on dark header background) */
+  :global(.bg-gradient-to-br h1) {
+    color: white !important;
+  }
+
+  :global(.bg-gradient-to-br article h1) {
+    color: white !important;
   }
 </style>
