@@ -1,0 +1,3 @@
+Is Kafka enough for your mission-critical event-driven apps? 🤔 As a VP of Eng, I've seen Solace PubSub+ outperform Kafka for real-time, global, high-stakes workloads. Discover why Solace is the true backbone for enterprise EDA. #Solace #Kafka #EDA 
+
+https://tkthetechie.io/blog/beyond-the-log-why-solace-pubsub-excels-for-mission-critical-event-architectures
