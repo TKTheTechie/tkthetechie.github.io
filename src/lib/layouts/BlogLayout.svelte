@@ -431,6 +431,19 @@
     color: rgb(229, 231, 235) !important;
   }
 
+  /* List items dark mode fix */
+  :global(.dark .blog-post-container .prose li) {
+    color: rgb(229, 231, 235) !important;
+  }
+
+  :global(.dark .blog-post-container .prose ul li) {
+    color: rgb(229, 231, 235) !important;
+  }
+
+  :global(.dark .blog-post-container .prose ol li) {
+    color: rgb(229, 231, 235) !important;
+  }
+
   /* Share text styling */
   :global(.share-text) {
     color: rgb(75, 85, 99) !important;
