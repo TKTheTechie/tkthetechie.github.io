@@ -7,8 +7,6 @@ headerImage: surviving-the-big-rewrite-strategic-insights-from-migrating-tibco-t
 layout: blog
 ---
 
-# Surviving the 'Big Rewrite': Strategic Insights from Migrating TIBCO to Solace at a Global Bank
-
 Every engineering leader eventually faces it: the 'Big Rewrite'. It's that daunting, often multi-year undertaking to replace mission-critical legacy infrastructure with something modern, scalable, and resilient. The stakes are always incredibly high – system downtime, data integrity issues, budget overruns, and team morale are just a few of the potential pitfalls.
 
 I know this challenge intimately because nearly a decade ago, I was on the other side of the table. As the Enterprise Messaging Lead at Deutsche Bank, I spearheaded the firm-wide migration from TIBCO Rendezvous to Solace. It was an ambitious project, transforming the very nervous system of a global financial institution. Now, as the VP of Systems Engineering at Solace, I see similar challenges and opportunities daily with our customers. My journey, first as a user and now as a leader at Solace, has given me a unique perspective on what it takes to navigate such a monumental shift successfully.
