@@ -7,6 +7,7 @@
   let posts: any[] = [];
   let loading = true;
   let isDark = false;
+  let categoryColors: Record<string, string> = {};
   
   // Subscribe to dark mode changes
   darkMode.subscribe(value => {
@@ -40,6 +41,8 @@
       // Ensure we have an array
       if (Array.isArray(data)) {
         posts = data;
+        // Generate colors for all unique categories
+        generateCategoryColors(posts);
       } else {
         console.error('API did not return an array:', data);
         posts = [];
@@ -52,6 +55,55 @@
     }
   };
   
+  const generateCategoryColors = (posts: any[]) => {
+    // Define a vibrant color palette
+    const colorPalette = [
+      'from-blue-500 to-blue-600',
+      'from-purple-500 to-purple-600',
+      'from-pink-500 to-pink-600',
+      'from-red-500 to-red-600',
+      'from-orange-500 to-orange-600',
+      'from-amber-500 to-amber-600',
+      'from-yellow-500 to-yellow-600',
+      'from-lime-500 to-lime-600',
+      'from-green-500 to-green-600',
+      'from-emerald-500 to-emerald-600',
+      'from-teal-500 to-teal-600',
+      'from-cyan-500 to-cyan-600',
+      'from-sky-500 to-sky-600',
+      'from-indigo-500 to-indigo-600',
+      'from-violet-500 to-violet-600',
+      'from-fuchsia-500 to-fuchsia-600',
+      'from-rose-500 to-rose-600',
+      'from-slate-500 to-slate-600'
+    ];
+    
+    // Extract all unique categories
+    const categories = new Set<string>();
+    posts.forEach(post => {
+      const category = post.meta?.category;
+      if (category) {
+        // Handle combined categories (like "Crypto, Personal")
+        if (category.includes(',')) {
+          category.split(',').forEach(cat => categories.add(cat.trim()));
+        } else {
+          categories.add(category);
+        }
+      }
+    });
+    
+    // Sort categories alphabetically for consistency
+    const sortedCategories = Array.from(categories).sort();
+    
+    // Assign colors to each category
+    const colors: Record<string, string> = {};
+    sortedCategories.forEach((category, index) => {
+      colors[category] = colorPalette[index % colorPalette.length];
+    });
+    
+    categoryColors = colors;
+  };
+  
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -62,14 +114,13 @@
   };
   
   const getCategoryColor = (category: string) => {
-    const colors = {
-      'Dev': 'from-blue-500 to-blue-600',
-      'Tech': 'from-green-500 to-green-600',
-      'Architecture': 'from-purple-500 to-purple-600',
-      'Tutorial': 'from-orange-500 to-orange-600',
-      'default': 'from-gray-500 to-gray-600'
-    };
-    return colors[category] || colors.default;
+    // Handle combined categories (like "Crypto, Personal")
+    if (category && category.includes(',')) {
+      const firstCategory = category.split(',')[0].trim();
+      return categoryColors[firstCategory] || 'from-gray-500 to-gray-600';
+    }
+    
+    return categoryColors[category] || 'from-gray-500 to-gray-600';
   };
 </script>
 
@@ -151,7 +202,8 @@
                   <!-- Read More Link -->
                   <a 
                     href={post.path}
-                    class="inline-flex items-center text-primary-500 hover:text-primary-600 dark:text-white dark:hover:text-white font-medium text-sm transition-colors duration-200"
+                    class="inline-flex items-center font-medium text-sm transition-colors duration-200"
+                    style="color: {isDark ? 'white' : 'rgb(14, 165, 233)'} !important;"
                   >
                     Read More
                     <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

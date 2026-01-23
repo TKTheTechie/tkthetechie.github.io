@@ -218,6 +218,11 @@
 
 <style>
   /* Blog-specific prose enhancements */
+  :global(.prose) {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
   :global(.prose h1) {
     margin-top: 3rem;
     margin-bottom: 2rem;
@@ -267,9 +272,12 @@
   :global(.prose pre) {
     margin-top: 1.5rem;
     margin-bottom: 2rem;
-    background: linear-gradient(135deg, rgb(17, 24, 39) 0%, rgb(31, 41, 55) 100%);
-    border: 1px solid rgb(75, 85, 99);
+    background: linear-gradient(135deg, rgb(243, 244, 246) 0%, rgb(229, 231, 235) 100%);
+    border: 1px solid rgb(209, 213, 219);
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    overflow-x: auto;
+    max-width: 100%;
+    border-radius: 0.5rem;
   }
 
   :global(.dark .prose pre) {
@@ -321,9 +329,17 @@
   }
 
   :global(.prose pre code) {
-    color: rgb(243, 244, 246);
+    color: rgb(17, 24, 39);
     background-color: transparent;
     padding: 0;
+    display: block;
+    overflow-x: auto;
+    white-space: pre;
+    word-wrap: normal;
+  }
+
+  :global(.dark .prose pre code) {
+    color: rgb(243, 244, 246);
   }
 
   :global(.prose table) {
