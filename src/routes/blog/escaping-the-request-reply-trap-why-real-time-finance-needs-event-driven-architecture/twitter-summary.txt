@@ -1,0 +1,1 @@
+Stuck in the 'Request-Reply' Trap for real-time finance? 💸 Polling kills performance & innovation. I've seen how #EDA transforms latency & TCO from Deutsche Bank to… https://tkthetechie.io/blog/escaping-the-request-reply-trap-why-real-time-finance-needs-event-driven-architecture
