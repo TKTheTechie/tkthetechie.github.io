@@ -372,6 +372,10 @@
     <Hero />
   </ScrollRevealAnimation>
   
+  <ScrollRevealAnimation direction="up" delay={0.2}>
+    <Blog />
+  </ScrollRevealAnimation>
+  
   <ScrollRevealAnimation direction="up" delay={0.2} cascade={true}>
     <About />
   </ScrollRevealAnimation>
@@ -390,10 +394,6 @@
   
   <ScrollRevealAnimation direction="fade" delay={0.1}>
     <Credentials />
-  </ScrollRevealAnimation>
-  
-  <ScrollRevealAnimation direction="up" delay={0.2}>
-    <Blog />
   </ScrollRevealAnimation>
   
   <ScrollRevealAnimation direction="fade" delay={0.1}>

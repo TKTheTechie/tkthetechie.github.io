@@ -15,12 +15,12 @@
   
   const navItems = [
     { name: 'Home', href: '/#home', id: 'home' },
+    { name: 'Blog', href: '/#blog', id: 'blog' },
     { name: 'About', href: '/#about', id: 'about' },
     { name: 'Experience', href: '/#experience', id: 'experience' },
     { name: 'Skills', href: '/#skills', id: 'skills' },
     { name: 'Portfolio', href: '/#portfolio', id: 'portfolio' },
     { name: 'Credentials', href: '/#credentials', id: 'credentials' },
-    { name: 'Blog', href: '/#blog', id: 'blog' },
     { name: 'Contact', href: '/#contact', id: 'contact' }
   ];
   

@@ -189,6 +189,13 @@
           <MorphingButton 
             variant="primary" 
             size="md" 
+            on:click={() => scrollToSection('#blog')}
+          >
+            Read My Blog
+          </MorphingButton>
+          <MorphingButton 
+            variant="secondary" 
+            size="md" 
             on:click={() => scrollToSection('#experience')}
           >
             View Experience
@@ -266,6 +273,13 @@
           <MorphingButton 
             variant="primary" 
             size="lg" 
+            on:click={() => scrollToSection('#blog')}
+          >
+            Read My Blog
+          </MorphingButton>
+          <MorphingButton 
+            variant="secondary" 
+            size="lg" 
             on:click={() => scrollToSection('#experience')}
           >
             View Experience
@@ -294,6 +308,12 @@
   #home h4:not(.gradient-text),
   #home h5:not(.gradient-text),
   #home h6:not(.gradient-text) {
+    color: white !important;
+  }
+
+  /* Ensure button text is always white on Hero section */
+  #home :global(.morphing-button),
+  #home :global(.morphing-button *) {
     color: white !important;
   }
 
