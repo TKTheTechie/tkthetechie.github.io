@@ -110,7 +110,7 @@
   };
 </script>
 
-<section id="portfolio" bind:this={portfolioRef} class="py-20 section-dark">
+<section id="portfolio" bind:this={portfolioRef} class="py-20 section-light">
   <div class="container-max section-padding">
     <div class="max-w-6xl mx-auto">
       <!-- Section Header -->

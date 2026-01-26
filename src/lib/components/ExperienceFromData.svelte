@@ -78,7 +78,7 @@
   }
 </script>
 
-<section id="experience" bind:this={experienceRef} class="py-20 section-dark">
+<section id="experience" bind:this={experienceRef} class="py-20 section-light">
   <div class="container-max section-padding">
     <div class="max-w-6xl mx-auto">
       <!-- Section Header -->
