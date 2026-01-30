@@ -69,7 +69,7 @@
 
 <svelte:head>
   <title>{title} - Thomas Kunnumpurath</title>
-  <meta name="description" content="Technical blog post: {title}" />
+  <meta name="description" content={title} />
 </svelte:head>
 
 <div class="min-h-screen transition-colors duration-300" style="background: {isDark ? 'linear-gradient(to bottom right, rgb(55, 65, 81), rgb(75, 85, 99), rgb(55, 65, 81))' : 'linear-gradient(to bottom right, rgb(249, 250, 251), rgb(255, 255, 255), rgb(249, 250, 251))'}">
