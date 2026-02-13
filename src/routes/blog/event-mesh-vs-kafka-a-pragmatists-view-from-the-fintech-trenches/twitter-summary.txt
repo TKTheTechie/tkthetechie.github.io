@@ -1,0 +1,1 @@
+Kafka or Event Mesh? 🤔 From Deutsche Bank trading floors to Solace Agent Mesh, I’ve architected critical systems. Discover when to choose which for real-time FinTech & why your decision matters. Dive into the trenches! 👇 #EDA #FinTech https://tkthetechie.io/blog/event-mesh-vs-kafka-a-pragmatists-view-from-the-fintech-trenches
