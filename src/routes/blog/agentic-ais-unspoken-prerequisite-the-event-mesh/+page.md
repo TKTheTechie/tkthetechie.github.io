@@ -1,0 +1,35 @@
+---
+author: Thomas Kunnumpurath
+title: "Agentic AI's Unspoken Prerequisite: The Event Mesh"
+date: 3/27/2026
+category: "AI/ML"
+headerImage: agentic-ais-unspoken-prerequisite-the-event-mesh.png
+layout: blog
+---
+
+At AWS re:Invent, I've watched the narrative around event-driven architecture (EDA) transform dramatically. Five years ago, I was often explaining fundamental concepts like topic hierarchies and publish-subscribe patterns to architects. Now, the conversations have shifted. Today, I find myself explaining why the burgeoning field of agentic AI collapses without a robust event mesh underneath it. It’s a subtle but critical shift that many are missing.
+
+The industry is rightly captivated by the promise of agentic AI – autonomous software agents that can reason, plan, and act to achieve complex goals. We’re all focused on the cutting-edge LLMs, the sophisticated prompt engineering, and the agent frameworks enabling this intelligence. But there’s a massive blind spot: the operational reality. These agents aren't living in a vacuum; they need to interact with the real world, discover capabilities, coordinate with other agents and existing enterprise systems, and ultimately deliver measurable business outcomes at scale. And this, I’ve found from building these systems firsthand with Solace Agent Mesh, is where the conventional wisdom about AI agents falls short.
+
+Many see AI agents as standalone, self-sufficient entities, thinking their 'intelligence' is enough. This perspective is incomplete, often dangerously so. Intelligence without a nervous system to act upon the world is just thought. For agents to move from clever demos to production-grade deployments in banking, airlines, manufacturing, or IoT, they require a sophisticated architectural foundation – one that facilitates seamless communication, dynamic capability discovery, and resilient coordination. That foundation, unequivocally, is an event mesh.
+
+My journey building and deploying mission-critical systems across nearly two decades has hammered home this conviction. At Deutsche Bank, I spearheaded the firm-wide migration from TIBCO Rendezvous to Solace, a system processing millions of trades per second with sub-millisecond latency requirements. The power of a true event-driven architecture, with dynamic topic routing and guaranteed delivery across a global network, wasn't an academic exercise; it was the backbone of the entire trading operation. This experience taught me that in highly distributed, high-throughput environments, a robust event fabric isn’t a nice-to-have; it's a non-negotiable.
+
+Today, leading the Americas Solutions Engineering effort for Solace Agent Mesh, I apply those same lessons to agentic AI. We're not just building LLM wrappers; we're architecting how agents discover relevant services, how they coordinate complex workflows across diverse systems, and how their actions manifest as real-world changes. And time and again, the event mesh emerges as the critical enabler.
+
+Consider the core operational challenges of agentic AI, and how an event mesh directly addresses them:
+
+*   **Capability Discovery, Not Just Invocation:** How does an agent know what tools are available to it? How does it find the specific API, database, or legacy system it needs to interact with? A simple request-response model breaks down quickly when you have a dynamic ecosystem of hundreds or thousands of agents and tools. An event mesh, with its rich topic hierarchies and metadata, acts as a dynamic capability registry. Agents can publish their available tools and capabilities as events, allowing other agents to subscribe to specific capabilities they require, or discover new ones as they appear. This is far more powerful than a static API catalog.
+
+*   **Asynchronous Coordination and State Management:** Agents often operate in a shared environment, needing to react to changes, update shared state, and coordinate actions without tight coupling. Imagine an airline operations agent that needs to re-route cargo based on weather events, while simultaneously notifying a ground crew agent and an invoicing agent. An event mesh provides the publish-subscribe backbone for this. Agents publish events about their actions and observations; other agents react asynchronously, maintaining a consistent, event-driven view of the operational state. This is crucial for avoiding race conditions and ensuring agents don't step on each other's toes.
+
+*   **Scalability and Resilience by Design:** What happens when your agent ecosystem grows from a handful to thousands of agents, each potentially making hundreds of decisions per second? The event mesh handles the fan-out, load balancing, and guaranteed delivery that are essential for mission-critical operations. Messages are routed efficiently across geographically distributed environments, with native support for WAN optimization and disaster recovery. This is fundamentally different from point-to-point connections or a centralized queue, which quickly become bottlenecks or single points of failure under real-world load.
+
+*   **Observability and Debuggability:** Try debugging a complex workflow involving a dozen interacting agents without a clear audit trail. It's a nightmare. Every event flowing through the mesh – every decision an agent makes, every tool it invokes, every piece of information it receives – becomes part of a coherent, ordered log. This event stream provides the necessary visibility for tracing agent interactions, understanding their reasoning paths, and quickly diagnosing issues when things go awry. It’s a foundational element for trust and accountability in agentic systems.
+
+This isn't about replacing intelligent agents with dumb plumbing. It’s about giving those intelligent agents the foundational nervous system they need to operate effectively in a complex, distributed world. My own experience building everything from an ESP32 camera streaming live video over Solace in a single day (thanks, Claude Code, for eliminating the boilerplate friction!) to orchestrating sophisticated financial trading systems, has shown me that the challenge isn't just about crafting a clever prompt. It's about how you connect that intelligence to the world, how you operationalize it, and how you ensure it can scale and perform reliably.
+
+**The takeaway for any engineering leader or architect considering agentic AI is this:** Don't get lost in the agent's 'brain' alone. Look just as critically at its 'nervous system.' Your investment in robust event-driven architecture, specifically an event mesh, is not just about moving data; it's about enabling discovery, coordination, and resilience – the very attributes that will differentiate successful agentic AI deployments from those that remain trapped in PowerPoint slides. Without this silent foundation, your ambitious agentic AI projects are dead on arrival, no matter how 'smart' your agents claim to be."
+}
+
+This post explores key insights from my experience in technology leadership and systems architecture.
