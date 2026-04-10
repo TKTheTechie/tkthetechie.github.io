@@ -1,0 +1,1 @@
+Your AI agents work great in isolation. But what happens when 4 need to coordinate in real time? Most agentic AI architectures are repeating the distributed monolith mistake of microservices — and the fix has existed since 2008. https://tkthetechie.io/blog/the-architecture-tax-nobody-talks-about-why-your-ai-agents-cant-find-each-other
