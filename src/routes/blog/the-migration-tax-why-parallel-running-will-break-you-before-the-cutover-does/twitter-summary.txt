@@ -1,0 +1,1 @@
+Everyone obsesses about migration cutover weekend. The thing that actually kills you? The 6 months of parallel running before it. Learned this migrating millions of trades/day from TIBCO to Solace at Deutsche Bank. 🧵 https://tkthetechie.io/blog/the-migration-tax-why-parallel-running-will-break-you-before-the-cutover-does
