@@ -1,0 +1,1 @@
+Most agentic AI demos prove that one agent can call one tool. They prove nothing about what happens when you need fifty agents coordinating in production. We're recreating the point-to-point integration mistakes of 2011 — with Python decorators. 🧵 https://tkthetechie.io/blog/the-architecture-astronaut-trap-why-your-ai-agent-demo-works-but-your-ai-agent-system-wont
