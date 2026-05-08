@@ -1,0 +1,3 @@
+The riskiest moment in any infrastructure migration isn't the cutover — it's the six months of parallel running before it. Your safety net is actually a complexity multiplier. 🧵
+
+https://tkthetechie.io/blog/the-six-months-before-the-cutover-will-kill-you
