@@ -1,0 +1,1 @@
+The candidate who interviews best in pre-sales engineering is often the one who performs worst. After scaling my SE team from 5→15, I stopped screening for technical skills first. Here's the signal that actually predicts success 👇 https://tkthetechie.io/blog/the-architecture-astronaut-detector-how-i-screen-pre-sales-engineers-for-signal-over-noise
