@@ -1,55 +1,58 @@
 ---
 author: Thomas Kunnumpurath
 title: "The Six Months Before the Cutover Will Kill You"
-date: 5/8/2026
+date: 5/22/2026
 category: "Engineering"
 headerImage: the-six-months-before-the-cutover-will-kill-you.png
 layout: blog
 ---
 
-In 2014, I stood in a Deutsche Bank operations room at 2 AM watching two messaging systems run in parallel — TIBCO Rendezvous carrying live trades on one side, Solace processing the same messages on the other. We were three months into parallel running, and I'd just discovered that a subset of our FX pricing messages were arriving on Solace 47 microseconds *faster* than expected. That sounds like good news. It wasn't. It meant a downstream consumer was occasionally processing the Solace message before the TIBCO message had been acknowledged, creating a phantom state where the system believed a trade had been priced twice.
+The night we cut over from TIBCO Rendezvous to Solace at Deutsche Bank — a system processing millions of trades across global markets — went remarkably smoothly. We had a plan, a rollback strategy, and a war room full of people who hadn't slept well in weeks. The cutover itself took hours, not days. The celebration was justified.
 
-Everyone talks about migration cutovers like they're the moment of maximum risk. They're not. The cutover is a controlled event with a rollback plan, an incident bridge, and every senior engineer on standby. The real danger lives in the months of parallel running that precede it — the period where two systems coexist, where edge cases multiply geometrically, and where your team's vigilance slowly erodes because nothing has exploded *yet*.
+But here's the thing nobody talks about: the cutover wasn't the hard part. The six months of parallel running before it nearly killed the project.
 
-## Parallel Running Is Not a Safety Net — It's a Complexity Multiplier
+## Parallel Running Is Where Migrations Actually Fail
 
-The conventional wisdom in enterprise infrastructure migration goes something like this: run both systems side-by-side, compare outputs, build confidence, then cut over. It sounds prudent. It's the approach every architecture review board will approve because it feels low-risk.
+Every enterprise migration guide will tell you to run old and new systems in parallel. It's sound advice. It's also wildly incomplete, because it treats parallel running as a validation phase when it's actually an operational nightmare that compounds daily.
 
-But here's what nobody tells you: parallel running doesn't halve your risk. It *doubles* your operational surface area. You now have two systems that need monitoring, two sets of failure modes, and — worst of all — an emerging class of bugs that only exist *because* both systems are running simultaneously.
+At Deutsche Bank, we ran TIBCO and Solace side by side for months. Both systems received the same market data, the same trade messages, the same risk calculations. The theory was simple: compare outputs, build confidence, cut over when the numbers match. The reality was that we had effectively doubled our operational surface area overnight.
 
-At Deutsche Bank, our migration from TIBCO Rendezvous to Solace touched systems processing millions of trades per day across equities, FX, and fixed income. The Solace infrastructure was demonstrably superior: lower latency, cleaner topic routing, dramatically lower operational overhead. None of that mattered during parallel running, because the hardest problems weren't about either system individually. They were about the *interaction* between them.
+Every alert now had to be triaged across two systems. Every capacity plan had to account for both. Every on-call engineer needed expertise in legacy TIBCO *and* the new Solace topology. We didn't just have two messaging layers — we had two sets of failure modes, two monitoring dashboards, two escalation paths, and one team stretched across all of it.
 
-That 47-microsecond timing anomaly I mentioned? It happened because Solace's more efficient message path meant certain consumers received data faster than the legacy path could complete its acknowledgment cycle. The fix wasn't in Solace or TIBCO — it was in the consumer-side correlation logic we'd built specifically for the parallel run. We were debugging our safety net, not our destination.
+The conventional wisdom is that parallel running reduces risk. It does — for the cutover. But it dramatically increases risk during the parallel phase itself, and most teams don't plan for that.
 
-## The Three Failure Modes Nobody Plans For
+## The Three Things That Actually Go Wrong
 
-After leading that multi-year migration and later watching similar patterns play out at Capital One and across Solace customers, I've identified three failure modes that consistently ambush teams during parallel running:
+Having led this migration and later watched dozens of enterprise customers at Solace navigate their own, I've seen the same failure patterns emerge during parallel running. They're never the things teams test for in advance.
 
-**1. Semantic Drift**
-When you run two systems in parallel, you're implicitly asserting they produce equivalent outputs. But "equivalent" is deceptively hard to define. At Deutsche Bank, a TIBCO message and a Solace message carrying the same trade could differ in timestamp precision, header metadata, or serialization ordering — none of which mattered to the business logic, but all of which broke our automated comparison tooling. We spent weeks building comparison logic that was tolerant enough to ignore irrelevant differences but strict enough to catch real divergence. That tooling itself became a source of bugs.
+**1. Message divergence creates trust erosion, not bug reports.**
 
-**2. Operational Fatigue**
-Parallel runs often last three to six months. In month one, every alert gets investigated thoroughly. By month four, your team has seen enough false positives from the comparison layer that response times slow. The alert that matters — the one indicating real data loss — arrives when vigilance is lowest. I've seen this pattern at every organization I've worked in. Human attention is a non-renewable resource during long parallel runs.
+When your parallel systems produce different outputs — and they will — the first instinct is to open a bug ticket. But in a trading environment, a message divergence at 2 AM triggers a chain reaction: Is the new system wrong, or is the old system masking a bug we've been living with? At Deutsche Bank, we discovered cases where TIBCO's behavior was technically incorrect but had been compensated for by downstream applications. The new system was *more correct*, but correctness broke things. Each divergence eroded stakeholder confidence in the migration timeline, even when the new system was right.
 
-**3. The Rollback Illusion**
-Teams enter parallel running believing they can always roll back to the old system. But three months in, the old system has fallen behind on patches, the team's muscle memory has shifted to the new platform, and — critically — some consumers have started quietly depending on behaviors unique to the new system. Your rollback plan is a snapshot of a world that no longer exists.
+**2. Operational fatigue hits before technical failure.**
 
-## What Actually Works: Compress, Isolate, Commit
+We lost more ground to exhaustion than to bugs. Supporting two systems with the same team means every incident takes twice the cognitive load. By month four, the engineers who knew both systems best were the most burned out. I learned — painfully — that parallel running requires dedicated capacity, not shared capacity. If your migration plan assumes the same team runs both systems at the same operational tempo, you're planning for attrition.
 
-Here's the framework I use now when advising customers on infrastructure migrations, whether it's legacy middleware to Solace, monolith-to-microservices, or on-prem to cloud:
+**3. The "just one more month" trap.**
 
-**Compress the parallel window ruthlessly.** Every additional week of parallel running adds complexity faster than it adds confidence. Set a hard deadline. If your parallel run needs six months, your migration scope is too broad — decompose it into smaller, independently migratable domains.
+Parallel running has no natural end state. There's always another edge case, another stakeholder who wants more data, another quarter where the business doesn't want to absorb cutover risk. At Deutsche Bank, we had to set a hard cutover date and defend it against perfectly reasonable requests to extend. Every month of parallel running costs real money — double infrastructure, double licensing, double operational burden — and the cost is invisible because it's spread across the team as toil rather than appearing on a single line item.
 
-**Isolate rather than compare.** Instead of running both systems on the same traffic and comparing outputs, migrate one bounded context completely. At Capital One, when we moved credit card controls from Java Spring Boot to GoLang microservices, the wins came from migrating entire API surfaces — not from running both implementations against the same requests. Dark launching a new service behind a feature flag and routing a percentage of real traffic to it gives you production validation without the combinatorial explosion of parallel running.
+## A Framework for Surviving Parallel Running
 
-**Commit to the new system early and instrument heavily.** Rather than building elaborate comparison frameworks, invest that engineering effort in observability on the new platform. Distributed tracing, anomaly detection on message latency distributions, business-metric dashboards that let domain experts — not just engineers — validate behavior. When we finally cut over from TIBCO to Solace at Deutsche Bank, it wasn't the parallel run that gave us confidence. It was the monitoring we'd built on the Solace side that let us see, in real time, that every trade was flowing correctly.
+If I were advising my former self — or any enterprise architect planning a messaging migration today — here's the framework I'd use:
 
-## The Broader Lesson: Safety Theater vs. Actual Safety
+**Set the cutover date before you start parallel running.** Not after. The date should be based on a defined set of acceptance criteria, not on a feeling of readiness. Readiness is a moving target; criteria are not. We eventually did this at Deutsche Bank, and it was the single decision that saved the project's timeline.
 
-This pattern extends well beyond messaging migrations. I see it constantly in enterprise architecture decisions: teams adopt the approach that *feels* safest rather than the approach that *is* safest. Running two systems in parallel feels cautious. But it's often safety theater — a practice that creates the appearance of risk management while actually introducing new, harder-to-detect risks.
+**Staff for two systems, not one system twice.** Assign a dedicated sub-team to the legacy platform during parallel running. Their only job is keeping it alive and triaging divergences. Your migration team should be focused forward, not constantly context-switching into legacy firefighting.
 
-The same instinct shows up in AI adoption right now. Organizations running "pilot programs" that never end, keeping legacy and AI-assisted workflows in parallel indefinitely, comparing outputs manually. The parallel running trap isn't specific to messaging infrastructure — it's a universal failure mode wherever organizations mistake coexistence for caution.
+**Classify divergences by business impact, not by root cause.** Not every message difference matters equally. We wasted weeks investigating divergences in logging metadata that had zero business impact while a subtle ordering issue in a low-volume feed went unnoticed. Build a triage rubric on day one: which message types are P1 if they diverge, which are noise?
 
-The antidote is the same everywhere: define your success criteria before you start, compress your validation window, and commit. The cutover isn't the scary part. The endless purgatory of "almost ready to switch" is where migrations go to die.
+**Budget for the parallel phase explicitly.** Infrastructure, licensing, and — most importantly — people-hours. If leadership sees parallel running as "just testing," they won't allocate the resources it actually requires. Make the cost visible before you start, not after your team is drowning.
 
-That night in the Deutsche Bank operations room, we fixed the timing anomaly by 4 AM. But the real lesson didn't land until months later: the parallel run hadn't found that bug through its normal comparison process. I found it because I happened to be staring at raw message logs at 2 AM. That's not a migration strategy. That's luck wearing an engineering badge.
+## Why This Matters Beyond Messaging Migrations
+
+I've been at Solace for seven years now, and the migration pattern I lived through at Deutsche Bank shows up everywhere — just in different clothes. Customers migrating from Kafka to Solace, from monoliths to microservices, from on-prem to cloud. The technology changes; the parallel running trap doesn't.
+
+And it's about to get worse. As enterprises adopt agentic AI platforms — including Solace Agent Mesh, which my team is actively deploying — the migration complexity multiplies. You're not just swapping a messaging layer; you're rewiring how autonomous agents discover capabilities and coordinate actions. The parallel phase for an agentic system isn't two message buses side by side. It's two decision-making architectures producing potentially different business outcomes.
+
+The principle holds: plan for the parallel phase as if it's the hardest part of the migration. Because it is. The cutover is just the moment you finally stop paying for two of everything.
