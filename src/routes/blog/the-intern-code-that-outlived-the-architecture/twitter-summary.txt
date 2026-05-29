@@ -1,0 +1,1 @@
+Three interns wrote code at Capital One that outlasted the platform architecture senior engineers designed. That paradox changed how I think about delegation, mentorship, and what "staying hands-on" really means as a leader. https://tkthetechie.io/blog/the-intern-code-that-outlived-the-architecture
