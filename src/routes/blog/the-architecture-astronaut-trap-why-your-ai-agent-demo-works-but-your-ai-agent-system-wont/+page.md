@@ -1,68 +1,68 @@
 ---
 author: Thomas Kunnumpurath
 title: "The Architecture Astronaut Trap: Why Your AI Agent Demo Works But Your AI Agent System Won't"
-date: 5/1/2026
+date: 6/5/2026
 category: "AI/ML"
 headerImage: the-architecture-astronaut-trap-why-your-ai-agent-demo-works-but-your-ai-agent-system-wont.png
 layout: blog
 ---
 
-Last month, I watched a team demo an AI agent that could rebook flights, check loyalty status, and send confirmation emails — all orchestrated beautifully through a single LLM with tool calls. The audience was impressed. I was worried.
+Last month, I watched a team demo an AI agent that could rebook flights, check loyalty status, and send apology emails — all orchestrated beautifully across three LLM calls. The CTO was impressed. I asked one question: "What happens when two agents try to rebook the same passenger on the last available seat?" Silence.
 
-I was worried because I've seen this movie before. In 2011, I watched teams at Deutsche Bank build elegant point-to-point integrations between trading systems that worked perfectly in demo environments and catastrophically in production. The failure mode wasn't the logic — it was the architecture. Specifically, it was the assumption that because something works when one user triggers one workflow, it will work when ten thousand users trigger ten thousand overlapping workflows simultaneously.
+This is the architecture astronaut trap of agentic AI, and I'm watching the industry walk straight into it.
 
-The agentic AI space is sprinting toward the same cliff.
+## The Demo-to-Production Chasm Is Wider Than You Think
 
-## The Demo Fallacy
+I've been leading the Americas Solutions Engineering effort for Solace Agent Mesh, which means I spend my weeks inside enterprise AI deployments across airlines, banking, manufacturing, and IoT. The pattern I see repeated is disturbingly consistent: teams build impressive agent demos using direct API calls and synchronous request-response patterns, then act surprised when the system collapses under real-world concurrency, partial failures, and temporal coupling.
 
-Here's what most agentic AI demos actually prove: that an LLM can parse intent, select a tool, and return a result. That's genuinely impressive — but it's also the easy part.
+The conventional wisdom says the hard part of agentic AI is the AI — prompt engineering, model selection, RAG pipelines, guardrails. That's wrong. The hard part is the architecture between the agents. The connective tissue. The part that determines whether your system degrades gracefully at 3 AM when one downstream service is slow and three agents are competing for the same resource.
 
-What demos don't prove is what happens when Agent A needs information from Agent B, which is waiting on Agent C, which just timed out because the downstream API rate-limited it. They don't prove what happens when two agents attempt to modify the same customer record simultaneously. They don't prove what happens when you need to add a fourteenth agent to a system designed around thirteen, and the orchestration logic lives in a monolithic Python script that one senior engineer understands.
+I've seen this movie before. It was called microservices, circa 2015.
 
-Leading the Americas SE effort for Solace Agent Mesh, I've had dozens of conversations with enterprises trying to move agentic AI from proof-of-concept to production. The pattern is remarkably consistent: the teams that struggle hardest are the ones who nailed the demo fastest. Speed to demo created false confidence about architectural readiness.
+## I Lived Through the Microservices Version of This Mistake
 
-## Why Orchestration ≠ Architecture
+At Capital One in 2017, we were building cloud-native microservices for the credit card business on AWS. The initial architectures were clean: service A calls service B calls service C. Beautiful diagrams. Then reality hit. Services had different latency profiles. Network partitions happened. Retry storms cascaded. We learned — painfully — that the synchronous call graph that looks elegant on a whiteboard becomes a distributed failure amplifier in production.
 
-The conventional wisdom in agentic AI right now is that the hard problem is orchestration — getting agents to coordinate, plan, and execute multi-step workflows. Frameworks like LangGraph, CrewAI, and AutoGen are all competing on orchestration sophistication.
+The fix wasn't better services. It was decoupling them through events. Asynchronous communication. Publish what happened, let consumers decide what to do about it. We redesigned identity verification flows to handle authentication spikes through event-driven batch processing instead of synchronous chains.
 
-I think this emphasis is backwards. Orchestration is a feature. Architecture is a foundation.
+Agentic AI is repeating the exact same architectural sin, just with LLMs instead of REST endpoints. Agent A directly invokes Agent B, which directly queries Agent C. It's synchronous microservices with a language model tax on every hop. And the failure modes are worse because LLM calls are nondeterministic, slower, and more expensive than a typical service call.
 
-Let me be specific. When I led the migration from TIBCO Rendezvous to Solace at Deutsche Bank, the system processed millions of trades in real time. The orchestration of trade workflows — matching, clearing, settlement — was complex, but it wasn't what kept me up at night. What kept me up was: How do we route messages dynamically across hundreds of consuming applications without hardcoding destinations? How do we guarantee ordering without creating bottlenecks? How do we add new consumers without redeploying producers?
+## Why Event-Driven Architecture Isn't Optional for Agents
 
-Those are the same questions that agentic AI systems need to answer. And most aren't answering them at all — they're deferring them with synchronous HTTP calls between agents and hardcoded workflow DAGs.
+Here's what changes when you put an event broker — a real one, not a message queue you're calling an event broker — between your agents:
 
-## The Event-Driven Difference Isn't Theoretical
+**Temporal decoupling.** Agent A publishes an intent ("passenger needs rebooking"). It doesn't need Agent B to be alive right now. Agent B processes it when ready. This sounds basic until you realize that most agent frameworks today assume synchronous availability of every agent in the chain.
 
-I'll make this concrete. In Solace Agent Mesh, agents register their capabilities — what they can do, what inputs they need, what events they produce — against a dynamic topic hierarchy. When a new agent comes online, it doesn't need to know about every other agent. It publishes what it offers and subscribes to what it needs. Discovery is architectural, not configured.
+**Competing consumers with guaranteed ordering.** Remember my question about two agents rebooking the same seat? With Solace's exclusive queues and topic-based routing, you get exactly-once processing semantics without building a distributed lock manager. The broker handles the coordination that agent frameworks pretend doesn't exist.
 
-Contrast this with the typical agentic framework approach: Agent A calls Agent B's endpoint. If Agent B moves, scales, or changes its interface, Agent A breaks. If you add Agent D that also cares about Agent B's output, you modify Agent B to also call Agent D. This is the point-to-point integration anti-pattern that enterprise middleware solved twenty years ago, and we're recreating it with Python decorators and API keys.
+**Dynamic discovery through topic hierarchies.** This is where I get genuinely opinionated. At AWS re:Invent five years ago, I was explaining what a topic hierarchy was. Now I'm explaining why agentic AI collapses without one. When Agent A publishes to `airline/rebooking/priority/gold/SFO`, any agent with the capability to handle gold-tier rebookings at SFO can subscribe dynamically. You don't hardcode agent-to-agent routing. The mesh discovers capabilities through the topic space.
 
-Here's a concrete example of why this matters. We've been working with airlines where a single customer interaction — a flight disruption — can trigger rebooking, loyalty recalculation, lounge access updates, meal preference transfers, and notification across SMS, email, and app push. That's six or seven agents that need to coordinate, some synchronously (rebooking must complete before lounge access updates) and some asynchronously (notifications can fan out independently).
+This is exactly what Solace Agent Mesh does — it gives agents a way to advertise capabilities, discover each other, and coordinate through an event mesh rather than through brittle point-to-point orchestration.
 
-In a hardcoded orchestration model, adding meal preference transfer to this workflow means modifying the central orchestrator, testing every existing path for regressions, and redeploying. In an event-driven model, the meal preference agent subscribes to the `passenger/rebooking/confirmed` topic and does its work. The orchestrator doesn't change. The rebooking agent doesn't change. Nothing changes except the new agent's deployment.
+## The Proof Is in What You Can Build in a Day
 
-That's the difference between a system that scales with organizational complexity and one that scales against it.
+Skeptics tell me this is over-engineering. "Just use function calling and a supervisor agent," they say. So let me offer a concrete counterpoint.
 
-## The Question You Should Ask Your Agent Framework
+A client was skeptical that Solace could handle real-time streaming workloads — they associated us with "traditional" messaging. Rather than argue, I went home, grabbed an ESP32 camera module, and used Claude Code to build a complete demo in one day: the camera captured live video frames, published each frame as a message over MQTT to Solace's event broker, and a web dashboard rendered the stream in real time. The broker handled backpressure, topic routing, and multi-subscriber fan-out — the exact same infrastructure patterns that make agentic AI resilient.
 
-If you're evaluating agentic AI architectures — whether you're building or buying — here's the single most diagnostic question I've found:
+The point isn't the demo. The point is that the architectural primitives for resilient agent systems already exist. They're the same primitives that handle millions of trades per second on bank trading floors — I ran that infrastructure at Deutsche Bank for nearly a decade. We migrated from TIBCO Rendezvous to Solace precisely because we needed dynamic topic routing, guaranteed ordering, and WAN-optimized replication across global data centers. Trading systems and agent systems have the same architectural requirements. We just haven't admitted it yet.
 
-**"What happens when I add the next agent?"**
+## The Decision Framework You Actually Need
 
-If the answer involves modifying existing agents, updating a central routing configuration, or changing the orchestration logic, you have a point-to-point system wearing an "agentic" label. It will work at five agents. It will strain at fifteen. It will collapse at fifty — which is exactly where enterprise deployments need to go.
+Before you build your next agentic AI system, ask these five questions:
 
-If the answer is "the new agent registers its capabilities, subscribes to relevant event topics, and the system discovers it automatically" — you have something that can actually scale.
+1. **What happens when an agent is slow or down?** If your answer involves retries and timeouts, you have a synchronous architecture wearing an async costume.
+2. **How do agents discover new capabilities?** If the answer is "we update the orchestrator config," you've built a monolith with LLM steps.
+3. **Can two agents safely compete for the same resource?** If you need application-level locking, your infrastructure is failing you.
+4. **What's your fan-out story?** When one event needs to trigger five agents, do you call them sequentially or publish once and let the broker distribute?
+5. **Can you replay agent interactions?** Event sourcing isn't just for audit logs — it's how you debug nondeterministic AI behavior in production.
 
-## The Parallel Running Lesson
+If you answered poorly on three or more, you don't have an AI problem. You have an architecture problem.
 
-The night we cut over from TIBCO to Solace at Deutsche Bank, the system was processing millions of trades. But the riskiest period wasn't the cutover itself — it was the six months of parallel running before it. Running both systems simultaneously, comparing outputs message by message, building confidence that the new architecture handled every edge case the old one did.
+## The Bigger Bet
 
-Agentic AI needs this same discipline. The teams I see succeeding don't flip a switch from "demo" to "production." They run their agent system alongside existing workflows, compare outputs, measure reliability, and build trust incrementally. The teams that fail go straight from a compelling demo to a production rollout and discover that their orchestration logic doesn't handle the seventeenth edge case that only appears under real load with real data.
+The agentic AI hype cycle is going to produce a lot of demos and a lot of disillusionment. The teams that succeed won't be the ones with the best prompts or the most powerful models. They'll be the ones who recognize that multi-agent coordination is a distributed systems problem — and distributed systems problems have distributed systems solutions.
 
-## Build for Agent Fifty, Not Agent Five
+We solved this in trading. We solved it in microservices. The patterns are proven. The question is whether the AI community will learn from thirty years of distributed systems engineering, or insist on rediscovering every failure mode from scratch.
 
-The agentic AI hype cycle is compressing years of architectural lessons into months. Every enterprise middleware pattern — pub/sub decoupling, dynamic discovery, guaranteed delivery, dead letter queuing, replay — exists because someone learned the hard way that point-to-point integration doesn't survive contact with reality.
-
-If you're building agentic AI systems today, the most leveraged decision you'll make isn't which LLM to use or which orchestration framework to adopt. It's whether your architecture assumes five agents forever or anticipates fifty. The LLM will get cheaper and smarter. The orchestration framework will be replaced twice. The architecture is the thing you'll live with.
-
-Choose the one that doesn't flinch when you add the next agent.
+I know which way I'm betting.
