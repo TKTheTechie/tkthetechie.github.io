@@ -1,0 +1,1 @@
+Your agentic AI demo works because it dodges the hard problem: what happens when agents fail, conflict, or can't find each other at 3 AM? The architecture between agents matters more than the agents themselves. https://tkthetechie.io/blog/the-architecture-tax-nobody-budgets-for-why-your-ai-agent-demo-wont-survive-production
