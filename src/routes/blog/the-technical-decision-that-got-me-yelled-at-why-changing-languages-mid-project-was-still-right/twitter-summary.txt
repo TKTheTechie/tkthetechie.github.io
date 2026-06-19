@@ -1,0 +1,3 @@
+Being right about the technology while being wrong about how you introduce it produces the same result as being wrong about everything.
+
+Lessons from a mid-project language change that almost fractured a team 👇 https://tkthetechie.io/blog/the-technical-decision-that-got-me-yelled-at-why-changing-languages-mid-project-was-still-right
