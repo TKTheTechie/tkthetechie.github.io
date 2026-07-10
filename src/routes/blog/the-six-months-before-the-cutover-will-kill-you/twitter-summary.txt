@@ -1,1 +1,3 @@
-The cutover isn't what kills enterprise migrations — it's the six months of parallel running before it. After migrating millions of trades from TIBCO to Solace at Deutsche Bank, here's what actually goes wrong (and the framework to survive it). https://tkthetechie.io/blog/the-six-months-before-the-cutover-will-kill-you
+The cutover isn't what kills infrastructure migrations. The six months of parallel running before it will bleed your team dry if you don't plan for it as a first-class engineering problem.
+
+https://tkthetechie.io/blog/the-six-months-before-the-cutover-will-kill-you
