@@ -1,0 +1,1 @@
+The riskiest part of an enterprise migration isn't the cutover — it's the 6-month parallel run where your team goes numb to discrepancy reports and you're burning 200% infrastructure for 100% throughput. Here's the framework I learned the hard way. https://tkthetechie.io/blog/the-migration-tax-why-parallel-running-is-where-enterprise-cutovers-actually-fail
