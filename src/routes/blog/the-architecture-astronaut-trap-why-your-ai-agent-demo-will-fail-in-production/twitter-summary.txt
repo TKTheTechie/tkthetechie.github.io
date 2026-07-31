@@ -1,0 +1,1 @@
+Your AI agent demo works because nothing fails. Production is nothing BUT failure. Agentic AI is microservices with non-determinism — and every distributed systems lesson applies harder. https://tkthetechie.io/blog/the-architecture-astronaut-trap-why-your-ai-agent-demo-will-fail-in-production
