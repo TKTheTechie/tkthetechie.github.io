@@ -1,88 +1,84 @@
 ---
 author: Thomas Kunnumpurath
 title: "The Architecture Tax Nobody Talks About: Why Your AI Agents Can't Find Each Other"
-date: 4/10/2026
+date: 8/7/2026
 category: "AI/ML"
 headerImage: the-architecture-tax-nobody-talks-about-why-your-ai-agents-cant-find-each-other.png
 layout: blog
 ---
 
-Last month, I watched a Fortune 500 airline's innovation team demo their shiny new AI agent system. They had a booking agent, a loyalty agent, a rebooking agent, and a customer sentiment agent. Each one worked beautifully in isolation. Then someone asked: "What happens when a flight cancels and all four need to coordinate in real time?"
+Three months ago, I watched a Fortune 500 airline's engineering team demo their shiny new AI agent system. They had a booking agent, a rebooking agent, a loyalty agent, and a flight status agent. Each one worked beautifully in isolation. Then someone asked: "What happens when a flight cancels and a platinum member needs rebooking on a partner airline?"
 
-Silence. Then: "We're still working on that part."
+Silence. Four agents, zero coordination. The rebooking agent didn't know about loyalty status. The loyalty agent didn't know about partner airline availability. The booking agent didn't know a cancellation had even occurred. They'd built four impressive silos and called it agentic AI.
 
-That part — the coordination, the discovery, the orchestration — isn't a feature you bolt on later. It's the entire architecture. And most teams building agentic AI systems are paying an invisible tax because they skipped it.
+This is the architecture tax nobody talks about — and it's being paid right now by nearly every enterprise experimenting with AI agents.
 
-## The Point-to-Point Trap
+## The Discovery Problem Is the Whole Problem
 
-Here's the pattern I see repeated across almost every early agentic AI deployment: teams build agents, then hardwire them together. Agent A calls Agent B's REST endpoint. Agent B calls Agent C. Someone writes a coordinator service that knows about all the agents and routes requests between them. It works in the demo. It even works in staging.
+Here's the conventional wisdom: building AI agents is hard because the models need to be smart enough, the prompts need to be precise enough, and the tools need to be robust enough. That's not wrong, but it's dramatically incomplete.
 
-Then the fourth agent shows up. Then the tenth. Then someone needs to swap out the sentiment model without breaking the rebooking flow. Suddenly you're maintaining a hand-rolled service mesh for AI, and every new agent multiplies your integration surface.
+The actual hard problem is discovery and coordination. How does Agent A know that Agent B exists? How does it know what Agent B can do? How does it know Agent B's output format, latency characteristics, and failure modes? And critically — how does all of this happen dynamically, without a human hardwiring every possible interaction path?
 
-This is the same mistake we made with microservices circa 2015. At Capital One, I watched teams build dozens of GoLang and Spring Boot microservices that each called each other directly. The performance was great. The operational complexity was not. Every new service meant updating five other services' configurations. We'd solved the monolith problem and created a distributed monolith instead.
+If you've spent time in the LangChain or CrewAI ecosystem, you've seen the default answer: point-to-point function calls. Agent A calls Agent B directly. This works in demos. It collapses at scale for the same reason point-to-point integrations always collapse at scale — because the number of connections grows quadratically while your ability to manage them grows linearly at best.
 
-Agentic AI is repeating this history, except faster and with higher stakes — because AI agents are nondeterministic. When a traditional microservice fails, it fails consistently. When an AI agent produces unexpected output, every downstream agent that hardcoded assumptions about that output breaks in creative and unpredictable ways.
+I've seen this movie before. I spent nine years at Deutsche Bank watching what happens when mission-critical systems rely on tight coupling. When we ran the firm-wide migration from TIBCO Rendezvous to Solace, the hardest part wasn't the messaging layer itself — it was untangling years of point-to-point dependencies that nobody fully understood anymore. Applications that were supposed to be independent turned out to share implicit contracts through message formats, timing assumptions, and undocumented routing logic.
 
-## What Discovery Actually Means at Scale
+Agentic AI is recreating this exact anti-pattern, just with HTTP calls and JSON instead of middleware queues.
 
-The missing piece isn't just message routing — it's dynamic capability discovery. An agent shouldn't need to know which other agent handles rebooking. It should express an intent ("I need to rebook passenger X on the next available flight") and the architecture should resolve that to the right capability, right now, even if the agent providing that capability was deployed five minutes ago.
+## What Event-Driven Architecture Actually Solves Here
 
-This is what we're building with Solace Agent Mesh, and it's why I believe event-driven architecture isn't just compatible with agentic AI — it's prerequisite infrastructure.
+The fix isn't adding another orchestration layer on top of your agents. It's changing the interaction model from "agents call each other" to "agents publish capabilities and subscribe to needs."
 
-Here's the concrete difference. In a point-to-point system:
+This is the core principle behind what we're building with Solace Agent Mesh, and it's the principle I keep coming back to when I talk with enterprise teams attempting agentic AI at scale. The shift is subtle but fundamental:
+
+**Point-to-point model:** The booking agent must know that the loyalty agent exists at `https://loyalty-service:8080/api/v2/status`, accepts a specific JSON schema, and responds within 200ms.
+
+**Event-driven model:** The booking agent publishes an event on a topic like `customer/loyalty/status/requested/{customerId}`. It doesn't know or care who fulfills it. The loyalty agent subscribes to that topic pattern, processes the request, and publishes a response. If the loyalty agent is replaced, upgraded, or supplemented with a second agent — zero changes to the booking agent.
+
+This is the same dynamic topic routing I've been building systems around for over a decade, but the stakes are higher with AI agents because they're supposed to be autonomous. An autonomous agent that requires hardcoded knowledge of every other agent's endpoint isn't autonomous — it's a distributed monolith with better marketing.
+
+## The Hierarchy That Makes Agents Navigable
+
+At AWS re:Invent a few years ago, I was explaining topic hierarchies to audiences who had never thought about event-driven architecture. Now I'm explaining the same concept to audiences building AI agents, and the reaction is completely different — because they've already felt the pain of not having it.
+
+A well-designed topic hierarchy acts as a self-describing namespace for agent capabilities. Consider:
 
 ```
-# Booking agent hardcodes knowledge of rebooking agent
-response = requests.post("http://rebooking-agent:8080/rebook", json=payload)
+agents/airline/rebooking/request/{flightId}/{priority}
+agents/airline/loyalty/status/{customerId}
+agents/airline/partner/availability/{route}/{date}
 ```
 
-In an event-driven agent mesh:
+An orchestrating agent — or even a peer agent — can discover capabilities by subscribing to wildcard patterns like `agents/airline/>/request/>`. New agents become discoverable the moment they start publishing. Dead agents stop appearing. No service registry to maintain. No configuration files to update. No deployment dependencies between teams.
 
-```
-# Booking agent publishes intent to a topic hierarchy
-await broker.publish("airline/ops/rebooking/request/v1", {
-  passenger_id: "ABC123",
-  constraint: "next_available",
-  priority: "high"
-})
-# The mesh resolves which agent (or agents) handle this capability
-# The booking agent doesn't know or care
-```
+This is not theoretical. This is how we're deploying Solace Agent Mesh in production across airlines and manufacturing right now, and it's the architectural insight that separates demos from systems.
 
-The topic hierarchy — something I was explaining at AWS re:Invent five years ago as a basic EDA concept — turns out to be the natural addressing scheme for agent capabilities. Dynamic topic subscriptions let agents register and deregister capabilities at runtime. The broker handles fan-out, filtering, and guaranteed delivery. No coordinator service. No hardwired endpoints. No distributed monolith.
+## The Lesson From Running AI Locally
 
-## The Lesson from Trading Floors
+I run a stock screening system on my MacBook using open-source models — what I call OpenClaw. One thing it taught me is that the gap between "AI works" and "AI works reliably in a system" is enormous. My local models occasionally hallucinate stock tickers. They sometimes return malformed JSON. They have variable latency depending on what else my machine is doing.
 
-I spent nine years at Deutsche Bank running the messaging middleware that connected real-time trading systems — equities, FX, fixed income — all publishing and consuming millions of messages per second. The reason that infrastructure worked wasn't because we had the fastest broker (though sub-millisecond latency mattered). It worked because no trading application needed to know the address of any other trading application.
+Now multiply that unreliability across four, ten, fifty agents in a production enterprise system, all calling each other directly. A single slow or malformed response cascades through the entire chain.
 
-A pricing engine published to `trading/fx/eurusd/price`. Any system that needed EUR/USD prices subscribed to that topic. When we migrated from TIBCO Rendezvous to Solace — a multi-year program I led — we could swap out entire subsystems without the publishers or subscribers knowing. The architecture was decoupled not just technically but organizationally: the equities team and the FX team could deploy independently.
+Event-driven architecture gives you the circuit breakers for free. Asynchronous communication means a slow agent doesn't block the caller. Topic-based routing means you can run two versions of an agent simultaneously — canary deployments for AI. Message persistence means that if an agent crashes mid-processing, the request isn't lost.
 
-Agentic AI needs exactly this property. When your sentiment analysis agent gets upgraded from GPT-4 to a fine-tuned model, the agents consuming sentiment scores shouldn't require a redeployment. When you add a new rebooking agent optimized for international routes, it should subscribe to the relevant topics and start handling traffic. Zero coordination overhead.
+These aren't new patterns. They're the same patterns I used to keep trading systems alive at Deutsche Bank. But they're newly urgent because AI agents are uniquely unreliable compared to traditional microservices. A REST API either returns a 200 or it doesn't. An AI agent might return a 200 with confidently wrong data. Your architecture needs to account for that.
 
-## The Practical Framework
+## What to Actually Do About This
 
-If you're building or evaluating an agentic AI system, here's the decision heuristic I use:
+If you're building multi-agent AI systems, here's the decision framework I use with every enterprise customer:
 
-**Ask: "What happens when I add the eleventh agent?"**
+1. **Count your agent-to-agent connections.** If you have N agents with point-to-point calls, you potentially have N×(N-1) connections to manage. If that number is above 12, you need an event-driven backbone. You're already past the complexity threshold.
 
-If the answer involves updating configuration in more than one existing agent, you've built a distributed monolith. Start over with your integration layer.
+2. **Design your topic taxonomy before you design your agents.** The topic hierarchy is your system's API contract. Get it wrong early and you'll be refactoring under pressure later. Spend the upfront hours.
 
-**Ask: "Can I replace any single agent without notifying other agents?"**
+3. **Make agent discovery dynamic, not configured.** If adding a new agent requires updating configuration in existing agents, you've built a distributed monolith. Test this: can a new agent join the system and start contributing without any existing agent being redeployed?
 
-If no, you've hardcoded capability resolution. You need dynamic discovery — whether through an event mesh, a service registry, or both.
-
-**Ask: "What happens when an agent produces unexpected output?"**
-
-If the answer is "the next agent in the chain crashes," you need schema evolution and dead-letter handling at the infrastructure level, not in application code.
-
-These aren't theoretical concerns. In the airline scenario I opened with, the team eventually realized they needed to rebuild their integration layer before they could go to production. Two months of agent development became dependent on an infrastructure decision they'd deferred.
+4. **Assume every agent response might be wrong.** Build validation, fallback, and retry logic into the messaging layer, not into each individual agent. This is where event brokers with built-in dead-letter queues and replay capabilities earn their keep.
 
 ## The Bigger Shift
 
-The industry is spending enormous energy on making individual AI agents smarter — better models, better prompts, better RAG pipelines. That work matters. But the bottleneck for enterprise agentic AI isn't agent intelligence. It's agent coordination.
+The AI industry is spending billions on making individual models smarter. That matters. But the enterprises I work with aren't failing because GPT-4 isn't smart enough. They're failing because ten smart agents with no coordination architecture produce chaos, not intelligence.
 
-Every complex system in history — trading floors, airline operations, supply chains, the internet itself — eventually converged on the same pattern: decoupled producers, decoupled consumers, and a smart fabric in between. Agentic AI won't be the exception.
+The irony is that we solved this problem in distributed systems twenty years ago. The principles of loose coupling, publish-subscribe, and dynamic discovery aren't new. What's new is that an entire generation of AI engineers is learning them the hard way — by building tightly coupled agent systems that work in demos and shatter in production.
 
-The teams that figure this out early will ship multi-agent systems that scale. The teams that don't will keep demoing impressive individual agents that can't work together when the flight cancels and four systems need to respond in the same second.
-
-I know which architecture I'd bet on. I've been running it in production since 2008.
+The architecture tax is real. But unlike technical debt, which you can defer, this one comes due the moment your second agent needs to talk to your first.
