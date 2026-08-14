@@ -1,0 +1,1 @@
+Your AI agents don't have a model problem — they have a topology problem. Flat pub/sub topics are the new distributed monolith, and most agentic architectures are about to learn this the hard way. https://tkthetechie.io/blog/the-architecture-tax-nobody-talks-about-why-your-ai-agents-will-fail-without-topic-hierarchies
