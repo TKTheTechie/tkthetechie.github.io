@@ -13,6 +13,20 @@ export class PortfolioItem {
 }
 
 export const PORTFOLIO_ITEMS: PortfolioItem[] = [
+
+  
+  new PortfolioItem(
+    'Solace Office Hours - Solace in Finance',
+    '/images/portfolio/Solace-office-hours-2025.png',
+    'https://www.youtube.com/watch?v=ebypWvxNjy4',
+    'I explained my experience deploying and building on Solace at an Investment Bank along with a 101 on Fixed Income!'
+  ),
+  new PortfolioItem(
+    'Experimenting with Three.js, shaders and a Holographic Solly (Solace Mascot)',
+    '/images/portfolio/holographic-solly.png',
+    'https://tkthetechie.io/holographic-solly',
+    'A 3D Interactive Web App using Three.js (via Threlte) that uses shaders to achieve a holographic effect'
+  ),
   new PortfolioItem(
     'EDA Summit Talk - Jet Streams & Market Streams: Navigating EDA in Aviation and Proprietary Trading',
     '/images/portfolio/EDA-Summit-2024-Talk.jpeg',

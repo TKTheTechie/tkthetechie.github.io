@@ -21,7 +21,7 @@
   ];
 
   const awards = [
-    { name: 'Solace Simply Stunning Award', detail: 'Quota achievement', year: '2022, 2023', icon: ICONS.star, from: '#fbbf24', to: '#d97706' },
+    { name: 'Solace Simply Stunning Award', detail: 'Quota achievement', year: '2022, 2023, 2025, 2026', icon: ICONS.star, from: '#fbbf24', to: '#d97706' },
     { name: 'Solace Individual Contributor Award', detail: 'Cloud spending optimisation', year: '2019', icon: ICONS.user, from: '#38bdf8', to: '#10b981' },
     { name: 'CapitalOne Hackathon Creative Award', detail: 'Innovation winner', year: '2017', icon: ICONS.bulb, from: '#a78bfa', to: '#7c3aed' },
     { name: 'Deutsche Bank My Recognition Award', detail: 'Outstanding performance', year: '2014', icon: ICONS.coin, from: '#38bdf8', to: '#0369a1' }
@@ -30,7 +30,9 @@
   const volunteering = [
     { name: 'Habitat for Humanity', detail: 'Career services and food packing initiatives', year: '2006 – 2018', icon: ICONS.heart, from: '#34d399', to: '#059669' },
     { name: 'C1 Coders', detail: 'Coding lessons to middle schoolers', year: '2017', icon: ICONS.code, from: '#38bdf8', to: '#0284c7' },
-    { name: "Coding Camp at St. Paul's School", detail: 'Volunteer instructor', year: '2022 – 2023', icon: ICONS.book, from: '#a78bfa', to: '#7c3aed' }
+    { name: "Coding Camp at St. Paul's School", detail: 'Volunteer instructor', year: '2022 – 2023', icon: ICONS.book, from: '#a78bfa', to: '#7c3aed' },
+    { name: "Boy Scouts of America - Cub Scouts - Den Leader", detail: 'Volunteer Leader', year: '2025 – Present', icon: ICONS.cap, from: '#fbbf24', to: '#d97706'}
+ 
   ];
 </script>
 
