@@ -1,295 +1,328 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { pushState, replaceState } from '$app/navigation';
   import { darkMode } from '$lib/stores/theme';
-  
+  import { paletteOpen } from '$lib/stores/palette';
+
   let isScrolled = false;
   let isMobileMenuOpen = false;
   let isDark = false;
-  let currentSection = 'home';
-  
-  // Subscribe to dark mode changes
-  darkMode.subscribe(value => {
-    isDark = value;
-  });
-  
+  let activeSection = 'home';
+  let progress = 0;
+  let onHome = true;
+
+  /** pixel geometry of the sliding active-pill */
+  let indicator = { left: 0, width: 0, ready: false };
+  let navList: HTMLElement;
+
+  darkMode.subscribe((value) => (isDark = value));
+
   const navItems = [
-    { name: 'Home', href: '/#home', id: 'home' },
-    { name: 'About', href: '/#about', id: 'about' },
-    { name: 'Blog', href: '/#blog', id: 'blog' },
-    { name: 'Experience', href: '/#experience', id: 'experience' },
-    { name: 'Skills', href: '/#skills', id: 'skills' },
-    { name: 'Portfolio', href: '/#portfolio', id: 'portfolio' },
-    { name: 'Credentials', href: '/#credentials', id: 'credentials' },
-    { name: 'Contact', href: '/#contact', id: 'contact' }
+    { name: 'Home', id: 'home' },
+    { name: 'About', id: 'about' },
+    { name: 'Experience', id: 'experience' },
+    { name: 'Skills', id: 'skills' },
+    { name: 'Portfolio', id: 'portfolio' },
+    { name: 'Education', id: 'education' },
+    { name: 'Blog', id: 'blog' },
+    { name: 'Contact', id: 'contact' }
   ];
-  
+
+  const moveIndicator = () => {
+    if (!navList) return;
+    const target = navList.querySelector<HTMLElement>(`[data-section="${activeSection}"]`);
+    if (!target) {
+      indicator = { ...indicator, ready: false };
+      return;
+    }
+    indicator = {
+      left: target.offsetLeft,
+      width: target.offsetWidth,
+      ready: true
+    };
+  };
+
   onMount(() => {
-    const handleScroll = () => {
-      isScrolled = window.scrollY > 50;
-    };
-    
-    // Throttle the section update to improve performance
-    let ticking = false;
-    const throttledUpdateCurrentSection = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          updateCurrentSection();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    
-    // Track current section for highlighting and URL updates
-    const updateCurrentSection = () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      const sectionElements = document.querySelectorAll('section[id]');
+    onHome = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
 
-      let detectedSection = 'home';
-      let closestSection = null;
-      let closestDistance = Infinity;
+    // Off the home page there are no sections to spy on, so highlight the
+    // route we're actually on instead of leaving "Home" lit.
+    if (!onHome) {
+      activeSection = window.location.pathname.startsWith('/blog') ? 'blog' : '';
+    }
 
-      sectionElements.forEach((section) => {
-        const sectionTop = (section as HTMLElement).offsetTop;
-        const sectionHeight = section.clientHeight;
-        const sectionCenter = sectionTop + sectionHeight / 2;
-        const viewportCenter = scrollTop + window.innerHeight / 2;
-        
-        // Calculate distance from viewport center to section center
-        const distance = Math.abs(viewportCenter - sectionCenter);
-        
-        // Also check if we're within the section bounds
-        const isInSection = scrollTop >= sectionTop - 100 && scrollTop < sectionTop + sectionHeight - 100;
-        
-        if (isInSection && distance < closestDistance) {
-          closestDistance = distance;
-          closestSection = section.id;
+    const sections = navItems
+      .map((item) => document.getElementById(item.id))
+      .filter((el): el is HTMLElement => Boolean(el));
+
+    const onScroll = () => {
+      isScrolled = window.scrollY > 24;
+
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - window.innerHeight;
+      progress = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+
+      // Scroll spy: the section whose top is nearest just under the navbar wins.
+      let current = activeSection;
+      let best = Number.POSITIVE_INFINITY;
+      for (const section of sections) {
+        const top = section.getBoundingClientRect().top - 120;
+        const distance = Math.abs(top);
+        if (top <= 40 && distance < best) {
+          best = distance;
+          current = section.id;
         }
-      });
-
-      // If we found a close section, use it
-      if (closestSection) {
-        detectedSection = closestSection;
       }
-
-      // If we're at the very top, ensure we're on home
-      if (scrollTop < 100) {
-        detectedSection = 'home';
+      // near the very bottom, always highlight the last section
+      if (max > 0 && window.scrollY >= max - 8 && sections.length) {
+        current = sections[sections.length - 1].id;
       }
-
-      // Only update if section has changed
-      if (currentSection !== detectedSection) {
-        currentSection = detectedSection;
-        
-        // Update URL hash to reflect current section
-        const url = new URL(window.location.href);
-        url.hash = detectedSection;
-        
-        // Use replaceState to update URL without adding to history
-        // This prevents back button issues when scrolling through sections
-        replaceState(url.toString(), { section: detectedSection });
+      if (current !== activeSection) {
+        activeSection = current;
+        moveIndicator();
       }
     };
 
-    // Handle direct navigation to hash URLs
-    const handleHashNavigation = () => {
-      const hash = window.location.hash.slice(1);
-      if (hash) {
-        // Small delay to ensure page is loaded
-        setTimeout(() => {
-          scrollToSection(hash);
-        }, 100);
-      }
-    };
+    onScroll();
+    moveIndicator();
 
-    // Handle browser back/forward navigation
-    const handlePopState = (event: PopStateEvent) => {
-      if (event.state && event.state.section) {
-        scrollToSection(event.state.section);
-      }
-    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', moveIndicator);
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('scroll', throttledUpdateCurrentSection, { passive: true });
-    window.addEventListener('popstate', handlePopState);
-    
-    // Initial calls
-    handleScroll();
-    updateCurrentSection();
-    handleHashNavigation();
-    
+    /*
+      The pill is measured in pixels, so anything that changes label widths
+      after mount will leave it misaligned. The display font swapping in is
+      the usual culprit — watch the list itself rather than guessing.
+    */
+    const listObserver = new ResizeObserver(moveIndicator);
+    if (navList) listObserver.observe(navList);
+    requestAnimationFrame(moveIndicator);
+    if (document.fonts?.ready) document.fonts.ready.then(moveIndicator);
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('scroll', throttledUpdateCurrentSection);
-      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', moveIndicator);
+      listObserver.disconnect();
     };
   });
-  
-  const toggleDarkMode = () => {
-    darkMode.toggle();
-  };
-  
-  const scrollToSection = (sectionId: string, event?: Event) => {
-    // Prevent default behavior if event is provided
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
+
+  const go = (id: string) => {
+    isMobileMenuOpen = false;
+    if (!onHome) {
+      window.location.href = `/#${id}`;
+      return;
     }
-    
-    // Find the element directly by ID
-    const element = document.getElementById(sectionId);
-    if (element) {
-      // Element exists on current page - scroll to it
-      // Update the URL with the hash using SvelteKit's pushState
-      const url = new URL(window.location.href);
-      url.hash = sectionId;
-      pushState(url.toString(), { section: sectionId });
-      
-      // Calculate the offset position accounting for fixed navigation
-      const elementTop = element.offsetTop;
-      const navHeight = 80; // Account for fixed navigation height
-      
-      // Use a simple, reliable scroll method
-      window.scrollTo({
-        top: elementTop - navHeight,
-        behavior: 'smooth'
-      });
-      
-      // Update current section
-      currentSection = sectionId;
-      isMobileMenuOpen = false;
-    } else {
-      // Element doesn't exist on current page - navigate to home page with hash
-      const currentPath = window.location.pathname;
-      if (currentPath !== '/') {
-        // Navigate to home page with the section hash
-        window.location.href = `/#${sectionId}`;
-      }
-    }
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 </script>
 
-<nav 
-  class="fixed top-0 left-0 right-0 z-[100] transition-all duration-300 backdrop-blur-md shadow-lg border-b {isDark ? 'border-gray-800' : 'border-gray-200/50'}"
-  style="background-color: {isDark ? 'rgb(0, 0, 0)' : (isScrolled ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.7)')}"
+<svelte:head>
+  <meta name="theme-color" content={isDark ? '#05080f' : '#ffffff'} />
+</svelte:head>
+
+<!-- reading-progress hairline, pinned above the bar -->
+<div class="fixed top-0 left-0 right-0 z-[110] h-[2px]" aria-hidden="true">
+  <div
+    class="h-full origin-left"
+    style="
+      transform:scaleX({progress});
+      background-image:linear-gradient(90deg,var(--color-primary-500),var(--color-accent-400),var(--color-plasma-400));
+      transition:transform .12s linear;
+      box-shadow:0 0 12px rgba(14,165,233,.6);
+    "
+  ></div>
+</div>
+
+<nav
+  class="fixed top-0 right-0 left-0 z-[100] transition-all duration-500"
+  class:is-scrolled={isScrolled}
+  style="
+    background-color:{isScrolled ? 'var(--nav-bg)' : 'transparent'};
+    border-bottom:1px solid {isScrolled ? 'var(--nav-border)' : 'transparent'};
+    backdrop-filter:{isScrolled ? 'blur(18px) saturate(180%)' : 'none'};
+    -webkit-backdrop-filter:{isScrolled ? 'blur(18px) saturate(180%)' : 'none'};
+  "
 >
   <div class="container-max section-padding">
-    <div class="flex items-center justify-between h-16">
-      <!-- Logo -->
-      <div class="flex items-center space-x-2">
-        <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-accent-600 rounded-lg flex items-center justify-center">
-          <span class="text-white font-bold text-lg">TK</span>
-        </div>
-      </div>
-      
-      <!-- Desktop Navigation -->
-      <div class="hidden md:flex items-center space-x-8">
+    <div class="flex h-[68px] items-center justify-between gap-4">
+      <!-- ---------- logo ---------- -->
+      <a href="/" class="group flex shrink-0 items-center gap-2.5" aria-label="TKTheTechie home">
+        <span class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-[10px]">
+          <span
+            class="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
+            style="background-image:linear-gradient(135deg,var(--color-primary-500),var(--color-accent-500));"
+          ></span>
+          <span
+            class="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            style="background-image:linear-gradient(135deg,var(--color-accent-400),var(--color-plasma-500));"
+          ></span>
+          <span class="font-display relative text-[13px] font-extrabold tracking-tight text-white">TK</span>
+        </span>
+        <span class="font-display text-[17px] font-bold tracking-tight" style="color:var(--nav-fg-strong);">
+          <span class="gradient-text">TheTechie</span>
+        </span>
+      </a>
+
+      <!-- ---------- desktop links ---------- -->
+      <div class="relative hidden items-center gap-1 lg:flex" bind:this={navList}>
+        <!-- sliding active pill -->
+        <span
+          class="pointer-events-none absolute top-1/2 h-8 rounded-full"
+          aria-hidden="true"
+          style="
+            left:{indicator.left}px;
+            width:{indicator.width}px;
+            opacity:{indicator.ready ? 1 : 0};
+            transform:translateY(-50%);
+            background-color:var(--nav-pill);
+            transition:left .55s cubic-bezier(.16,1,.3,1), width .55s cubic-bezier(.16,1,.3,1), opacity .3s ease;
+          "
+        ></span>
+
         {#each navItems as item}
           <button
-            type="button"
-            on:click={(event) => scrollToSection(item.id, event)}
-            class="relative text-black dark:text-white hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold cursor-pointer {
-              currentSection === item.id 
-                ? 'text-primary-500 dark:text-primary-400' 
-                : ''
-            }"
-            style="text-shadow: {isDark ? '0 1px 2px rgba(0,0,0,0.8)' : 'none'}"
+            data-section={item.id}
+            on:click={() => go(item.id)}
+            class="relative rounded-full px-3.5 py-1.5 text-[13.5px] font-semibold transition-colors duration-300"
+            style="color:{activeSection === item.id ? 'var(--nav-fg-active)' : 'var(--nav-fg)'};"
+            aria-current={activeSection === item.id ? 'page' : undefined}
           >
             {item.name}
-            
-            <!-- Active indicator -->
-            {#if currentSection === item.id}
-              <div class="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-primary-500 to-accent-600 rounded-full animate-fade-in"></div>
-            {/if}
           </button>
         {/each}
-        
-        <!-- Dark Mode Toggle -->
-        <button
-          on:click={toggleDarkMode}
-          class="p-2 rounded-lg {isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'} transition-colors duration-200 cursor-pointer"
-          aria-label="Toggle dark mode"
-          title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-        >
-          <svg class="w-5 h-5 {isDark ? 'text-gray-100' : 'text-gray-900'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path class="{isDark ? 'hidden' : 'block'}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-            <path class="{isDark ? 'block' : 'hidden'}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-        </button>
       </div>
-      
-      <!-- Mobile Menu Button -->
-      <div class="md:hidden flex items-center space-x-2">
+
+      <!-- ---------- actions ---------- -->
+      <div class="flex shrink-0 items-center gap-2">
+        <!-- command palette trigger -->
         <button
-          on:click={toggleDarkMode}
-          class="p-2 rounded-lg {isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'} transition-colors duration-200 cursor-pointer"
-          aria-label="Toggle dark mode"
+          on:click={() => paletteOpen.set(true)}
+          class="hidden items-center gap-2 rounded-full py-1.5 pr-2 pl-3 text-[12px] font-medium transition-all duration-300 md:flex"
+          style="border:1px solid var(--nav-border-strong);color:var(--nav-fg);"
+          aria-label="Open command palette"
+        >
+          <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20l-3.6-3.6" stroke-linecap="round" />
+          </svg>
+          <span class="hidden lg:inline">Jump to…</span>
+          <kbd
+            class="rounded px-1.5 py-0.5 font-mono text-[10px]"
+            style="background-color:var(--nav-pill);color:var(--nav-fg-strong);"
+          >⌘K</kbd>
+        </button>
+
+        <!-- theme toggle -->
+        <button
+          on:click={() => darkMode.toggle()}
+          class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-full transition-all duration-300"
+          style="border:1px solid var(--nav-border-strong);color:var(--nav-fg-strong);"
+          aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
           title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
-          <svg class="w-5 h-5 {isDark ? 'text-gray-100' : 'text-gray-900'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path class="{isDark ? 'hidden' : 'block'}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-            <path class="{isDark ? 'block' : 'hidden'}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          <!-- the two icons cross-fade and counter-rotate -->
+          <svg
+            class="absolute h-[17px] w-[17px] transition-all duration-500"
+            style="opacity:{isDark ? 0 : 1};transform:rotate({isDark ? -90 : 0}deg) scale({isDark ? 0.4 : 1});"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+          </svg>
+          <svg
+            class="absolute h-[17px] w-[17px] transition-all duration-500"
+            style="opacity:{isDark ? 1 : 0};transform:rotate({isDark ? 0 : 90}deg) scale({isDark ? 1 : 0.4});"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
           </svg>
         </button>
-        
+
+        <!-- mobile menu -->
         <button
-          on:click={() => isMobileMenuOpen = !isMobileMenuOpen}
-          class="p-2 rounded-lg {isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-100 hover:bg-gray-200'} transition-colors duration-200 cursor-pointer"
+          on:click={() => (isMobileMenuOpen = !isMobileMenuOpen)}
+          class="grid h-9 w-9 place-items-center rounded-full transition-all duration-300 lg:hidden"
+          style="border:1px solid var(--nav-border-strong);color:var(--nav-fg-strong);"
           aria-label="Toggle menu"
+          aria-expanded={isMobileMenuOpen}
         >
-          <svg class="w-6 h-6 {isDark ? 'text-gray-100' : 'text-gray-900'}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            {#if !isMobileMenuOpen}
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            {:else}
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            {/if}
-          </svg>
+          <span class="relative block h-3.5 w-4">
+            <span
+              class="absolute left-0 block h-[1.6px] w-full rounded-full bg-current transition-all duration-500"
+              style="top:{isMobileMenuOpen ? '6.4px' : '1px'};transform:rotate({isMobileMenuOpen ? 45 : 0}deg);"
+            ></span>
+            <span
+              class="absolute left-0 block h-[1.6px] w-full rounded-full bg-current transition-all duration-300"
+              style="top:6.4px;opacity:{isMobileMenuOpen ? 0 : 1};"
+            ></span>
+            <span
+              class="absolute left-0 block h-[1.6px] w-full rounded-full bg-current transition-all duration-500"
+              style="top:{isMobileMenuOpen ? '6.4px' : '12px'};transform:rotate({isMobileMenuOpen ? -45 : 0}deg);"
+            ></span>
+          </span>
         </button>
       </div>
     </div>
-    
-    <!-- Mobile Menu -->
-    {#if isMobileMenuOpen}
-      <div class="md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700">
-        <div class="flex flex-col space-y-3 pt-4">
-          {#each navItems as item}
-            <button
-              type="button"
-              on:click={(event) => scrollToSection(item.id, event)}
-              class="relative text-left text-black dark:text-white hover:text-primary-500 dark:hover:text-primary-300 transition-all duration-200 font-bold dark:font-extrabold py-2 cursor-pointer {
-                currentSection === item.id 
-                  ? 'text-primary-500 dark:text-primary-400' 
-                  : ''
-              }"
-              style="text-shadow: {isDark ? '0 1px 2px rgba(0,0,0,0.8)' : 'none'}"
-            >
-              {item.name}
-              
-              <!-- Active indicator for mobile -->
-              {#if currentSection === item.id}
-                <div class="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-primary-500 to-accent-600 rounded-full animate-fade-in"></div>
-              {/if}
-            </button>
-          {/each}
-        </div>
+  </div>
+
+  <!-- ---------- mobile drawer ---------- -->
+  <div
+    class="overflow-hidden lg:hidden"
+    style="
+      max-height:{isMobileMenuOpen ? '30rem' : '0'};
+      opacity:{isMobileMenuOpen ? 1 : 0};
+      background-color:var(--nav-bg-solid);
+      backdrop-filter:blur(18px) saturate(180%);
+      transition:max-height .6s cubic-bezier(.16,1,.3,1), opacity .35s ease;
+    "
+  >
+    <div class="container-max section-padding pt-2 pb-5">
+      <div class="grid gap-1" style="border-top:1px solid var(--nav-border);padding-top:.75rem;">
+        {#each navItems as item, i}
+          <button
+            on:click={() => go(item.id)}
+            class="flex items-center justify-between rounded-xl px-3 py-2.5 text-left text-[15px] font-semibold transition-all duration-500"
+            style="
+              color:{activeSection === item.id ? 'var(--nav-fg-active)' : 'var(--nav-fg)'};
+              background-color:{activeSection === item.id ? 'var(--nav-pill)' : 'transparent'};
+              transform:translateY({isMobileMenuOpen ? '0' : '10px'});
+              opacity:{isMobileMenuOpen ? 1 : 0};
+              transition-delay:{isMobileMenuOpen ? 40 + i * 35 : 0}ms;
+            "
+          >
+            {item.name}
+            <span class="font-mono text-[10px] opacity-50">0{i + 1}</span>
+          </button>
+        {/each}
       </div>
-    {/if}
+    </div>
   </div>
 </nav>
 
 <style>
-  /* Navigation text override for dark mode */
-  :global(.dark) nav button {
-    color: white !important;
+  /*
+    The bar floats over a very dark hero at rest and over normal page surfaces
+    once scrolled, so its palette is expressed as variables that flip with the
+    scrolled state rather than with the theme alone.
+  */
+  nav {
+    --nav-fg: rgb(203 213 225 / 0.82);
+    --nav-fg-strong: #fff;
+    --nav-fg-active: #fff;
+    --nav-pill: rgb(255 255 255 / 0.12);
+    --nav-border: rgb(255 255 255 / 0.1);
+    --nav-border-strong: rgb(255 255 255 / 0.14);
+    --nav-bg: rgb(5 8 15 / 0.72);
+    --nav-bg-solid: rgb(5 8 15 / 0.94);
   }
-  
-  :global(.dark) nav button:hover {
-    color: rgb(147, 197, 253) !important; /* primary-300 */
-  }
-  
-  /* Active state override */
-  :global(.dark) nav button.text-primary-500 {
-    color: rgb(59, 130, 246) !important; /* primary-400 in dark mode */
+
+  /* Once scrolled past the hero the bar adopts the page theme. */
+  :global(html:not(.dark)) nav.is-scrolled {
+    --nav-fg: #475569;
+    --nav-fg-strong: #0b1220;
+    --nav-fg-active: #0b1220;
+    --nav-pill: rgb(15 23 42 / 0.07);
+    --nav-border: rgb(15 23 42 / 0.08);
+    --nav-border-strong: rgb(15 23 42 / 0.12);
+    --nav-bg: rgb(255 255 255 / 0.78);
+    --nav-bg-solid: rgb(255 255 255 / 0.96);
   }
 </style>

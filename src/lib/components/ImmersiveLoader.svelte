@@ -1,1 +1,0 @@
-<!-- Loading screen completely removed - site loads instantly -->

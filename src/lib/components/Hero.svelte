@@ -1,565 +1,354 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import InteractiveParticles from './InteractiveParticles.svelte';
-  import MagneticElement from './MagneticElement.svelte';
-  import MorphingButton from './MorphingButton.svelte';
-  
-  let heroRef: HTMLElement;
-  let isVisible = false;
-  let mouseX = 0;
-  let mouseY = 0;
-  let isMouseInside = false;
-  let mouseTrackingParticle: HTMLElement;
-  
-  onMount(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        isVisible = entry.isIntersecting;
-      },
-      { threshold: 0.1 }
-    );
-    
-    if (heroRef) observer.observe(heroRef);
-    
-    // Mouse tracking for parallax effects and particle
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!heroRef) return;
-      
-      const rect = heroRef.getBoundingClientRect();
-      mouseX = (e.clientX - rect.left) / rect.width;
-      mouseY = (e.clientY - rect.top) / rect.height;
-      
-      // Update mouse tracking particle position
-      if (mouseTrackingParticle && isMouseInside) {
-        const actualX = e.clientX - rect.left;
-        const actualY = e.clientY - rect.top;
-        mouseTrackingParticle.style.left = `${actualX}px`;
-        mouseTrackingParticle.style.top = `${actualY}px`;
-      }
-    };
-    
-    const handleMouseEnter = () => {
-      isMouseInside = true;
-    };
-    
-    const handleMouseLeave = () => {
-      isMouseInside = false;
-      // Reset to center when mouse leaves
-      mouseX = 0.5;
-      mouseY = 0.5;
-    };
-    
-    if (heroRef) {
-      heroRef.addEventListener('mousemove', handleMouseMove);
-      heroRef.addEventListener('mouseenter', handleMouseEnter);
-      heroRef.addEventListener('mouseleave', handleMouseLeave);
+  import EventMesh from './EventMesh.svelte';
+  import { magnetic } from '$lib/actions/motion';
+
+  const NAME_FIRST = 'Thomas';
+  const NAME_LAST = 'Kunnumpurath';
+
+  const ROLES = [
+    'Event-Driven Architecture',
+    'Cloud-Native Platforms',
+    'Engineering Leadership',
+    'Technical Evangelism'
+  ];
+
+  const PRIOR = ['Solace', 'Capital One', 'Deutsche Bank'];
+
+  /**
+   * background-clip:text can't survive per-character transforms, so instead of
+   * a CSS gradient we sample the ramp once per letter. Same look, but each
+   * glyph is a real colour we're free to animate.
+   */
+  const RAMP: Array<[number, number, number]> = [
+    [56, 189, 248],  // sky-400
+    [52, 211, 153],  // emerald-400
+    [125, 211, 252]  // sky-300
+  ];
+
+  const colourAt = (t: number) => {
+    const scaled = Math.min(0.9999, Math.max(0, t)) * (RAMP.length - 1);
+    const i = Math.floor(scaled);
+    const f = scaled - i;
+    const [r1, g1, b1] = RAMP[i];
+    const [r2, g2, b2] = RAMP[i + 1];
+    return `rgb(${Math.round(r1 + (r2 - r1) * f)},${Math.round(g1 + (g2 - g1) * f)},${Math.round(b1 + (b2 - b1) * f)})`;
+  };
+
+  const SOCIALS = [
+    {
+      name: 'LinkedIn',
+      href: 'https://www.linkedin.com/in/tkthetechie/',
+      d: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z'
+    },
+    {
+      name: 'GitHub',
+      href: 'https://github.com/TKTheTechie',
+      d: 'M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z'
+    },
+    {
+      name: 'X',
+      href: 'https://x.com/tkthetechie',
+      d: 'M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'
     }
-    
-    return () => {
-      observer.disconnect();
-      if (heroRef) {
-        heroRef.removeEventListener('mousemove', handleMouseMove);
-        heroRef.removeEventListener('mouseenter', handleMouseEnter);
-        heroRef.removeEventListener('mouseleave', handleMouseLeave);
+  ];
+
+  /* ---- role typewriter ---------------------------------------------- */
+  let typed = '';
+  let roleIndex = 0;
+
+  onMount(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      typed = ROLES[0];
+      return;
+    }
+
+    let charIndex = 0;
+    let erasing = false;
+    let timer: ReturnType<typeof setTimeout>;
+
+    const tick = () => {
+      const word = ROLES[roleIndex];
+
+      if (!erasing) {
+        charIndex++;
+        typed = word.slice(0, charIndex);
+        if (charIndex === word.length) {
+          erasing = true;
+          timer = setTimeout(tick, 2100);
+          return;
+        }
+        timer = setTimeout(tick, 42 + Math.random() * 45);
+      } else {
+        charIndex -= 2;
+        if (charIndex <= 0) {
+          charIndex = 0;
+          erasing = false;
+          roleIndex = (roleIndex + 1) % ROLES.length;
+          timer = setTimeout(tick, 260);
+          return;
+        }
+        typed = word.slice(0, charIndex);
+        timer = setTimeout(tick, 22);
       }
     };
+
+    timer = setTimeout(tick, 1200);
+    return () => clearTimeout(timer);
   });
-  
-  // Calculate parallax transforms based on mouse position
-  $: parallaxStrong = `translate(${(mouseX - 0.5) * 60}px, ${(mouseY - 0.5) * 60}px)`;
-  $: parallaxMedium = `translate(${(mouseX - 0.5) * 40}px, ${(mouseY - 0.5) * 40}px)`;
-  $: parallaxLight = `translate(${(mouseX - 0.5) * 20}px, ${(mouseY - 0.5) * 20}px)`;
-  $: parallaxReverse = `translate(${(0.5 - mouseX) * 30}px, ${(0.5 - mouseY) * 30}px)`;
-  
-  function scrollToSection(sectionId: string) {
-    const element = document.querySelector(sectionId);
-    element?.scrollIntoView({ behavior: 'smooth' });
-  }
+
+  const scrollTo = (id: string) =>
+    document.querySelector(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 </script>
 
-<section id="home" bind:this={heroRef} class="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-blue-900 to-green-900">
-  <!-- Animated Background Pattern -->
-  <div class="absolute inset-0 z-0">
-    <!-- Interactive Particles Layer -->
-    <InteractiveParticles particleCount={80} connectionDistance={150} mouseRadius={200} />
-    
-    <div class="matrix-bg" style="transform: {parallaxLight}; transition: transform 0.1s ease-out;"></div>
-    
-    <!-- Floating Orbs with enhanced movement and mouse tracking -->
-    <div class="floating-orb orb-1" style="transform: {parallaxMedium}; transition: transform 0.15s ease-out;"></div>
-    <div class="floating-orb orb-2" style="transform: {parallaxStrong}; transition: transform 0.1s ease-out;"></div>
-    <div class="floating-orb orb-3" style="transform: {parallaxLight}; transition: transform 0.2s ease-out;"></div>
-    <div class="floating-orb orb-4" style="transform: {parallaxReverse}; transition: transform 0.15s ease-out;"></div>
-    <div class="floating-orb orb-5" style="transform: {parallaxMedium}; transition: transform 0.1s ease-out;"></div>
-    
-    <!-- Enhanced Animated Particles -->
-    <div class="particles-container" style="transform: {parallaxLight}; transition: transform 0.2s ease-out;">
-      <div class="particle particle-1 enhanced-particle"></div>
-      <div class="particle particle-2 enhanced-particle"></div>
-      <div class="particle particle-3 enhanced-particle"></div>
-      <div class="particle particle-4 enhanced-particle"></div>
-      <div class="particle particle-5 enhanced-particle"></div>
-      <div class="particle particle-6 enhanced-particle"></div>
-      <!-- Additional particles for more pronounced effect -->
-      <div class="particle particle-7 enhanced-particle"></div>
-      <div class="particle particle-8 enhanced-particle"></div>
-      <div class="particle particle-9 enhanced-particle"></div>
-      <div class="particle particle-10 enhanced-particle"></div>
-    </div>
-    
-    <!-- Enhanced Gradient Waves -->
-    <div class="gradient-wave wave-1 enhanced-wave" style="transform: {parallaxReverse}; transition: transform 0.25s ease-out;"></div>
-    <div class="gradient-wave wave-2 enhanced-wave" style="transform: {parallaxMedium}; transition: transform 0.2s ease-out;"></div>
-    
-    <!-- New: Mouse tracking blurred particle -->
-    {#if isMouseInside}
-      <div 
-        bind:this={mouseTrackingParticle}
-        class="mouse-tracking-particle"
-      ></div>
-    {/if}
-    
-    <!-- New: Interactive cursor glow effect -->
-    {#if isMouseInside}
-      <div 
-        class="cursor-glow" 
-        style="left: {mouseX * 100}%; top: {mouseY * 100}%; transform: translate(-50%, -50%);"
-      ></div>
-    {/if}
-  </div>
-  
-  <!-- Gradient Overlay -->
-  <div class="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-transparent to-accent-600/10 z-10"></div>
-  
-  <!-- Content -->
-  <div class="relative z-20 w-full h-full">
-    <!-- Mobile Layout (stacked) -->
-    <div class="lg:hidden flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 text-center">
-      <!-- Profile Picture -->
-      <div class="mb-6 {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.1s;">
-        <MagneticElement strength={0.2} distance={80}>
-          <div class="w-40 h-40 sm:w-48 sm:h-48 mx-auto mb-4 relative">
-            <div class="absolute inset-0 rounded-full animate-pulse-border" style="animation: pulseBorder 2s ease-in-out infinite;"></div>
-            <img 
-              src="/profile-pic.png" 
-              alt="Thomas Kunnumpurath" 
-              class="w-full h-full object-cover object-top rounded-full border-2 sm:border-3 border-white/30 shadow-2xl backdrop-blur-sm relative z-10"
-            />
-            <div class="absolute inset-0 rounded-full bg-gradient-to-br from-primary-500/20 to-accent-600/20"></div>
-          </div>
-        </MagneticElement>
-      </div>
-      
-      <!-- Text Content -->
-      <div class="max-w-lg">
-        <!-- Title -->
-        <div class="mb-6 {isVisible ? 'animate-slide-up' : 'opacity-0'}" style="animation-delay: 0.2s;">
-          <h1 class="text-3xl sm:text-4xl font-bold mb-3 text-white drop-shadow-2xl">
-            <span class="gradient-text">Thomas</span>
-            <br />
-            <span class="text-white">Kunnumpurath</span>
-          </h1>
-          <div class="h-1 w-24 sm:w-28 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full shadow-lg"></div>
-        </div>
-        
-        <!-- Subtitle -->
-        <div class="mb-6 {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.4s;">
-          <h2 class="text-lg sm:text-xl text-gray-100 font-light mb-3 drop-shadow-lg">
-            Vice President of Systems Engineering
-          </h2>
-          <p class="text-base text-gray-200 leading-relaxed drop-shadow-md">
-            Engineering Executive transforming technical strategy into business value. I scale high-performance teams and architect event-driven platforms and Agentic AI solutions that accelerate revenue and digital agility.</p>
-        </div>
-        
-        <!-- Open Source Highlight -->
-        <div class="mb-6 {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.5s;">
-          <div class="flex items-center justify-center gap-2 mb-2">
-            <svg class="w-5 h-5 text-accent-400" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            <span class="text-accent-400 font-medium text-sm">Open Source Contributor</span>
-          </div>
-          <p class="text-sm text-gray-300 leading-relaxed">
-            Author of multiple open source projects including Solace plugins for GraphQL, DAPR, and innovative microservices solutions.
-          </p>
-        </div>
-        
-        <!-- CTA Buttons -->
-        <div class="flex flex-col sm:flex-row gap-3 justify-center {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.7s;">
-          <MorphingButton 
-            variant="primary" 
-            size="md" 
-            on:click={() => scrollToSection('#blog')}
-          >
-            Read My Blog
-          </MorphingButton>
-          <MorphingButton 
-            variant="secondary" 
-            size="md" 
-            on:click={() => scrollToSection('#experience')}
-          >
-            View Experience
-          </MorphingButton>
-          <MorphingButton 
-            variant="secondary" 
-            size="md" 
-            on:click={() => scrollToSection('#contact')}
-          >
-            Get In Touch
-          </MorphingButton>
-        </div>
-      </div>
-    </div>
+<!--
+  The hero is deliberately dark in both themes: the event mesh needs an
+  ink background to read, and it gives the page a strong opening chord.
+-->
+<section
+  id="home"
+  class="relative isolate flex min-h-[100svh] items-center overflow-hidden"
+  style="background-color:#04070e;"
+>
+  <!-- layer 1: base wash -->
+  <div
+    class="absolute inset-0 -z-30"
+    style="background:
+      radial-gradient(120% 90% at 78% 12%, #0b2b45 0%, transparent 58%),
+      radial-gradient(90% 80% at 12% 92%, #06281f 0%, transparent 60%),
+      linear-gradient(160deg, #04070e 0%, #060c18 45%, #04070e 100%);"
+  ></div>
 
-    <!-- Desktop Layout (split) -->
-    <div class="hidden lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center lg:justify-center lg:min-h-screen lg:px-8 xl:px-16">
-      <!-- Left Half - Profile Picture -->
-      <div class="flex items-center justify-center {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.1s;">
-        <MagneticElement strength={0.3} distance={120}>
-          <div class="relative">
-            <div class="w-80 h-80 xl:w-96 xl:h-96 relative">
-              <div class="absolute inset-0 rounded-full animate-pulse-border" style="animation: pulseBorder 2s ease-in-out infinite;"></div>
-              <img 
-                src="/profile-pic.png" 
-                alt="Thomas Kunnumpurath" 
-                class="w-full h-full object-cover object-top rounded-full border-4 border-white/30 shadow-2xl backdrop-blur-sm relative z-10"
+  <!-- layer 2: drifting colour fields -->
+  <div class="aurora -z-20">
+    <span
+      class="h-[38rem] w-[38rem] -left-40 -top-40"
+      style="background:radial-gradient(circle,#0ea5e9,transparent 62%);opacity:.34;animation-duration:30s;"
+    ></span>
+    <span
+      class="h-[32rem] w-[32rem] right-[-8rem] top-1/3"
+      style="background:radial-gradient(circle,#10b981,transparent 62%);opacity:.3;animation-duration:38s;animation-delay:-9s;"
+    ></span>
+    <span
+      class="h-[26rem] w-[26rem] left-1/3 bottom-[-9rem]"
+      style="background:radial-gradient(circle,#8b5cf6,transparent 62%);opacity:.22;animation-duration:44s;animation-delay:-18s;"
+    ></span>
+  </div>
+
+  <!-- layer 3: engineering grid -->
+  <div class="mesh-grid -z-20 opacity-40" style="--hairline:rgb(148 163 184 / 0.13);"></div>
+
+  <!-- layer 5: vignette so text always wins -->
+  <div
+    class="pointer-events-none absolute inset-0 -z-10"
+    style="background:radial-gradient(80% 60% at 22% 50%, rgba(4,7,14,.92) 0%, rgba(4,7,14,.55) 45%, transparent 72%);"
+  ></div>
+  <div
+    class="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40"
+    style="background:linear-gradient(to top,#04070e,transparent);"
+  ></div>
+
+  <!-- ---------------------------------------------------------------- -->
+  <div class="container-max section-padding relative w-full pt-28 pb-24 lg:pt-32">
+    <div class="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8">
+      <!-- ============ copy ============ -->
+      <div class="max-w-2xl text-center lg:text-left">
+        <!-- status line -->
+        <div
+          class="animate-fade-in mb-7 inline-flex items-center gap-2.5 rounded-full border border-white/12 bg-white/[0.045] px-3.5 py-1.5 backdrop-blur-md"
+          style="animation-delay:.15s;"
+        >
+          <span class="relative flex h-1.5 w-1.5">
+            <span class="animate-pulse-ring absolute inline-flex h-full w-full rounded-full bg-accent-400"></span>
+            <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent-400"></span>
+          </span>
+          <span class="font-mono text-[11px] tracking-[0.16em] text-slate-300 uppercase">
+            VP Systems Engineering · Solace
+          </span>
+        </div>
+
+        <!-- name, per-character 3D rise -->
+        <h1
+          class="font-display mb-6 text-[clamp(2.35rem,7vw,4.6rem)] leading-[0.95] font-extrabold tracking-[-0.04em] text-white"
+          style="perspective:900px;"
+        >
+          <span class="sr-only">Thomas Kunnumpurath</span>
+          <span class="block" aria-hidden="true">
+            {#each NAME_FIRST.split('') as ch, i}
+              <span class="animate-rise inline-block" style="animation-delay:{260 + i * 42}ms;">{ch}</span>
+            {/each}
+          </span>
+          <span class="block" aria-hidden="true">
+            {#each NAME_LAST.split('') as ch, i}
+              <span
+                class="animate-rise inline-block"
+                style="animation-delay:{520 + i * 34}ms;color:{colourAt(i / (NAME_LAST.length - 1))};"
+              >{ch}</span>
+            {/each}
+          </span>
+        </h1>
+
+        <!-- rotating specialism -->
+        <p
+          class="animate-fade-in mb-7 flex min-h-[1.9rem] items-center justify-center gap-2 font-mono text-sm text-slate-400 sm:text-base lg:justify-start"
+          style="animation-delay:.9s;"
+        >
+          <span class="text-accent-400">&gt;</span>
+          <span class="text-slate-200">{typed}</span>
+          <span class="animate-caret inline-block h-[1.05em] w-[2px] translate-y-[0.14em] bg-primary-400"></span>
+        </p>
+
+        <p
+          class="animate-fade-in mx-auto mb-9 max-w-xl text-lg leading-relaxed text-slate-300/90 lg:mx-0"
+          style="animation-delay:1s;"
+        >
+          I lead a team of 15 engineers across the Americas, helping enterprises
+          move to real-time event-driven architectures — and I still write
+          code, ship open source, and give talks.
+        </p>
+
+        <!-- CTAs -->
+        <div
+          class="animate-fade-in flex flex-col justify-center gap-3.5 sm:flex-row lg:justify-start"
+          style="animation-delay:1.12s;"
+        >
+          <button class="btn btn-primary spotlight" use:magnetic={0.16} on:click={() => scrollTo('#experience')}>
+            <span class="relative z-10">View Experience</span>
+            <svg class="relative z-10 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5-5 5M6 12h12" />
+            </svg>
+          </button>
+          <button
+            class="btn btn-ghost spotlight !border-white/15 !bg-white/[0.055] !text-white hover:!border-primary-400/60"
+            use:magnetic={0.16}
+            on:click={() => scrollTo('#contact')}
+          >
+            <span class="relative z-10">Get In Touch</span>
+          </button>
+        </div>
+
+        <!-- prior companies + socials -->
+        <div
+          class="animate-fade-in mt-12 flex flex-col items-center gap-6 sm:flex-row sm:items-end sm:justify-between lg:items-center"
+          style="animation-delay:1.3s;"
+        >
+         
+
+          <div class="flex items-center gap-2.5">
+            {#each SOCIALS as social}
+              <a
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.name}
+                class="group grid h-10 w-10 place-items-center rounded-xl border border-white/12 bg-white/[0.04] backdrop-blur-md transition-all duration-500 hover:-translate-y-1 hover:border-primary-400/60 hover:bg-white/10"
+              >
+                <svg
+                  class="h-[17px] w-[17px] fill-slate-400 transition-colors duration-300 group-hover:fill-white"
+                  viewBox="0 0 24 24"
+                >
+                  <path d={social.d} />
+                </svg>
+              </a>
+            {/each}
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ portrait, sitting at the centre of the mesh ============ -->
+      <div class="relative order-first flex justify-center lg:order-last lg:justify-end">
+        <div
+          class="animate-fade-in relative aspect-square w-[min(78vw,20rem)] sm:w-[22rem] lg:w-[26rem]"
+          style="animation-delay:.35s;"
+        >
+          <!-- the mesh is centred on the portrait: he sits inside the topology -->
+          <div class="absolute -inset-[78%] sm:-inset-[70%] lg:-inset-[62%]">
+            <EventMesh radius={0.29} nodeCount={80} packetCount={24} />
+          </div>
+
+          <!-- orbiting rings -->
+          <div class="animate-spin-slow absolute inset-[4%] rounded-full border border-dashed border-white/10"></div>
+          <div
+            class="absolute inset-[16%] rounded-full border border-white/[0.07]"
+            style="animation:spin 34s linear infinite reverse;"
+          ></div>
+
+          <!-- conic halo -->
+          <div
+            class="absolute inset-[19%] rounded-full opacity-70 blur-xl"
+            style="background:conic-gradient(from 0deg,#0ea5e9,#10b981,#8b5cf6,#0ea5e9);animation:spin 14s linear infinite;"
+          ></div>
+
+          <!-- portrait -->
+          <div class="animate-float-slow absolute inset-[21%]">
+            <div class="relative h-full w-full rounded-full p-[2px]" style="background:linear-gradient(150deg,rgba(56,189,248,.9),rgba(52,211,153,.55),rgba(139,92,246,.75));">
+              <img
+                src="/profile-pic.png"
+                alt="Thomas Kunnumpurath"
+                class="h-full w-full rounded-full object-cover object-top"
+                style="background-color:#0b1220;"
               />
-              <div class="absolute inset-0 rounded-full bg-gradient-to-br from-primary-500/20 to-accent-600/20"></div>
+              <!-- inner rim light -->
+              <div class="pointer-events-none absolute inset-0 rounded-full" style="box-shadow:inset 0 1px 12px rgba(255,255,255,.22), inset 0 -14px 30px rgba(4,7,14,.55);"></div>
             </div>
-            <!-- Decorative elements -->
-            <div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-primary-500/30 to-accent-600/30 rounded-full blur-xl"></div>
-            <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-accent-500/20 to-primary-600/20 rounded-full blur-xl"></div>
           </div>
-        </MagneticElement>
-      </div>
 
-      <!-- Right Half - Text Content -->
-      <div class="flex flex-col justify-center text-left">
-        <!-- Title -->
-        <div class="mb-8 {isVisible ? 'animate-slide-up' : 'opacity-0'}" style="animation-delay: 0.2s;">
-          <h1 class="text-5xl xl:text-6xl font-bold mb-4 text-white drop-shadow-2xl">
-            <span class="gradient-text">Thomas</span>
-            <br />
-            <span class="text-white">Kunnumpurath</span>
-          </h1>
-          <div class="h-1 w-32 bg-gradient-to-r from-primary-500 to-accent-600 rounded-full shadow-lg"></div>
+          <!-- orbiting capability chips -->
+          {#each [{ label: 'Event Mesh', dur: '28s', delay: '0s', inset: '-6%', at: 20 }, { label: 'Kafka', dur: '36s', delay: '-13s', inset: '5%', at: 145 }, { label: 'Multi-Cloud', dur: '32s', delay: '-24s', inset: '-1%', at: 260 }] as chip}
+            <!--
+              Three nested layers on purpose: the outer ring spins, the middle
+              layer holds the static centring translate (an animation on the
+              same element would overwrite it), and the inner layer counter-
+              spins so the label stays upright as it orbits.
+            -->
+            <div
+              class="pointer-events-none absolute hidden sm:block"
+              style="inset:{chip.inset};rotate:{chip.at}deg;animation:spin {chip.dur} linear infinite;animation-delay:{chip.delay};"
+            >
+              <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <span
+                  class="block rounded-full border border-white/12 bg-[#070d19]/85 px-2.5 py-1 font-mono text-[10px] whitespace-nowrap text-slate-300 backdrop-blur-md"
+                  style="rotate:{-chip.at}deg;animation:spin {chip.dur} linear infinite reverse;animation-delay:{chip.delay};"
+                >
+                  {chip.label}
+                </span>
+              </div>
+            </div>
+          {/each}
         </div>
-        
-        <!-- Subtitle -->
-        <div class="mb-8 {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.4s;">
-          <h2 class="text-2xl xl:text-3xl text-gray-100 font-light mb-4 drop-shadow-lg">
-            Vice President of Systems Engineering
-          </h2>
-          <p class="text-lg xl:text-xl text-gray-200 leading-relaxed drop-shadow-md max-w-lg">
-            Engineering Executive transforming technical strategy into business value. I scale high-performance teams and architect event-driven platforms and Agentic AI solutions that accelerate revenue and digital agility. 
-          </p>
-        </div>
-        
-        <!-- Open Source Highlight -->
-        <div class="mb-8 {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.5s;">
-          <div class="flex items-center gap-3 mb-3">
-            <svg class="w-6 h-6 text-accent-400" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.30.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            <span class="text-accent-400 font-semibold text-lg">Open Source Contributor</span>
-          </div>
-          <p class="text-base xl:text-lg text-gray-300 leading-relaxed max-w-lg">
-            Author of multiple open source projects including Solace plugins for GraphQL, DAPR, and innovative microservices solutions that are used by developers worldwide.
-          </p>
-        </div>
-        
-        <!-- CTA Buttons -->
-        <div class="flex flex-row gap-4 {isVisible ? 'animate-fade-in' : 'opacity-0'}" style="animation-delay: 0.7s;">
-          <MorphingButton 
-            variant="primary" 
-            size="lg" 
-            on:click={() => scrollToSection('#blog')}
-          >
-            Read My Blog
-          </MorphingButton>
-          <MorphingButton 
-            variant="secondary" 
-            size="lg" 
-            on:click={() => scrollToSection('#experience')}
-          >
-            View Experience
-          </MorphingButton>
-          <MorphingButton 
-            variant="secondary" 
-            size="lg" 
-            on:click={() => scrollToSection('#contact')}
-          >
-            Get In Touch
-          </MorphingButton>
-        </div>
+
+        <!-- mesh readout — describes exactly what you're looking at -->
+        <p
+          class="animate-fade-in absolute -bottom-2 left-1/2 hidden -translate-x-1/2 font-mono text-[10px] tracking-[0.14em] whitespace-nowrap text-slate-500 uppercase sm:block lg:right-0 lg:left-auto lg:translate-x-0"
+          style="animation-delay:1.5s;"
+        >
+          live mesh · 80 nodes · 24 events in flight
+        </p>
       </div>
     </div>
   </div>
+
+  <!-- scroll cue -->
+  <button
+    on:click={() => scrollTo('#about')}
+    class="animate-fade-in group absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2"
+    style="animation-delay:1.7s;"
+    aria-label="Scroll to about section"
+  >
+    <span class="font-mono text-[10px] tracking-[0.22em] text-slate-500 uppercase transition-colors group-hover:text-slate-300">
+      Scroll
+    </span>
+    <span class="relative h-9 w-[1px] overflow-hidden bg-white/12">
+      <span class="absolute inset-x-0 top-0 h-3 bg-gradient-to-b from-primary-400 to-transparent" style="animation:scrollCue 2s cubic-bezier(0.16,1,0.3,1) infinite;"></span>
+    </span>
+  </button>
 </section>
 
 <style>
-  /* Hero section should always have white text (dark background) */
-  #home p,
-  #home span,
-  #home div:not(.gradient-text),
-  #home h1:not(.gradient-text),
-  #home h2:not(.gradient-text),
-  #home h3:not(.gradient-text),
-  #home h4:not(.gradient-text),
-  #home h5:not(.gradient-text),
-  #home h6:not(.gradient-text) {
-    color: white !important;
-  }
-
-  /* Ensure button text is always white on Hero section */
-  #home :global(.morphing-button),
-  #home :global(.morphing-button *) {
-    color: white !important;
-  }
-
-  /* Hero-specific background effects */
-  .matrix-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-      radial-gradient(circle at 20% 50%, rgba(22, 146, 79, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 40% 80%, rgba(22, 146, 79, 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 60% 30%, rgba(14, 165, 233, 0.08) 0%, transparent 50%);
-    opacity: 0.8;
-  }
-  
-  .matrix-bg::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: 
-      linear-gradient(90deg, transparent 96%, rgba(22, 146, 79, 0.15) 100%),
-      linear-gradient(0deg, transparent 96%, rgba(14, 165, 233, 0.15) 100%);
-    background-size: 40px 40px;
-  }
-  
-  /* Floating Orbs */
-  .floating-orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(1px);
-    opacity: 0.4;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-  }
-  
-  .orb-1 {
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, rgba(14, 165, 233, 0.3) 0%, transparent 70%);
-    top: 10%;
-    left: 10%;
-    filter: blur(4px) brightness(1.1);
-  }
-  
-  .orb-2 {
-    width: 80px;
-    height: 80px;
-    background: radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, transparent 70%);
-    top: 20%;
-    right: 15%;
-    filter: blur(2px) brightness(1.2);
-  }
-  
-  .orb-3 {
-    width: 100px;
-    height: 100px;
-    background: radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, transparent 70%);
-    bottom: 30%;
-    left: 20%;
-    filter: blur(5px) brightness(1.0);
-  }
-  
-  .orb-4 {
-    width: 60px;
-    height: 60px;
-    background: radial-gradient(circle, rgba(34, 197, 94, 0.3) 0%, transparent 70%);
-    bottom: 15%;
-    right: 25%;
-    filter: blur(2px) brightness(1.3);
-  }
-  
-  .orb-5 {
-    width: 90px;
-    height: 90px;
-    background: radial-gradient(circle, rgba(14, 165, 233, 0.25) 0%, transparent 70%);
-    top: 60%;
-    left: 50%;
-    filter: blur(3px) brightness(1.1);
-  }
-  
-  /* Animated Particles */
-  .particles-container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-  
-  .particle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    background: rgba(14, 165, 233, 0.6);
-    border-radius: 50%;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-  }
-  
-  .particle-1 {
-    top: 20%;
-    left: 10%;
-  }
-  
-  .particle-2 {
-    top: 40%;
-    left: 80%;
-    background: rgba(34, 197, 94, 0.6);
-  }
-  
-  .particle-3 {
-    top: 70%;
-    left: 30%;
-  }
-  
-  .particle-4 {
-    top: 15%;
-    left: 60%;
-    background: rgba(34, 197, 94, 0.6);
-  }
-  
-  .particle-5 {
-    top: 80%;
-    left: 70%;
-  }
-  
-  .particle-6 {
-    top: 50%;
-    left: 20%;
-    background: rgba(34, 197, 94, 0.6);
-  }
-  
-  .particle-7 {
-    top: 35%;
-    left: 75%;
-    background: rgba(14, 165, 233, 0.7);
-  }
-  
-  .particle-8 {
-    top: 85%;
-    left: 45%;
-    background: rgba(34, 197, 94, 0.5);
-  }
-  
-  .particle-9 {
-    top: 25%;
-    left: 35%;
-    background: rgba(14, 165, 233, 0.6);
-  }
-  
-  .particle-10 {
-    top: 75%;
-    left: 85%;
-    background: rgba(34, 197, 94, 0.7);
-  }
-  
-  /* Gradient Waves */
-  .gradient-wave {
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    opacity: 0.1;
-    border-radius: 50%;
-    filter: blur(2px);
-  }
-  
-  .wave-1 {
-    background: conic-gradient(from 0deg, rgba(14, 165, 233, 0.3), rgba(34, 197, 94, 0.3), rgba(14, 165, 233, 0.3));
-    top: -50%;
-    left: -50%;
-  }
-  
-  .wave-2 {
-    background: conic-gradient(from 180deg, rgba(34, 197, 94, 0.2), rgba(14, 165, 233, 0.2), rgba(34, 197, 94, 0.2));
-    bottom: -50%;
-    right: -50%;
-  }
-
-  /* Mouse tracking blurred particle */
-  .mouse-tracking-particle {
-    position: absolute;
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, rgba(14, 165, 233, 0.4) 0%, rgba(34, 197, 94, 0.3) 50%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 15;
-    transform: translate(-50%, -50%);
-    filter: blur(20px);
-    animation: particlePulse 3s ease-in-out infinite;
-  }
-  
-  .mouse-tracking-particle::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 60%;
-    height: 60%;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.6) 0%, rgba(14, 165, 233, 0.4) 100%);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    filter: blur(10px);
-    animation: particlePulse 2s ease-in-out infinite reverse;
-  }
-  
-  .mouse-tracking-particle::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 30%;
-    height: 30%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(34, 197, 94, 0.6) 100%);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    filter: blur(5px);
-    animation: particlePulse 1.5s ease-in-out infinite;
-  }
-  
-  @keyframes particlePulse {
-    0%, 100% {
-      opacity: 0.6;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    50% {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1.2);
-    }
-  }
-  
-  /* Enhanced cursor glow */
-  .cursor-glow {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, rgba(34, 197, 94, 0.1) 40%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 5;
-    filter: blur(30px);
+  @keyframes scrollCue {
+    0%   { transform: translateY(-100%); opacity: 0; }
+    35%  { opacity: 1; }
+    100% { transform: translateY(300%); opacity: 0; }
   }
 </style>

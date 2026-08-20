@@ -1,50 +1,35 @@
 <script lang="ts">
   import '../app.css';
-  import { darkMode } from '$lib/stores/theme';
   import { onMount } from 'svelte';
-  import LoadingIndicator from '$lib/components/LoadingIndicator.svelte';
-  
-  let isReady = false;
-  
+  import { fly } from 'svelte/transition';
+  import { cubicOut } from 'svelte/easing';
+  import { page } from '$app/stores';
+  import { darkMode } from '$lib/stores/theme';
+  import CommandPalette from '$lib/components/CommandPalette.svelte';
+  import BackToTop from '$lib/components/BackToTop.svelte';
+
+  let transitionMs = 0;
+
   onMount(() => {
-    // Initialize the store state to match what was set in app.html
-    const savedTheme = localStorage.getItem('theme');
-    const shouldBeDark = savedTheme === 'light' ? false : true;
-    darkMode.set(shouldBeDark);
-    
-    // Fallback timeout to ensure loading doesn't hang
-    const fallbackTimer = setTimeout(() => {
-      isReady = true;
-    }, 2000);
-    
-    // Wait for fonts and critical resources to load
-    Promise.all([
-      document.fonts.ready,
-      new Promise(resolve => {
-        if (document.readyState === 'complete') {
-          resolve(true);
-        } else {
-          window.addEventListener('load', () => resolve(true));
-        }
-      })
-    ]).then(() => {
-      clearTimeout(fallbackTimer);
-      // Small additional delay to ensure smooth transition
-      setTimeout(() => {
-        isReady = true;
-      }, 50);
-    }).catch(() => {
-      // In case of any errors, still show the content
-      clearTimeout(fallbackTimer);
-      isReady = true;
-    });
+    darkMode.init();
+    // Only animate route changes for users who want motion.
+    transitionMs = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 320;
   });
+
+  /* Keyed on pathname only: in-page hash links must not remount the page. */
+  $: routeKey = $page.url.pathname;
 </script>
 
-<LoadingIndicator />
+<!-- film grain: kills gradient banding and gives the flat surfaces some tooth -->
+<div class="grain" aria-hidden="true"></div>
 
-{#if isReady}
-  <main class="min-h-screen transition-colors duration-300">
-    <slot />
-  </main>
-{/if}
+<main class="min-h-screen">
+  {#key routeKey}
+    <div in:fly={{ y: 14, duration: transitionMs, easing: cubicOut }}>
+      <slot />
+    </div>
+  {/key}
+</main>
+
+<CommandPalette />
+<BackToTop />
