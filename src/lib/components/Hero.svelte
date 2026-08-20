@@ -295,7 +295,7 @@
           </div>
 
           <!-- orbiting capability chips -->
-          {#each [{ label: 'Event Mesh', dur: '28s', delay: '0s', inset: '-6%', at: 20 }, { label: 'Kafka', dur: '36s', delay: '-13s', inset: '5%', at: 145 }, { label: 'Multi-Cloud', dur: '32s', delay: '-24s', inset: '-1%', at: 260 }] as chip}
+          {#each [{ label: 'Event Mesh', dur: '28s', delay: '0s', inset: '-6%', at: 20 }, { label: 'Agent Mesh', dur: '36s', delay: '-13s', inset: '5%', at: 92 }, { label: 'Cloud Native', dur: '32s', delay: '-24s', inset: '-1%', at: 164 }, { label: 'Low Latency', dur: '30s', delay: '-7s', inset: '3%', at: 236 }, { label: 'High Throughput', dur: '34s', delay: '-19s', inset: '-4%', at: 308 }] as chip}
             <!--
               Three nested layers on purpose: the outer ring spins, the middle
               layer holds the static centring translate (an animation on the
