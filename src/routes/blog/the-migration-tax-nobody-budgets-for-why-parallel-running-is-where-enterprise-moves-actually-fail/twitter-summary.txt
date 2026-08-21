@@ -1,0 +1,1 @@
+The riskiest phase of any enterprise migration isn't cutover day — it's the months of parallel running where nobody has the courage to turn off the old system. Here's the playbook that broke the stall. https://tkthetechie.io/blog/the-migration-tax-nobody-budgets-for-why-parallel-running-is-where-enterprise-moves-actually-fail
