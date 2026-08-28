@@ -1,0 +1,3 @@
+Trophy projects teach interns nothing. Give them a real problem with real users instead.
+
+Three interns at Capital One built an alerting tool that outlasted the platform it monitored — because we let them own the problem, not just the code. https://tkthetechie.io/blog/the-interns-alerting-tool-outlasted-the-platform-it-monitored
