@@ -7,7 +7,7 @@
   export let align: 'center' | 'left' = 'center';
 </script>
 
-<div class="mb-14 md:mb-16 {align === 'center' ? 'text-center' : 'text-left'}">
+<div class="perspective mb-14 md:mb-16 {align === 'center' ? 'text-center' : 'text-left'}">
   {#if eyebrow}
     <p
       class="eyebrow mb-5 {align === 'center' ? 'justify-center' : ''}"
@@ -18,10 +18,11 @@
     </p>
   {/if}
 
+  <!-- the heading swings up out of the page plane -->
   <h2
     class="font-display text-[clamp(2rem,4.4vw,3.1rem)] leading-[1.06] font-bold tracking-[-0.03em]"
     style="color:var(--text-1);"
-    use:reveal={{ y: 22, delay: 70 }}
+    use:reveal={{ y: 30, delay: 70, rotate: -42, blur: 4 }}
   >
     <slot />
   </h2>

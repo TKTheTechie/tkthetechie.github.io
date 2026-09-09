@@ -122,11 +122,11 @@
             </div>
 
             <!-- card -->
-            <div class="ml-11 md:ml-0">
+            <div class="perspective ml-11 md:ml-0">
               <article
                 class="glass-effect spotlight experience-card relative overflow-hidden rounded-2xl p-7 md:p-8"
                 use:tilt={{ max: 3, lift: 4, scale: 1.006 }}
-                use:reveal={{ y: 30, delay: 60, blur: 6 }}
+                use:reveal={{ y: 34, delay: 60, blur: 6, rotate: -10 }}
               >
                 <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2">
                   <h3 class="font-display text-2xl font-bold tracking-tight" style="color:var(--text-1);">

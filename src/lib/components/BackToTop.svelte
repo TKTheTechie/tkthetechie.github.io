@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { scrollToTop } from '$lib/stores/scroll';
 
   let visible = false;
   let progress = 0;
@@ -19,7 +20,7 @@
 </script>
 
 <button
-  on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+  on:click={scrollToTop}
   class="group fixed right-5 bottom-5 z-[120] grid h-12 w-12 place-items-center rounded-full transition-all duration-500"
   style="
     background-color:var(--glass-bg);

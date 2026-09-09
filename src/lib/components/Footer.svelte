@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { scrollToId } from '$lib/stores/scroll';
+
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
@@ -26,7 +28,7 @@
       window.location.href = `/#${id}`;
       return;
     }
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    scrollToId(id);
   };
 </script>
 
@@ -127,7 +129,7 @@
           © {currentYear} Thomas Kunnumpurath. All rights reserved.
         </p>
         <p class="font-mono text-[11.5px] text-slate-600">
-          Built with Svelte 5 · Tailwind CSS
+          Built with Svelte 5 · Tailwind CSS · Three.js
         </p>
       </div>
     </div>

@@ -51,9 +51,19 @@ Both use `import.meta.glob` to discover `+page.md` files at build time.
 
 Dark mode defaults to `true`. Preference is stored in `localStorage` under the key `theme` (`'dark'` or `'light'`). The `darkMode` store at `src/lib/stores/theme.ts` manages this, applying/removing the `dark` class on `document.documentElement`. Components call `darkMode.initSync()` before mount to avoid flash.
 
+### 3D, Motion and Scrolling
+
+- `src/lib/three/MeshScene.svelte` — the WebGL event mesh (Three.js): sphere topology, packets, holographic polyhedra, optional broker `core`. Pass an `anchor` element and the sphere centres on it. Falls back to the 2D canvas `EventMesh.svelte` if WebGL is unavailable. Shaders live in `src/lib/three/materials.ts`.
+- `src/lib/actions/motion.ts` — `reveal`, `stagger`, `tilt`, `magnetic`, `parallax`, `countTo`, `spotlight` actions. `reveal` accepts `rotate` (degrees of rotateX) for perspective entrances; put `.perspective` on an ancestor.
+- `src/lib/stores/scroll.ts` — Lenis is created in the root layout. Always scroll via `scrollToId` / `scrollToTop` / `lockScroll` from this module rather than `scrollIntoView`, so smooth scrolling and modal locking stay consistent.
+- `src/lib/components/TagSphere.svelte` — DOM-projected 3D word sphere; `Portfolio.svelte` is a CSS 3D coverflow.
+
+All motion honours `prefers-reduced-motion` (single static frame, no Lenis).
+
 ### Key Directories
 
 - `src/lib/components/` — page section components (Hero, About, Skills, Portfolio, Blog, Contact, Navigation, Footer, etc.)
+- `src/lib/three/` — Three.js scene and shader materials
 - `src/lib/layouts/` — full-page layout wrappers (BlogLayout, ExperienceLayout)
 - `src/lib/data/` — static JSON data for portfolio and experience sections
 - `src/lib/config/seo.ts` — site-wide SEO defaults and `generateMetaTags` helper

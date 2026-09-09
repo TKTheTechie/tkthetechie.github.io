@@ -1,7 +1,11 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import EventMesh from './EventMesh.svelte';
+  import MeshScene from '$lib/three/LazyMeshScene.svelte';
   import { magnetic } from '$lib/actions/motion';
+  import { scrollToId } from '$lib/stores/scroll';
+
+  /** the portrait box — the WebGL mesh centres itself on this */
+  let portraitEl: HTMLDivElement;
 
   const NAME_FIRST = 'Thomas';
   const NAME_LAST = 'Kunnumpurath';
@@ -98,8 +102,7 @@
     return () => clearTimeout(timer);
   });
 
-  const scrollTo = (id: string) =>
-    document.querySelector(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const scrollTo = (id: string) => scrollToId(id);
 </script>
 
 <!--
@@ -138,6 +141,15 @@
 
   <!-- layer 3: engineering grid -->
   <div class="mesh-grid -z-20 opacity-40" style="--hairline:rgb(148 163 184 / 0.13);"></div>
+
+  <!--
+    layer 4: the mesh, in WebGL. It spans the whole hero so the particle
+    field and orbiting models have room, but the sphere itself is anchored
+    to the portrait box below.
+  -->
+  <div class="absolute inset-0 -z-10">
+    <MeshScene anchor={portraitEl} radiusScale={1.32} nodeCount={96} packetCount={28} satellites={6} particles={700} />
+  </div>
 
   <!-- layer 5: vignette so text always wins -->
   <div
@@ -259,20 +271,12 @@
       <!-- ============ portrait, sitting at the centre of the mesh ============ -->
       <div class="relative order-first flex justify-center lg:order-last lg:justify-end">
         <div
+          bind:this={portraitEl}
           class="animate-fade-in relative aspect-square w-[min(78vw,20rem)] sm:w-[22rem] lg:w-[26rem]"
           style="animation-delay:.35s;"
         >
-          <!-- the mesh is centred on the portrait: he sits inside the topology -->
-          <div class="absolute -inset-[78%] sm:-inset-[70%] lg:-inset-[62%]">
-            <EventMesh radius={0.29} nodeCount={80} packetCount={24} />
-          </div>
-
-          <!-- orbiting rings -->
+          <!-- inner ring, framing the portrait inside the mesh -->
           <div class="animate-spin-slow absolute inset-[4%] rounded-full border border-dashed border-white/10"></div>
-          <div
-            class="absolute inset-[16%] rounded-full border border-white/[0.07]"
-            style="animation:spin 34s linear infinite reverse;"
-          ></div>
 
           <!-- conic halo -->
           <div
@@ -323,7 +327,7 @@
           class="animate-fade-in absolute -bottom-2 left-1/2 hidden -translate-x-1/2 font-mono text-[10px] tracking-[0.14em] whitespace-nowrap text-slate-500 uppercase sm:block lg:right-0 lg:left-auto lg:translate-x-0"
           style="animation-delay:1.5s;"
         >
-          live mesh · 80 nodes · 24 events in flight
+          live mesh · 96 nodes · 28 events in flight · webgl
         </p>
       </div>
     </div>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import SectionHeading from './SectionHeading.svelte';
-  import Marquee from './Marquee.svelte';
+  import TagSphere from './TagSphere.svelte';
   import { reveal, tilt, countTo, parallax } from '$lib/actions/motion';
 
   const stats = [
@@ -73,12 +73,12 @@
         </div>
 
         <!-- ---------------- stats ---------------- -->
-        <div class="grid grid-cols-2 gap-4 sm:gap-5" use:parallax={0.05}>
+        <div class="perspective grid grid-cols-2 gap-4 sm:gap-5" use:parallax={0.05}>
           {#each stats as stat, i}
             <div
               class="glass-effect spotlight group relative overflow-hidden rounded-2xl p-6"
               use:tilt={{ max: 8, lift: 6 }}
-              use:reveal={{ delay: 120 + i * 90, y: 30 }}
+              use:reveal={{ delay: 120 + i * 90, y: 34, rotate: -24 }}
             >
               <!-- index watermark -->
               <span
@@ -143,14 +143,17 @@
         </div>
       </div>
 
-      <!-- ---------------- the stack, on a loop ---------------- -->
+      <!-- ---------------- the stack, as a sphere you can spin ---------------- -->
       <div class="mt-20 text-center" use:reveal={{ delay: 80 }}>
-        <p class="eyebrow mb-5">
+        <p class="eyebrow mb-2">
           <span class="h-px w-6" style="background-image:linear-gradient(90deg,transparent,currentColor);"></span>
           Day to day
           <span class="h-px w-6" style="background-image:linear-gradient(90deg,currentColor,transparent);"></span>
         </p>
-        <Marquee items={stack} duration={52} />
+        <p class="font-mono mb-2 text-[11px] tracking-[0.14em] uppercase" style="color:var(--text-3);">
+          drag to spin
+        </p>
+        <TagSphere items={stack} />
       </div>
     </div>
   </div>

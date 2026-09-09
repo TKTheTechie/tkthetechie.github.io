@@ -1,7 +1,9 @@
 <script lang="ts">
-  import SectionHeading from './SectionHeading.svelte';
-  import EventMesh from './EventMesh.svelte';
+  import MeshScene from '$lib/three/LazyMeshScene.svelte';
   import { reveal, tilt, magnetic } from '$lib/actions/motion';
+
+  /** the empty stage the broker-core model is anchored to */
+  let stageEl: HTMLDivElement;
 
   const socialLinks = [
     {
@@ -53,65 +55,112 @@
 </script>
 
 <section id="contact" class="relative isolate overflow-hidden py-24 md:py-32" style="background-color:#04070e;">
-  <!-- the mesh returns to close the page where it opened it -->
-  <div class="absolute inset-0 -z-20" style="background:
+  <div class="absolute inset-0 -z-30" style="background:
       radial-gradient(90% 70% at 50% 0%, #0a2438 0%, transparent 62%),
-      radial-gradient(70% 60% at 80% 100%, #06281f 0%, transparent 62%),
+      radial-gradient(70% 60% at 85% 100%, #06281f 0%, transparent 62%),
       linear-gradient(180deg,#04070e,#060c18);"></div>
+  <div class="mesh-grid -z-20 opacity-30" style="--hairline:rgb(148 163 184 / 0.12);" aria-hidden="true"></div>
 
-  <div class="absolute inset-x-0 -bottom-1/3 -z-10 h-[46rem] opacity-60">
-    <EventMesh radius={0.44} nodeCount={62} packetCount={16} degree={3} speed={0.07} />
+  <!-- the mesh returns to close the page where it opened it — this time with the broker core at its heart -->
+  <div class="absolute inset-0 -z-10">
+    <MeshScene
+      anchor={stageEl}
+      radiusScale={1.05}
+      nodeCount={72}
+      packetCount={20}
+      satellites={4}
+      particles={420}
+      core
+      speed={0.07}
+      scrollParallax={0.4}
+    />
   </div>
+  <!-- keep the copy legible over the scene -->
   <div
-    class="pointer-events-none absolute inset-0 -z-10"
-    style="background:radial-gradient(70% 55% at 50% 32%, rgba(4,7,14,.88) 0%, rgba(4,7,14,.4) 55%, transparent 78%);"
+    class="pointer-events-none absolute inset-0 -z-10 lg:hidden"
+    style="background:radial-gradient(70% 55% at 50% 30%, rgba(4,7,14,.85) 0%, rgba(4,7,14,.3) 55%, transparent 80%);"
   ></div>
 
   <div class="container-max section-padding relative">
-    <div class="mx-auto max-w-5xl">
-      <div class="mb-14 text-center md:mb-16">
-        <p class="eyebrow mb-5 !text-primary-300" use:reveal={{ y: 12, blur: 3 }}>
-          <span class="h-px w-6" style="background-image:linear-gradient(90deg,transparent,currentColor);"></span>
-          Contact
-          <span class="h-px w-6" style="background-image:linear-gradient(90deg,currentColor,transparent);"></span>
-        </p>
-        <h2
-          class="font-display text-[clamp(2rem,4.6vw,3.2rem)] leading-[1.06] font-bold tracking-[-0.03em] text-white"
-          use:reveal={{ y: 22, delay: 70 }}
-        >
-          Let's build something <span class="gradient-text">event-driven</span>
-        </h2>
-        <div
-          class="mx-auto mt-6 h-[3px] w-20 rounded-full"
-          style="background-image:linear-gradient(90deg,var(--color-primary-500),var(--color-accent-500));"
-          use:reveal={{ y: 0, blur: 0, scale: 0.12, delay: 200 }}
-        ></div>
-        <p
-          class="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-slate-300/90"
-          use:reveal={{ y: 18, delay: 260 }}
-        >
-          Opportunities, collaborations, or speaking engagements — I'm always interested in
-          connecting with fellow technologists and industry leaders.
-        </p>
-
-        <div class="mt-9 flex justify-center" use:reveal={{ y: 16, delay: 320 }}>
-          <a
-            href="https://www.linkedin.com/in/tkthetechie/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-primary spotlight"
-            use:magnetic={0.14}
+    <div class="mx-auto max-w-6xl">
+      <div class="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
+        <!-- ---------------- copy ---------------- -->
+        <div class="perspective text-center lg:text-left">
+          <p class="eyebrow mb-5 justify-center !text-primary-300 lg:justify-start" use:reveal={{ y: 12, blur: 3 }}>
+            <span class="h-px w-6" style="background-image:linear-gradient(90deg,transparent,currentColor);"></span>
+            Contact
+          </p>
+          <h2
+            class="font-display text-[clamp(2rem,4.6vw,3.2rem)] leading-[1.06] font-bold tracking-[-0.03em] text-white"
+            use:reveal={{ y: 30, delay: 70, rotate: -42, blur: 4 }}
           >
-            <svg class="relative z-10 h-4 w-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
-              <path d={socialLinks[0].icon} />
-            </svg>
-            <span class="relative z-10">Message me on LinkedIn</span>
-          </a>
+            Let's build something <span class="gradient-text">event-driven</span>
+          </h2>
+          <div
+            class="mx-auto mt-6 h-[3px] w-20 rounded-full lg:mx-0"
+            style="background-image:linear-gradient(90deg,var(--color-primary-500),var(--color-accent-500));"
+            use:reveal={{ y: 0, blur: 0, scale: 0.12, delay: 200 }}
+          ></div>
+          <p
+            class="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-slate-300/90 lg:mx-0"
+            use:reveal={{ y: 18, delay: 260 }}
+          >
+            Opportunities, collaborations, or speaking engagements — I'm always interested in
+            connecting with fellow technologists and industry leaders.
+          </p>
+
+          <div class="mt-9 flex justify-center lg:justify-start" use:reveal={{ y: 16, delay: 320 }}>
+            <a
+              href="https://www.linkedin.com/in/tkthetechie/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-primary spotlight"
+              use:magnetic={0.14}
+            >
+              <svg class="relative z-10 h-4 w-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                <path d={socialLinks[0].icon} />
+              </svg>
+              <span class="relative z-10">Message me on LinkedIn</span>
+            </a>
+          </div>
+
+          <!-- what I'm open to -->
+          <ul class="mt-12 grid gap-3 text-left">
+            {#each availability as item, i}
+              <li
+                class="flex gap-3.5 rounded-2xl p-4"
+                style="background-color:rgb(255 255 255 / .035);border:1px solid rgb(255 255 255 / .08);backdrop-filter:blur(10px);"
+                use:reveal={{ y: 20, delay: 360 + i * 80 }}
+              >
+                <span class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg" style="background-color:rgb(16 185 129 / .14);">
+                  <svg class="h-4 w-4 text-accent-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d={item.icon} />
+                  </svg>
+                </span>
+                <div>
+                  <h4 class="font-display text-[13.5px] font-semibold text-white">{item.title}</h4>
+                  <p class="mt-1 text-[12.5px] leading-relaxed text-slate-400">{item.detail}</p>
+                </div>
+              </li>
+            {/each}
+          </ul>
+        </div>
+
+        <!-- ---------------- stage for the 3D broker core ---------------- -->
+        <div class="relative flex justify-center lg:justify-end">
+          <div bind:this={stageEl} class="relative aspect-square w-[min(70vw,18rem)] sm:w-[22rem] lg:w-[24rem]" use:reveal={{ y: 0, blur: 0, scale: 0.9, delay: 100 }}>
+            <!-- the scene renders around this box; the box itself only provides the readout -->
+            <p
+              class="font-mono absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.16em] whitespace-nowrap text-slate-500 uppercase"
+            >
+              broker core · 72 nodes · agent mesh
+            </p>
+          </div>
         </div>
       </div>
 
       <!-- ---------------- social cards ---------------- -->
-      <div class="mb-14 grid gap-4 sm:grid-cols-3">
+      <div class="perspective mt-20 grid gap-4 sm:grid-cols-3">
         {#each socialLinks as social, i}
           <a
             href={social.href}
@@ -120,7 +169,7 @@
             class="spotlight group relative flex flex-col items-start overflow-hidden rounded-2xl p-6 transition-colors duration-500"
             style="background-color:rgb(255 255 255 / .045);border:1px solid rgb(255 255 255 / .1);backdrop-filter:blur(14px);"
             use:tilt={{ max: 8, lift: 7 }}
-            use:reveal={{ y: 24, delay: 80 + i * 90 }}
+            use:reveal={{ y: 28, delay: 80 + i * 90, rotate: -18 }}
           >
             <span
               class="mb-4 grid h-12 w-12 place-items-center rounded-xl transition-transform duration-500 group-hover:scale-110"
@@ -143,30 +192,6 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
           </a>
-        {/each}
-      </div>
-
-      <!-- ---------------- what I'm open to ---------------- -->
-      <div class="grid gap-4 sm:grid-cols-3">
-        {#each availability as item, i}
-          <div
-            class="flex gap-3.5 rounded-2xl p-5"
-            style="background-color:rgb(255 255 255 / .03);border:1px solid rgb(255 255 255 / .07);"
-            use:reveal={{ y: 20, delay: 120 + i * 80 }}
-          >
-            <span
-              class="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-lg"
-              style="background-color:rgb(16 185 129 / .14);"
-            >
-              <svg class="h-4 w-4 text-accent-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d={item.icon} />
-              </svg>
-            </span>
-            <div>
-              <h4 class="font-display text-[13.5px] font-semibold text-white">{item.title}</h4>
-              <p class="mt-1 text-[12.5px] leading-relaxed text-slate-400">{item.detail}</p>
-            </div>
-          </div>
         {/each}
       </div>
     </div>

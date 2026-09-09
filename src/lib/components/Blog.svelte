@@ -96,7 +96,7 @@
           <p style="color:var(--text-2);">Check back soon for insights and tutorials.</p>
         </div>
       {:else}
-        <div class="grid gap-5 lg:grid-cols-3">
+        <div class="perspective grid gap-5 lg:grid-cols-3">
           <!-- ---------- feature ---------- -->
           {#if featured}
             {@const cat = categoryStyle(featured.meta?.category)}
@@ -104,7 +104,7 @@
               href={featured.path}
               class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl lg:col-span-2"
               use:tilt={{ max: 4, lift: 7 }}
-              use:reveal={{ y: 28 }}
+              use:reveal={{ y: 30, rotate: -14 }}
             >
               <div class="relative h-52 overflow-hidden sm:h-64" style="background-color:var(--surface-1);">
                 {#if featured.meta?.headerImage}
@@ -170,7 +170,7 @@
               href={post.path}
               class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl"
               use:tilt={{ max: 7, lift: 8 }}
-              use:reveal={{ y: 26, delay: 90 + i * 80 }}
+              use:reveal={{ y: 30, delay: 90 + i * 80, rotate: -18 }}
             >
               <div class="relative h-36 overflow-hidden" style="background-color:var(--surface-1);">
                 {#if post.meta?.headerImage}

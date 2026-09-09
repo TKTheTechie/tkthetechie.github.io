@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { darkMode } from '$lib/stores/theme';
   import { paletteOpen } from '$lib/stores/palette';
+  import { scrollToId } from '$lib/stores/scroll';
 
   let isScrolled = false;
   let isMobileMenuOpen = false;
@@ -12,6 +13,8 @@
 
   /** pixel geometry of the sliding active-pill */
   let indicator = { left: 0, width: 0, ready: false };
+  /** the first placement snaps into position; only later moves slide */
+  let indicatorSettled = false;
   let navList: HTMLElement;
 
   darkMode.subscribe((value) => (isDark = value));
@@ -39,6 +42,7 @@
       width: target.offsetWidth,
       ready: true
     };
+    if (!indicatorSettled) requestAnimationFrame(() => (indicatorSettled = true));
   };
 
   onMount(() => {
@@ -111,7 +115,7 @@
       window.location.href = `/#${id}`;
       return;
     }
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    scrollToId(id);
   };
 </script>
 
@@ -174,7 +178,7 @@
             opacity:{indicator.ready ? 1 : 0};
             transform:translateY(-50%);
             background-color:var(--nav-pill);
-            transition:left .55s cubic-bezier(.16,1,.3,1), width .55s cubic-bezier(.16,1,.3,1), opacity .3s ease;
+            transition:{indicatorSettled ? 'left .55s cubic-bezier(.16,1,.3,1), width .55s cubic-bezier(.16,1,.3,1), opacity .3s ease' : 'none'};
           "
         ></span>
 

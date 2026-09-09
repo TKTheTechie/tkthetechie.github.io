@@ -181,7 +181,8 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    /* Lenis owns smooth scrolling; native smoothing on top of it double-eases */
+    scroll-behavior: auto;
     /* room for the fixed nav when jumping to an #anchor */
     scroll-padding-top: 5.5rem;
     -webkit-tap-highlight-color: transparent;
@@ -518,7 +519,8 @@
   /* -- Scroll reveal (driven by the `reveal` action) ------------------- */
   .reveal-init {
     opacity: 0;
-    transform: translate3d(0, var(--reveal-y, 26px), var(--reveal-z, 0)) scale(var(--reveal-s, 1));
+    transform: translate3d(0, var(--reveal-y, 26px), var(--reveal-z, 0)) rotateX(var(--reveal-rx, 0deg)) scale(var(--reveal-s, 1));
+    transform-origin: 50% 100%;
     filter: blur(var(--reveal-blur, 6px));
     transition:
       opacity 0.9s var(--ease-out-expo) var(--reveal-delay, 0ms),
@@ -531,6 +533,11 @@
     transform: none;
     filter: blur(0);
   }
+
+  /* -- 3D helpers ------------------------------------------------------ */
+  .perspective { perspective: 1400px; }
+  .perspective-near { perspective: 900px; }
+  .preserve-3d { transform-style: preserve-3d; }
 
   /* -- Marquee --------------------------------------------------------- */
   .marquee-track {
@@ -554,6 +561,12 @@
   .clamp-3 { -webkit-line-clamp: 3; }
   .clamp-4 { -webkit-line-clamp: 4; }
 }
+
+/* Lenis */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
 
 /* ---------------------------------------------------------------------------
    Scrollbar

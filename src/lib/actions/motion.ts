@@ -25,6 +25,8 @@ export interface RevealOptions {
   blur?: number;
   /** starting scale */
   scale?: number;
+  /** starting rotateX in degrees — needs `perspective` on an ancestor to read as 3D */
+  rotate?: number;
   /** 0–1 of the element that must be visible */
   threshold?: number;
   /** replay every time it re-enters (default: reveal once and forget) */
@@ -35,11 +37,12 @@ export function reveal(node: HTMLElement, options: RevealOptions = {}) {
   let opts = options;
 
   const apply = () => {
-    const { delay = 0, y = 26, blur = 6, scale = 1 } = opts;
+    const { delay = 0, y = 26, blur = 6, scale = 1, rotate = 0 } = opts;
     node.style.setProperty('--reveal-delay', `${delay}ms`);
     node.style.setProperty('--reveal-y', `${y}px`);
     node.style.setProperty('--reveal-blur', `${blur}px`);
     node.style.setProperty('--reveal-s', `${scale}`);
+    node.style.setProperty('--reveal-rx', `${rotate}deg`);
   };
 
   if (reduced()) {
@@ -95,7 +98,7 @@ export interface StaggerOptions extends Omit<RevealOptions, 'delay'> {
 }
 
 export function stagger(node: HTMLElement, options: StaggerOptions = {}) {
-  const { step = 70, offset = 0, y = 22, blur = 5, scale = 1, select } = options;
+  const { step = 70, offset = 0, y = 22, blur = 5, scale = 1, rotate = 0, select } = options;
 
   const items = Array.from(
     select ? node.querySelectorAll<HTMLElement>(select) : (node.children as unknown as HTMLElement[])
@@ -111,6 +114,7 @@ export function stagger(node: HTMLElement, options: StaggerOptions = {}) {
     el.style.setProperty('--reveal-y', `${y}px`);
     el.style.setProperty('--reveal-blur', `${blur}px`);
     el.style.setProperty('--reveal-s', `${scale}`);
+    el.style.setProperty('--reveal-rx', `${rotate}deg`);
     el.classList.add('reveal-init');
   });
 

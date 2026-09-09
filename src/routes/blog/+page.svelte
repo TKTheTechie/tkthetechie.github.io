@@ -1,239 +1,84 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { page } from '$app/stores';
-  import { darkMode } from '$lib/stores/theme';
-  import { browser } from '$app/environment';
-  
-  let posts: any[] = [];
+  import { reveal, tilt } from '$lib/actions/motion';
+
+  type Post = {
+    path: string;
+    meta?: { title?: string; date?: string; category?: string; headerImage?: string | null };
+  };
+
+  let posts: Post[] = [];
   let loading = true;
   let searchTerm = '';
   let selectedCategory = 'all';
   let categories: string[] = [];
-  let isDark = true; // Default to dark mode for SSR
-  let categoryColors: Record<string, string> = {};
-  
-  // Initialize theme synchronously if in browser
-  if (browser) {
-    isDark = darkMode.initSync();
-  }
-  
-  // Subscribe to dark mode changes
-  darkMode.subscribe(value => {
-    isDark = value;
-  });
-  
-  onMount(() => {
-    // Initialize theme
-    darkMode.init();
-    fetchPosts();
-  });
-  
-  const fetchPosts = async () => {
+
+  onMount(async () => {
     try {
       const response = await fetch('/blog/api/posts');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      const data = response.ok ? await response.json() : [];
+      posts = Array.isArray(data) ? data : [];
+      const unique = new Set<string>();
+      for (const post of posts) {
+        for (const c of (post.meta?.category ?? '').split(',')) {
+          const name = c.trim();
+          if (name) unique.add(name);
+        }
       }
-      const data = await response.json();
-      
-      // Ensure we have an array
-      if (Array.isArray(data)) {
-        posts = data;
-        
-        // Extract unique categories
-        const uniqueCategories = [...new Set(posts.map(post => post.meta?.category).filter(Boolean))];
-        categories = ['all', ...uniqueCategories];
-        
-        // Generate colors for all unique categories
-        generateCategoryColors(posts);
-      } else {
-        console.error('API did not return an array:', data);
-        posts = [];
-        categories = ['all'];
-      }
-      
-      loading = false;
+      categories = ['all', ...Array.from(unique).sort()];
     } catch (error) {
       console.error('Error fetching blog posts:', error);
       posts = [];
       categories = ['all'];
+    } finally {
       loading = false;
     }
-  };
-  
-  const generateCategoryColors = (posts: any[]) => {
-    // Define a vibrant color palette
-    const colorPalette = [
-      'from-blue-500 to-blue-600',
-      'from-purple-500 to-purple-600',
-      'from-pink-500 to-pink-600',
-      'from-red-500 to-red-600',
-      'from-orange-500 to-orange-600',
-      'from-amber-500 to-amber-600',
-      'from-yellow-500 to-yellow-600',
-      'from-lime-500 to-lime-600',
-      'from-green-500 to-green-600',
-      'from-emerald-500 to-emerald-600',
-      'from-teal-500 to-teal-600',
-      'from-cyan-500 to-cyan-600',
-      'from-sky-500 to-sky-600',
-      'from-indigo-500 to-indigo-600',
-      'from-violet-500 to-violet-600',
-      'from-fuchsia-500 to-fuchsia-600',
-      'from-rose-500 to-rose-600',
-      'from-slate-500 to-slate-600'
-    ];
-    
-    // Extract all unique categories
-    const categoriesSet = new Set<string>();
-    posts.forEach(post => {
-      const category = post.meta?.category;
-      if (category) {
-        // Handle combined categories (like "Crypto, Personal")
-        if (category.includes(',')) {
-          category.split(',').forEach(cat => categoriesSet.add(cat.trim()));
-        } else {
-          categoriesSet.add(category);
-        }
-      }
-    });
-    
-    // Sort categories alphabetically for consistency
-    const sortedCategories = Array.from(categoriesSet).sort();
-    
-    // Assign colors to each category
-    const colors: Record<string, string> = {};
-    sortedCategories.forEach((category, index) => {
-      colors[category] = colorPalette[index % colorPalette.length];
-    });
-    
-    categoryColors = colors;
-  };
-  
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-  
-  const getCategoryColor = (category: string) => {
-    // Handle combined categories (like "Crypto, Personal")
-    if (category && category.includes(',')) {
-      const firstCategory = category.split(',')[0].trim();
-      return categoryColors[firstCategory] || 'from-gray-500 to-gray-600';
-    }
-    
-    return categoryColors[category] || 'from-gray-500 to-gray-600';
-  };
-  
-  const getCategoryFilterColor = (category: string, isSelected: boolean) => {
-    if (category === 'all') {
-      return isSelected 
-        ? 'bg-gradient-to-r from-primary-500 to-accent-600 text-white' 
-        : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600';
-    }
-    
-    // Use the same gradient colors as the badge colors for consistency
-    const badgeGradient = getCategoryColor(category);
-    
-    if (isSelected) {
-      return `bg-gradient-to-r ${badgeGradient} text-white`;
-    }
-    
-    // For unselected state, extract the base color from the gradient
-    // Map gradient colors to their corresponding lighter/darker variants
-    const gradientToColorMap: Record<string, { light: string; dark: string }> = {
-      'from-blue-500 to-blue-600': {
-        light: 'bg-blue-200 text-blue-800 hover:bg-blue-300 border border-blue-300',
-        dark: 'bg-blue-600 text-blue-100 hover:bg-blue-500 border border-blue-500'
-      },
-      'from-purple-500 to-purple-600': {
-        light: 'bg-purple-200 text-purple-800 hover:bg-purple-300 border border-purple-300',
-        dark: 'bg-purple-600 text-purple-100 hover:bg-purple-500 border border-purple-500'
-      },
-      'from-pink-500 to-pink-600': {
-        light: 'bg-pink-200 text-pink-800 hover:bg-pink-300 border border-pink-300',
-        dark: 'bg-pink-600 text-pink-100 hover:bg-pink-500 border border-pink-500'
-      },
-      'from-red-500 to-red-600': {
-        light: 'bg-red-200 text-red-800 hover:bg-red-300 border border-red-300',
-        dark: 'bg-red-600 text-red-100 hover:bg-red-500 border border-red-500'
-      },
-      'from-orange-500 to-orange-600': {
-        light: 'bg-orange-200 text-orange-800 hover:bg-orange-300 border border-orange-300',
-        dark: 'bg-orange-600 text-orange-100 hover:bg-orange-500 border border-orange-500'
-      },
-      'from-amber-500 to-amber-600': {
-        light: 'bg-amber-200 text-amber-800 hover:bg-amber-300 border border-amber-300',
-        dark: 'bg-amber-600 text-amber-100 hover:bg-amber-500 border border-amber-500'
-      },
-      'from-yellow-500 to-yellow-600': {
-        light: 'bg-yellow-200 text-yellow-800 hover:bg-yellow-300 border border-yellow-300',
-        dark: 'bg-yellow-600 text-yellow-100 hover:bg-yellow-500 border border-yellow-500'
-      },
-      'from-lime-500 to-lime-600': {
-        light: 'bg-lime-200 text-lime-800 hover:bg-lime-300 border border-lime-300',
-        dark: 'bg-lime-600 text-lime-100 hover:bg-lime-500 border border-lime-500'
-      },
-      'from-green-500 to-green-600': {
-        light: 'bg-green-200 text-green-800 hover:bg-green-300 border border-green-300',
-        dark: 'bg-green-600 text-green-100 hover:bg-green-500 border border-green-500'
-      },
-      'from-emerald-500 to-emerald-600': {
-        light: 'bg-emerald-200 text-emerald-800 hover:bg-emerald-300 border border-emerald-300',
-        dark: 'bg-emerald-600 text-emerald-100 hover:bg-emerald-500 border border-emerald-500'
-      },
-      'from-teal-500 to-teal-600': {
-        light: 'bg-teal-200 text-teal-800 hover:bg-teal-300 border border-teal-300',
-        dark: 'bg-teal-600 text-teal-100 hover:bg-teal-500 border border-teal-500'
-      },
-      'from-cyan-500 to-cyan-600': {
-        light: 'bg-cyan-200 text-cyan-800 hover:bg-cyan-300 border border-cyan-300',
-        dark: 'bg-cyan-600 text-cyan-100 hover:bg-cyan-500 border border-cyan-500'
-      },
-      'from-sky-500 to-sky-600': {
-        light: 'bg-sky-200 text-sky-800 hover:bg-sky-300 border border-sky-300',
-        dark: 'bg-sky-600 text-sky-100 hover:bg-sky-500 border border-sky-500'
-      },
-      'from-indigo-500 to-indigo-600': {
-        light: 'bg-indigo-200 text-indigo-800 hover:bg-indigo-300 border border-indigo-300',
-        dark: 'bg-indigo-600 text-indigo-100 hover:bg-indigo-500 border border-indigo-500'
-      },
-      'from-violet-500 to-violet-600': {
-        light: 'bg-violet-200 text-violet-800 hover:bg-violet-300 border border-violet-300',
-        dark: 'bg-violet-600 text-violet-100 hover:bg-violet-500 border border-violet-500'
-      },
-      'from-fuchsia-500 to-fuchsia-600': {
-        light: 'bg-fuchsia-200 text-fuchsia-800 hover:bg-fuchsia-300 border border-fuchsia-300',
-        dark: 'bg-fuchsia-600 text-fuchsia-100 hover:bg-fuchsia-500 border border-fuchsia-500'
-      },
-      'from-rose-500 to-rose-600': {
-        light: 'bg-rose-200 text-rose-800 hover:bg-rose-300 border border-rose-300',
-        dark: 'bg-rose-600 text-rose-100 hover:bg-rose-500 border border-rose-500'
-      },
-      'from-slate-500 to-slate-600': {
-        light: 'bg-slate-200 text-slate-800 hover:bg-slate-300 border border-slate-300',
-        dark: 'bg-slate-600 text-slate-100 hover:bg-slate-500 border border-slate-500'
-      },
-      'from-gray-500 to-gray-600': {
-        light: 'bg-gray-200 text-gray-800 hover:bg-gray-300 border border-gray-300',
-        dark: 'bg-gray-600 text-gray-100 hover:bg-gray-500 border border-gray-500'
-      }
-    };
-    
-    const colorStyles = gradientToColorMap[badgeGradient] || gradientToColorMap['from-gray-500 to-gray-600'];
-    return isDark ? colorStyles.dark : colorStyles.light;
-  };
-  
-  $: filteredPosts = (posts || []).filter(post => {
-    const matchesSearch = post.meta?.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         (post.meta?.category && post.meta.category.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = selectedCategory === 'all' || post.meta?.category === selectedCategory;
-    return matchesSearch && matchesCategory;
   });
+
+  const formatDate = (value?: string) =>
+    new Date(value ?? Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+
+  /*
+    Category colour comes from the brand palette plus a couple of warm
+    accents, assigned by name so a category keeps its colour across pages.
+  */
+  const SWATCHES = [
+    { bg: 'rgb(14 165 233 / .16)', fg: '#38bdf8', ring: 'rgb(14 165 233 / .32)' },
+    { bg: 'rgb(16 185 129 / .16)', fg: '#34d399', ring: 'rgb(16 185 129 / .32)' },
+    { bg: 'rgb(139 92 246 / .16)', fg: '#a78bfa', ring: 'rgb(139 92 246 / .32)' },
+    { bg: 'rgb(249 115 22 / .16)', fg: '#fb923c', ring: 'rgb(249 115 22 / .32)' },
+    { bg: 'rgb(250 204 21 / .16)', fg: '#facc15', ring: 'rgb(250 204 21 / .32)' },
+    { bg: 'rgb(244 63 94 / .16)', fg: '#fb7185', ring: 'rgb(244 63 94 / .32)' },
+    { bg: 'rgb(20 184 166 / .16)', fg: '#2dd4bf', ring: 'rgb(20 184 166 / .32)' }
+  ];
+  const FIXED: Record<string, number> = { Dev: 0, Tech: 1, Architecture: 2, Tutorial: 3, Crypto: 4 };
+  const swatch = (name?: string) => {
+    const key = (name ?? '').split(',')[0].trim();
+    if (!key) return { bg: 'rgb(148 163 184 / .16)', fg: '#94a3b8', ring: 'rgb(148 163 184 / .3)' };
+    if (key in FIXED) return SWATCHES[FIXED[key]];
+    let h = 0;
+    for (const ch of key) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+    return SWATCHES[h % SWATCHES.length];
+  };
+
+  const matchesCategory = (post: Post) =>
+    selectedCategory === 'all' ||
+    (post.meta?.category ?? '')
+      .split(',')
+      .map((c) => c.trim())
+      .includes(selectedCategory);
+
+  $: filteredPosts = posts.filter((post) => {
+    const q = searchTerm.trim().toLowerCase();
+    const matchesSearch =
+      !q ||
+      (post.meta?.title ?? '').toLowerCase().includes(q) ||
+      (post.meta?.category ?? '').toLowerCase().includes(q);
+    return matchesSearch && matchesCategory(post);
+  });
+
+  $: featured = selectedCategory === 'all' && !searchTerm ? filteredPosts[0] : undefined;
+  $: grid = featured ? filteredPosts.slice(1) : filteredPosts;
 </script>
 
 <svelte:head>
@@ -243,22 +88,19 @@
   <meta name="author" content="Thomas Kunnumpurath" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://tkthetechie.io/blog/" />
-  
-  <!-- Open Graph -->
+
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://tkthetechie.io/blog/" />
   <meta property="og:title" content="Technical Blog - Thomas Kunnumpurath" />
   <meta property="og:description" content="Technical blog posts on event-driven architecture, modern development practices, and emerging technologies." />
   <meta property="og:image" content="https://tkthetechie.io/profile-pic.png" />
-  
-  <!-- Twitter -->
+
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://tkthetechie.io/blog/" />
   <meta property="twitter:title" content="Technical Blog - Thomas Kunnumpurath" />
   <meta property="twitter:description" content="Technical blog posts on event-driven architecture, modern development practices, and emerging technologies." />
   <meta property="twitter:image" content="https://tkthetechie.io/profile-pic.png" />
-  
-  <!-- Structured Data - Blog Schema -->
+
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -266,194 +108,229 @@
       "name": "Thomas Kunnumpurath Technical Blog",
       "url": "https://tkthetechie.io/blog/",
       "description": "Technical blog posts on event-driven architecture, modern development practices, and emerging technologies",
-      "author": {
-        "@type": "Person",
-        "name": "Thomas Kunnumpurath",
-        "url": "https://tkthetechie.io"
-      },
-      "publisher": {
-        "@type": "Person",
-        "name": "Thomas Kunnumpurath"
-      },
+      "author": { "@type": "Person", "name": "Thomas Kunnumpurath", "url": "https://tkthetechie.io" },
+      "publisher": { "@type": "Person", "name": "Thomas Kunnumpurath" },
       "inLanguage": "en-US"
     }
   </script>
 </svelte:head>
 
-<div 
-  class="blog-listing-container min-h-screen transition-colors duration-300 relative overflow-hidden"
-  style="background: {isDark ? 'linear-gradient(135deg, rgb(3, 7, 18) 0%, rgb(15, 23, 42) 50%, rgb(3, 7, 18) 100%)' : 'linear-gradient(135deg, rgb(249, 250, 251) 0%, rgb(243, 244, 246) 50%, rgb(249, 250, 251) 100)'}"
->
-  <!-- Background Pattern -->
-  <div class="absolute inset-0 opacity-20">
-    <div class="absolute inset-0" style="background-image: radial-gradient(circle at 20% 30%, {isDark ? 'rgba(59, 130, 246, 0.05)' : 'rgba(59, 130, 246, 0.05)'} 0%, transparent 50%), radial-gradient(circle at 80% 70%, {isDark ? 'rgba(34, 197, 94, 0.05)' : 'rgba(34, 197, 94, 0.05)'} 0%, transparent 50%), radial-gradient(circle at 40% 80%, {isDark ? 'rgba(168, 85, 247, 0.04)' : 'rgba(168, 85, 247, 0.03)'} 0%, transparent 50%);"></div>
+<!-- ---------------- masthead ---------------- -->
+<header class="relative isolate overflow-hidden pt-32 pb-16 md:pt-40 md:pb-20" style="background-color:#04070e;">
+  <div
+    class="absolute inset-0 -z-20"
+    style="background:
+      radial-gradient(90% 80% at 78% 4%, #0b2b45 0%, transparent 58%),
+      radial-gradient(70% 70% at 10% 100%, #06281f 0%, transparent 60%),
+      linear-gradient(165deg,#04070e,#060c18);"
+  ></div>
+  <div class="aurora -z-20" aria-hidden="true">
+    <span class="h-[30rem] w-[30rem] -top-32 left-1/4" style="background:radial-gradient(circle,#0ea5e9,transparent 62%);opacity:.22;"></span>
+    <span class="h-[26rem] w-[26rem] -right-20 top-0" style="background:radial-gradient(circle,#10b981,transparent 62%);opacity:.18;animation-delay:-12s;"></span>
   </div>
-  <!-- Header -->
-  <div class="bg-gradient-to-br from-gray-900 via-blue-900 to-green-900 text-white py-20 relative z-10">
-    <div class="container-max section-padding">
-      <div class="max-w-4xl mx-auto text-center">
-        <h1 class="text-5xl md:text-6xl font-bold mb-6" style="color: white !important;">
-          Technical <span class="gradient-text">Blog</span>
-        </h1>
-        <div class="h-1 w-20 bg-gradient-to-r from-primary-500 to-accent-600 mx-auto rounded-full mb-6"></div>
-        <p class="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed" style="color: rgb(229, 231, 235) !important;">
-          Insights on event-driven architecture, modern development practices, and emerging technologies.
-          Real-world implementations and industry experience shared through detailed tutorials and analysis.
-        </p>
-        
-        <!-- Back to Home -->
-        <div class="mt-8">
-          <a 
-            href="/"
-            class="inline-flex items-center text-primary-400 hover:text-primary-300 font-medium transition-colors duration-200 relative z-20"
-            style="color: rgb(96, 165, 250) !important;"
-          >
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Home
-          </a>
-        </div>
-      </div>
+  <div class="mesh-grid -z-10 opacity-40" style="--hairline:rgb(148 163 184 / .12);" aria-hidden="true"></div>
+
+  <div class="container-max section-padding relative">
+    <div class="perspective mx-auto max-w-3xl text-center">
+      <p class="eyebrow mb-5 justify-center !text-primary-300" use:reveal={{ y: 12, blur: 3 }}>
+        <span class="h-px w-6" style="background-image:linear-gradient(90deg,transparent,currentColor);"></span>
+        Writing
+        <span class="h-px w-6" style="background-image:linear-gradient(90deg,currentColor,transparent);"></span>
+      </p>
+      <h1
+        class="font-display text-[clamp(2.4rem,6vw,4.2rem)] leading-[1.02] font-extrabold tracking-[-0.035em] text-white"
+        use:reveal={{ y: 30, delay: 60, rotate: -42, blur: 4 }}
+      >
+        Technical <span class="gradient-text">Blog</span>
+      </h1>
+      <div
+        class="mx-auto mt-6 h-[3px] w-20 rounded-full"
+        style="background-image:linear-gradient(90deg,var(--color-primary-500),var(--color-accent-500));"
+        use:reveal={{ y: 0, blur: 0, scale: 0.12, delay: 200 }}
+      ></div>
+      <p class="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-slate-300/90" use:reveal={{ y: 18, delay: 260 }}>
+        Insights on event-driven architecture, modern development practices, and emerging
+        technologies — real-world implementations and hard-won lessons.
+      </p>
     </div>
   </div>
-  
-  <!-- Main Content -->
-  <div class="py-16 relative z-10">
-    <div class="container-max section-padding">
-      <div class="max-w-6xl mx-auto">
-        
-        {#if loading}
-          <!-- Loading State -->
-          <div class="flex justify-center items-center py-20">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-500"></div>
-          </div>
-        {:else}
-          <!-- Search and Filter -->
-          <div class="mb-12">
-            <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
-              <!-- Search -->
-              <div class="relative flex-1 max-w-md">
-                <input
-                  type="text"
-                  bind:value={searchTerm}
-                  placeholder="Search posts..."
-                  class="w-full px-4 py-3 pl-10 {isDark ? 'bg-gray-800 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} border rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
-                />
-                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-              
-              <!-- Category Filter -->
-              <div class="flex flex-wrap gap-2">
-                {#each categories as category}
-                  <button
-                    on:click={() => selectedCategory = category}
-                    class="px-4 py-2 rounded-full font-medium transition-all duration-200 {getCategoryFilterColor(category, selectedCategory === category)}"
-                  >
-                    {category === 'all' ? 'All Posts' : category}
-                  </button>
-                {/each}
+</header>
+
+<!-- ---------------- listing ---------------- -->
+<div class="relative py-14 md:py-20" style="background-color:var(--surface-0);">
+  <div class="container-max section-padding">
+    <div class="mx-auto max-w-6xl">
+      {#if loading}
+        <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {#each Array(6) as _, i}
+            <div class="glass-effect animate-pulse overflow-hidden rounded-2xl" style="animation-delay:{i * 120}ms;">
+              <div class="h-44" style="background-color:var(--surface-1);"></div>
+              <div class="space-y-3 p-6">
+                <div class="h-3 w-24 rounded-full" style="background-color:var(--surface-1);"></div>
+                <div class="h-4 w-full rounded-full" style="background-color:var(--surface-1);"></div>
+                <div class="h-4 w-2/3 rounded-full" style="background-color:var(--surface-1);"></div>
               </div>
             </div>
-            
-            <!-- Results Count -->
-            <div class="mt-4 {isDark ? 'text-white' : 'text-gray-600'}">
-              {filteredPosts.length} {filteredPosts.length === 1 ? 'post' : 'posts'} found
-            </div>
-          </div>
-          
-          {#if filteredPosts.length === 0}
-            <!-- No Results -->
-            <div class="text-center py-20">
-              <div class="w-24 h-24 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-              <h3 class="text-2xl font-bold {isDark ? 'text-white' : 'text-gray-900'} mb-4">No Posts Found</h3>
-              <p class="{isDark ? 'text-gray-300' : 'text-gray-600'}">Try adjusting your search or filter criteria.</p>
-            </div>
-          {:else}
-            <!-- Blog Posts Grid -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {#each filteredPosts as post, index}
-                <article class="rounded-2xl overflow-hidden hover-lift card-hover transition-all duration-300 
-                               border {isDark ? 'border-gray-700/60 shadow-xl shadow-black/50 bg-gray-900/90 hover:shadow-2xl hover:shadow-black/70 hover:border-primary-600/60' : 'border-gray-200/60 shadow-xl shadow-gray-200/50 bg-white/90 hover:shadow-2xl hover:shadow-gray-300/60 hover:border-primary-300/60'} 
-                               backdrop-blur-sm hover:-translate-y-1 hover:scale-[1.02]">
-                  <!-- Header Image Placeholder -->
-                  <div class="h-48 bg-gradient-to-br from-primary-500/20 to-accent-600/20 flex items-center justify-center">
-                    {#if post.meta?.headerImage}
-                      <img 
-                        src="/images/blog/headers/{post.meta.headerImage}" 
-                        alt={post.meta?.title || 'Blog post'}
-                        class="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    {:else}
-                      <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                        </svg>
-                      </div>
-                    {/if}
-                  </div>
-                  
-                  <!-- Content -->
-                  <div class="p-6 {isDark ? 'bg-gradient-to-b from-gray-900/95 to-gray-900/98' : 'bg-gradient-to-b from-white/95 to-white/98'}">
-                    <!-- Category and Date -->
-                    <div class="flex items-center justify-between mb-4">
-                      <span class="px-3 py-1 bg-gradient-to-r {getCategoryColor(post.meta?.category)} text-white text-sm font-medium rounded-full">
-                        {post.meta?.category || 'Blog'}
-                      </span>
-                      <span class="text-sm {isDark ? 'text-gray-400' : 'text-gray-500'}">
-                        {formatDate(post.meta?.date || new Date().toISOString())}
-                      </span>
-                    </div>
-                    
-                    <!-- Title -->
-                    <h2 class="text-xl font-bold {isDark ? 'text-white hover:text-primary-400' : 'text-gray-900 hover:text-primary-600'} mb-3 line-clamp-2 
-                             tracking-tight leading-tight font-black
-                             transition-colors duration-200">
-                      {post.meta?.title || 'Untitled'}
-                    </h2>
-                    
-                    <!-- Read More -->
-                    <div class="flex items-center justify-between">
-                      <div></div>
-                      
-                      <!-- Read More Link -->
-                      <a 
-                        href={post.path}
-                        class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-primary-500 to-accent-600 
-                               text-white font-semibold text-sm rounded-lg
-                               hover:from-primary-600 hover:to-accent-700 
-                               transition-all duration-200 hover:shadow-lg hover:scale-105
-                               border border-primary-400/50"
-                      >
-                        Read More
-                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </article>
+          {/each}
+        </div>
+      {:else}
+        <!-- ---------- search + filter ---------- -->
+        <div class="glass-effect sticky top-[76px] z-20 mb-10 rounded-2xl p-3 md:p-4" use:reveal={{ y: 16 }}>
+          <div class="flex flex-col gap-3">
+            <label class="relative block w-full md:max-w-md">
+              <span class="sr-only">Search posts</span>
+              <svg class="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" style="color:var(--text-3);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M20 20l-3.6-3.6" stroke-linecap="round" />
+              </svg>
+              <input
+                type="search"
+                bind:value={searchTerm}
+                placeholder="Search {posts.length} posts…"
+                class="w-full rounded-xl py-2.5 pr-3 pl-10 text-[14px]"
+              />
+            </label>
+
+            <div class="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
+              {#each categories as category}
+                {@const active = selectedCategory === category}
+                {@const sw = swatch(category)}
+                <button
+                  on:click={() => (selectedCategory = category)}
+                  class="chip !py-1.5"
+                  style={active
+                    ? `background-color:${category === 'all' ? 'rgb(14 165 233 / .16)' : sw.bg};color:${category === 'all' ? 'var(--color-primary-500)' : sw.fg};border-color:${category === 'all' ? 'rgb(14 165 233 / .4)' : sw.ring};`
+                    : ''}
+                  aria-pressed={active}
+                >
+                  {category === 'all' ? 'All' : category}
+                </button>
               {/each}
             </div>
-          {/if}
+          </div>
+          <p class="font-mono mt-3 px-1 text-[11px] tracking-wide" style="color:var(--text-3);">
+            {filteredPosts.length} {filteredPosts.length === 1 ? 'post' : 'posts'}
+            {#if selectedCategory !== 'all'}· {selectedCategory}{/if}
+            {#if searchTerm}· matching “{searchTerm}”{/if}
+          </p>
+        </div>
+
+        {#if filteredPosts.length === 0}
+          <div class="py-20 text-center" use:reveal>
+            <span class="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-2xl" style="background-image:linear-gradient(135deg,var(--color-primary-500),var(--color-accent-500));">
+              <svg class="h-7 w-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M20 20l-3.6-3.6" stroke-linecap="round" />
+              </svg>
+            </span>
+            <h3 class="font-display mb-2 text-xl font-bold" style="color:var(--text-1);">Nothing matches</h3>
+            <p style="color:var(--text-2);">Try a different search or clear the category filter.</p>
+            <button class="btn btn-ghost spotlight mt-6" on:click={() => { searchTerm = ''; selectedCategory = 'all'; }}>
+              <span class="relative z-10">Show all posts</span>
+            </button>
+          </div>
+        {:else}
+          <div class="perspective grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <!-- ---------- feature ---------- -->
+            {#if featured}
+              {@const cat = swatch(featured.meta?.category)}
+              <a
+                href={featured.path}
+                class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl md:col-span-2 lg:col-span-3"
+                use:tilt={{ max: 3, lift: 6, scale: 1.005 }}
+                use:reveal={{ y: 30, rotate: -12 }}
+              >
+                <div class="relative h-64 overflow-hidden sm:h-80 lg:h-[26rem]" style="background-color:var(--surface-1);">
+                  {#if featured.meta?.headerImage}
+                    <img
+                      src="/images/blog/headers/{featured.meta.headerImage}"
+                      alt=""
+                      class="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]"
+                      style="transition-timing-function:cubic-bezier(.16,1,.3,1);"
+                    />
+                  {/if}
+                  <div class="pointer-events-none absolute inset-0" style="background:linear-gradient(to top,rgb(5 8 15 / .94) 4%,rgb(5 8 15 / .4) 45%,transparent 75%);"></div>
+                  <div class="absolute inset-x-0 bottom-0 p-6 sm:p-8 lg:p-10">
+                    <div class="mb-3 flex flex-wrap items-center gap-2.5">
+                      <span class="font-mono rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-wide backdrop-blur-md" style="background-color:{cat.bg};color:{cat.fg};border:1px solid {cat.ring};">
+                        {featured.meta?.category ?? 'Blog'}
+                      </span>
+                      <span class="font-mono text-[11px] text-slate-300">{formatDate(featured.meta?.date)}</span>
+                      <span class="font-mono text-[11px] text-slate-500">· Latest</span>
+                    </div>
+                    <h2 class="font-display max-w-3xl text-2xl leading-tight font-bold text-white sm:text-3xl lg:text-[2.4rem]">
+                      {featured.meta?.title ?? 'Untitled'}
+                    </h2>
+                    <span class="font-display mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-primary-300">
+                      Read the post
+                      <svg class="h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5-5 5M6 12h12" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </a>
+            {/if}
+
+            <!-- ---------- grid ---------- -->
+            {#each grid as post, i (post.path)}
+              {@const cat = swatch(post.meta?.category)}
+              <a
+                href={post.path}
+                class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl"
+                use:tilt={{ max: 7, lift: 8 }}
+                use:reveal={{ y: 28, delay: (i % 3) * 80, rotate: -16 }}
+              >
+                <div class="relative h-44 overflow-hidden" style="background-color:var(--surface-1);">
+                  {#if post.meta?.headerImage}
+                    <img
+                      src="/images/blog/headers/{post.meta.headerImage}"
+                      alt=""
+                      class="h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.07]"
+                      style="transition-timing-function:cubic-bezier(.16,1,.3,1);"
+                      loading="lazy"
+                    />
+                  {:else}
+                    <div class="grid h-full w-full place-items-center">
+                      <span class="grid h-12 w-12 place-items-center rounded-xl" style="background-image:linear-gradient(135deg,var(--color-primary-500),var(--color-accent-500));">
+                        <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13" />
+                        </svg>
+                      </span>
+                    </div>
+                  {/if}
+                  <div class="pointer-events-none absolute inset-0" style="background:linear-gradient(to top,rgb(5 8 15 / .7),transparent 62%);"></div>
+                  <span class="font-mono absolute bottom-3 left-3.5 rounded-full px-2.5 py-1 text-[10px] font-semibold backdrop-blur-md" style="background-color:{cat.bg};color:{cat.fg};border:1px solid {cat.ring};">
+                    {post.meta?.category ?? 'Blog'}
+                  </span>
+                </div>
+
+                <div class="flex flex-1 flex-col p-5">
+                  <div class="font-mono mb-2.5 text-[10.5px]" style="color:var(--text-3);">{formatDate(post.meta?.date)}</div>
+                  <h2 class="font-display clamp-3 text-[15.5px] leading-snug font-bold" style="color:var(--text-1);">
+                    {post.meta?.title ?? 'Untitled'}
+                  </h2>
+                  <span class="mt-auto flex items-center gap-1.5 pt-4 font-mono text-[11px]" style="color:var(--color-primary-500);">
+                    Read
+                    <svg class="h-3 w-3 transition-transform duration-500 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5-5 5M6 12h12" />
+                    </svg>
+                  </span>
+                </div>
+              </a>
+            {/each}
+          </div>
         {/if}
+      {/if}
+
+      <div class="mt-16 flex justify-center">
+        <a href="/" class="btn btn-ghost spotlight">
+          <svg class="relative z-10 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 17l-5-5 5-5M18 12H6" />
+          </svg>
+          <span class="relative z-10">Back to home</span>
+        </a>
       </div>
     </div>
   </div>
 </div>
-
-<style>
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-</style>

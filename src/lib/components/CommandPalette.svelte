@@ -2,6 +2,7 @@
   import { onMount, tick } from 'svelte';
   import { paletteOpen } from '$lib/stores/palette';
   import { darkMode } from '$lib/stores/theme';
+  import { scrollToId, lockScroll } from '$lib/stores/scroll';
 
   type Command = {
     label: string;
@@ -51,7 +52,7 @@
       window.location.href = `/#${id}`;
       return;
     }
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    scrollToId(id);
   };
 
   const openUrl = (url: string, external = false) => {
@@ -182,9 +183,7 @@
     return () => window.removeEventListener('keydown', onKey);
   });
 
-  $: if (typeof document !== 'undefined') {
-    document.documentElement.style.overflow = open ? 'hidden' : '';
-  }
+  $: if (typeof document !== 'undefined') lockScroll(open);
 </script>
 
 {#if open}
@@ -238,7 +237,7 @@
       </div>
 
       <!-- results -->
-      <div bind:this={listEl} class="max-h-[52vh] overflow-y-auto overscroll-contain p-2">
+      <div bind:this={listEl} class="max-h-[52vh] overflow-y-auto overscroll-contain p-2" data-lenis-prevent>
         {#if flat.length === 0}
           <p class="px-3 py-10 text-center text-sm" style="color:var(--text-3);">
             Nothing matches “{query}”.

@@ -106,13 +106,13 @@
         Skills &amp; <span class="gradient-text">Expertise</span>
       </SectionHeading>
 
-      <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+      <div class="perspective grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {#each skillCategories as category, i}
           {@const accent = ACCENTS[category.accent]}
           <article
             class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl p-7"
             use:tilt={{ max: 6, lift: 7 }}
-            use:reveal={{ delay: 60 + (i % 3) * 80 + Math.floor(i / 3) * 60, y: 28 }}
+            use:reveal={{ delay: 60 + (i % 3) * 80 + Math.floor(i / 3) * 60, y: 34, rotate: -22 }}
           >
             <!-- corner index -->
             <span

@@ -105,12 +105,12 @@
             <span class="gradient-text">{group.title}</span>
           </h3>
 
-          <div class="grid gap-4 {group.cols}">
+          <div class="perspective grid gap-4 {group.cols}">
             {#each group.items as item, i}
               <article
                 class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl p-6"
                 use:tilt={{ max: 7, lift: 6 }}
-                use:reveal={{ delay: 60 + i * 80, y: 24 }}
+                use:reveal={{ delay: 60 + i * 80, y: 30, rotate: -22 }}
               >
                 <span
                   class="mb-4 grid h-11 w-11 place-items-center rounded-xl transition-transform duration-500 group-hover:scale-110"
