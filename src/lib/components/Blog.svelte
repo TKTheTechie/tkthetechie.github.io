@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import SectionHeading from './SectionHeading.svelte';
   import { reveal, tilt } from '$lib/actions/motion';
 
@@ -15,21 +14,8 @@
     };
   };
 
-  let posts: Post[] = [];
-  let loading = true;
-
-  onMount(async () => {
-    try {
-      const response = await fetch('/blog/api/posts');
-      const data = response.ok ? await response.json() : [];
-      posts = Array.isArray(data) ? data : [];
-    } catch (error) {
-      console.error('Error fetching blog posts:', error);
-      posts = [];
-    } finally {
-      loading = false;
-    }
-  });
+  /* Loaded in +page.ts so the cards (and their links) are in the prerendered HTML. */
+  export let posts: Post[] = [];
 
   const formatDate = (value?: string) =>
     new Date(value ?? Date.now()).toLocaleDateString('en-US', {
@@ -65,24 +51,7 @@
         Latest <span class="gradient-text">Blog Posts</span>
       </SectionHeading>
 
-      {#if loading}
-        <!-- skeletons keep the layout from jumping when posts land -->
-        <div class="grid gap-5 lg:grid-cols-3">
-          {#each Array(3) as _, i}
-            <div
-              class="glass-effect animate-pulse overflow-hidden rounded-2xl"
-              style="animation-delay:{i * 160}ms;"
-            >
-              <div class="h-44" style="background-color:var(--surface-1);"></div>
-              <div class="space-y-3 p-6">
-                <div class="h-3 w-24 rounded-full" style="background-color:var(--surface-1);"></div>
-                <div class="h-4 w-full rounded-full" style="background-color:var(--surface-1);"></div>
-                <div class="h-4 w-2/3 rounded-full" style="background-color:var(--surface-1);"></div>
-              </div>
-            </div>
-          {/each}
-        </div>
-      {:else if posts.length === 0}
+      {#if posts.length === 0}
         <div class="py-16 text-center">
           <span
             class="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-2xl"
@@ -110,7 +79,7 @@
                 {#if featured.meta?.headerImage}
                   <img
                     src="/images/blog/headers/{featured.meta.headerImage}"
-                    alt=""
+                    alt={featured.meta?.title ?? ''}
                     class="h-full w-full object-cover transition-transform duration-[1100ms] group-hover:scale-[1.06]"
                     style="transition-timing-function:cubic-bezier(.16,1,.3,1);"
                     loading="lazy"
@@ -176,7 +145,7 @@
                 {#if post.meta?.headerImage}
                   <img
                     src="/images/blog/headers/{post.meta.headerImage}"
-                    alt=""
+                    alt={post.meta?.title ?? ''}
                     class="h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.07]"
                     style="transition-timing-function:cubic-bezier(.16,1,.3,1);"
                     loading="lazy"

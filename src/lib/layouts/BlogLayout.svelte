@@ -1,11 +1,36 @@
 <script lang="ts">
   import { reveal } from '$lib/actions/motion';
+  import Seo from '$lib/components/Seo.svelte';
+  import { SITE_URL, AUTHOR_NAME, DEFAULT_OG_IMAGE, absoluteUrl, toIsoDate } from '$lib/config/site';
 
   export let title: string;
   export let date: string;
-  export let author: string = 'Thomas Kunnumpurath';
+  export let dateIso: string = '';
+  export let description: string = '';
+  export let author: string = AUTHOR_NAME;
   export let category: string = 'Blog';
   export let headerImage: string = '';
+  export let path: string = '';
+
+  $: published = dateIso || toIsoDate(date);
+  $: image = headerImage ? `/images/blog/headers/${headerImage}` : DEFAULT_OG_IMAGE;
+  $: metaDescription = description || `${title} - by ${author}, VP of Systems Engineering at Solace.`;
+  $: articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description: metaDescription,
+    image: absoluteUrl(image),
+    url: absoluteUrl(path),
+    mainEntityOfPage: { '@type': 'WebPage', '@id': absoluteUrl(path) },
+    datePublished: published,
+    dateModified: published,
+    articleSection: category,
+    inLanguage: 'en-US',
+    author: { '@type': 'Person', '@id': `${SITE_URL}/#person`, name: author, url: SITE_URL },
+    publisher: { '@type': 'Person', '@id': `${SITE_URL}/#person`, name: AUTHOR_NAME, url: SITE_URL },
+    isPartOf: { '@type': 'Blog', '@id': `${SITE_URL}/blog#blog` }
+  };
 
   const formatDate = (value: string) =>
     new Date(value).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -40,11 +65,15 @@
   }
 </script>
 
-<svelte:head>
-  <title>{title} - Thomas Kunnumpurath</title>
-  <meta name="description" content="Technical blog post: {title}" />
-  <meta name="author" content={author} />
-</svelte:head>
+<Seo
+  title="{title} - Thomas Kunnumpurath"
+  description={metaDescription}
+  {path}
+  {image}
+  type="article"
+  publishedTime={published}
+  jsonld={articleSchema}
+/>
 
 <article style="background-color:var(--surface-0);">
   <!-- ---------------- masthead ---------------- -->
@@ -114,7 +143,7 @@
           <figure class="mb-12 overflow-hidden rounded-2xl" style="border:1px solid var(--hairline);" use:reveal={{ y: 22 }}>
             <img
               src="/images/blog/headers/{headerImage}"
-              alt=""
+              alt={title}
               class="w-full object-cover"
               style="max-height:22rem;"
             />

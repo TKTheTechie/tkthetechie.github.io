@@ -30,11 +30,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # The site is served from the root of the custom domain (tkthetechie.io),
+      # so no base path: a repo-name prefix breaks route matching and canonicals.
       - name: Build site
-        env:
-          BASE_PATH: '/${{ github.event.repository.name }}'
-        run: |
-          npm run build
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

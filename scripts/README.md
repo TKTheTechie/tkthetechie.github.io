@@ -53,3 +53,10 @@ date: "1/2/2026"
 ### Integration
 
 The script is automatically run before each build via the `build` and `build:gh-pages` npm scripts, ensuring the sitemap is always up-to-date when deploying.
+## generate-redirects.js
+
+Runs after `vite build` (wired into `npm run build`). For each entry in
+`src/lib/data/redirects.json` it writes a small HTML page into `build/` with a
+canonical link and an instant meta refresh to the new URL. This is how legacy
+WordPress-era URLs (`/<slug>/`) reach `/blog/<slug>` on GitHub Pages, which has
+no server-side redirects.

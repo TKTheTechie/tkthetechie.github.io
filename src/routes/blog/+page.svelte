@@ -1,39 +1,55 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { page } from '$app/stores';
   import { reveal, tilt } from '$lib/actions/motion';
+  import Seo from '$lib/components/Seo.svelte';
+  import { SITE_URL, AUTHOR_NAME } from '$lib/config/site';
+  import type { Post } from '$lib/posts';
+  import type { PageData } from './$types';
 
-  type Post = {
-    path: string;
-    meta?: { title?: string; date?: string; category?: string; headerImage?: string | null };
-  };
+  export let data: PageData;
 
-  let posts: Post[] = [];
-  let loading = true;
+  /* Posts come from the blog layout load, so every card is in the prerendered HTML. */
+  $: posts = (data.posts ?? []) as Post[];
   let searchTerm = '';
   let selectedCategory = 'all';
-  let categories: string[] = [];
 
-  onMount(async () => {
-    try {
-      const response = await fetch('/blog/api/posts');
-      const data = response.ok ? await response.json() : [];
-      posts = Array.isArray(data) ? data : [];
-      const unique = new Set<string>();
-      for (const post of posts) {
-        for (const c of (post.meta?.category ?? '').split(',')) {
-          const name = c.trim();
-          if (name) unique.add(name);
-        }
+  $: categories = (() => {
+    const unique = new Set<string>();
+    for (const post of posts) {
+      for (const c of (post.meta?.category ?? '').split(',')) {
+        const name = c.trim();
+        if (name) unique.add(name);
       }
-      categories = ['all', ...Array.from(unique).sort()];
-    } catch (error) {
-      console.error('Error fetching blog posts:', error);
-      posts = [];
-      categories = ['all'];
-    } finally {
-      loading = false;
     }
+    return ['all', ...Array.from(unique).sort()];
+  })();
+
+  // Honour ?search= so the site's SearchAction structured data is real.
+  onMount(() => {
+    const q = $page.url.searchParams.get('search');
+    if (q) searchTerm = q;
   });
+
+  const DESCRIPTION =
+    'Technical blog posts on event-driven architecture, agentic AI, and engineering leadership by Thomas Kunnumpurath, VP of Systems Engineering at Solace.';
+  $: blogSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    '@id': `${SITE_URL}/blog#blog`,
+    name: 'Thomas Kunnumpurath Technical Blog',
+    url: `${SITE_URL}/blog`,
+    description: DESCRIPTION,
+    inLanguage: 'en-US',
+    author: { '@type': 'Person', '@id': `${SITE_URL}/#person`, name: AUTHOR_NAME, url: SITE_URL },
+    publisher: { '@type': 'Person', '@id': `${SITE_URL}/#person`, name: AUTHOR_NAME },
+    blogPost: posts.slice(0, 20).map((post) => ({
+      '@type': 'BlogPosting',
+      headline: post.meta.title,
+      url: `${SITE_URL}${post.path}`,
+      datePublished: post.meta.dateIso
+    }))
+  };
 
   const formatDate = (value?: string) =>
     new Date(value ?? Date.now()).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -81,39 +97,12 @@
   $: grid = featured ? filteredPosts.slice(1) : filteredPosts;
 </script>
 
-<svelte:head>
-  <title>Blog - Thomas Kunnumpurath | Technical Insights & Tutorials</title>
-  <meta name="description" content="Technical blog posts on event-driven architecture, modern development practices, and emerging technologies by Thomas Kunnumpurath." />
-  <meta name="keywords" content="Event Driven Architecture, Technical Blog, Software Engineering, Microservices, Cloud Architecture, Pre Sales Engineering, Solutions Architecture, Financial Technology, Thomas Kunnumpurath" />
-  <meta name="author" content="Thomas Kunnumpurath" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://tkthetechie.io/blog/" />
-
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://tkthetechie.io/blog/" />
-  <meta property="og:title" content="Technical Blog - Thomas Kunnumpurath" />
-  <meta property="og:description" content="Technical blog posts on event-driven architecture, modern development practices, and emerging technologies." />
-  <meta property="og:image" content="https://tkthetechie.io/profile-pic.png" />
-
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://tkthetechie.io/blog/" />
-  <meta property="twitter:title" content="Technical Blog - Thomas Kunnumpurath" />
-  <meta property="twitter:description" content="Technical blog posts on event-driven architecture, modern development practices, and emerging technologies." />
-  <meta property="twitter:image" content="https://tkthetechie.io/profile-pic.png" />
-
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Blog",
-      "name": "Thomas Kunnumpurath Technical Blog",
-      "url": "https://tkthetechie.io/blog/",
-      "description": "Technical blog posts on event-driven architecture, modern development practices, and emerging technologies",
-      "author": { "@type": "Person", "name": "Thomas Kunnumpurath", "url": "https://tkthetechie.io" },
-      "publisher": { "@type": "Person", "name": "Thomas Kunnumpurath" },
-      "inLanguage": "en-US"
-    }
-  </script>
-</svelte:head>
+<Seo
+  title="Blog - Thomas Kunnumpurath | Event-Driven Architecture, Agentic AI & Engineering Leadership"
+  description={DESCRIPTION}
+  path="/blog"
+  jsonld={blogSchema}
+/>
 
 <!-- ---------------- masthead ---------------- -->
 <header class="relative isolate overflow-hidden pt-32 pb-16 md:pt-40 md:pb-20" style="background-color:#04070e;">
@@ -160,167 +149,152 @@
 <div class="relative py-14 md:py-20" style="background-color:var(--surface-0);">
   <div class="container-max section-padding">
     <div class="mx-auto max-w-6xl">
-      {#if loading}
-        <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {#each Array(6) as _, i}
-            <div class="glass-effect animate-pulse overflow-hidden rounded-2xl" style="animation-delay:{i * 120}ms;">
-              <div class="h-44" style="background-color:var(--surface-1);"></div>
-              <div class="space-y-3 p-6">
-                <div class="h-3 w-24 rounded-full" style="background-color:var(--surface-1);"></div>
-                <div class="h-4 w-full rounded-full" style="background-color:var(--surface-1);"></div>
-                <div class="h-4 w-2/3 rounded-full" style="background-color:var(--surface-1);"></div>
-              </div>
-            </div>
-          {/each}
+      <!-- ---------- search + filter ---------- -->
+      <div class="glass-effect sticky top-[76px] z-20 mb-10 rounded-2xl p-3 md:p-4" use:reveal={{ y: 16 }}>
+        <div class="flex flex-col gap-3">
+          <label class="relative block w-full md:max-w-md">
+            <span class="sr-only">Search posts</span>
+            <svg class="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" style="color:var(--text-3);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-3.6-3.6" stroke-linecap="round" />
+            </svg>
+            <input
+              type="search"
+              bind:value={searchTerm}
+              placeholder="Search {posts.length} posts…"
+              class="w-full rounded-xl py-2.5 pr-3 pl-10 text-[14px]"
+            />
+          </label>
+
+          <div class="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
+            {#each categories as category}
+              {@const active = selectedCategory === category}
+              {@const sw = swatch(category)}
+              <button
+                on:click={() => (selectedCategory = category)}
+                class="chip !py-1.5"
+                style={active
+                  ? `background-color:${category === 'all' ? 'rgb(14 165 233 / .16)' : sw.bg};color:${category === 'all' ? 'var(--color-primary-500)' : sw.fg};border-color:${category === 'all' ? 'rgb(14 165 233 / .4)' : sw.ring};`
+                  : ''}
+                aria-pressed={active}
+              >
+                {category === 'all' ? 'All' : category}
+              </button>
+            {/each}
+          </div>
+        </div>
+        <p class="font-mono mt-3 px-1 text-[11px] tracking-wide" style="color:var(--text-3);">
+          {filteredPosts.length} {filteredPosts.length === 1 ? 'post' : 'posts'}
+          {#if selectedCategory !== 'all'}· {selectedCategory}{/if}
+          {#if searchTerm}· matching “{searchTerm}”{/if}
+        </p>
+      </div>
+
+      {#if filteredPosts.length === 0}
+        <div class="py-20 text-center" use:reveal>
+          <span class="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-2xl" style="background-image:linear-gradient(135deg,var(--color-primary-500),var(--color-accent-500));">
+            <svg class="h-7 w-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-3.6-3.6" stroke-linecap="round" />
+            </svg>
+          </span>
+          <h3 class="font-display mb-2 text-xl font-bold" style="color:var(--text-1);">Nothing matches</h3>
+          <p style="color:var(--text-2);">Try a different search or clear the category filter.</p>
+          <button class="btn btn-ghost spotlight mt-6" on:click={() => { searchTerm = ''; selectedCategory = 'all'; }}>
+            <span class="relative z-10">Show all posts</span>
+          </button>
         </div>
       {:else}
-        <!-- ---------- search + filter ---------- -->
-        <div class="glass-effect sticky top-[76px] z-20 mb-10 rounded-2xl p-3 md:p-4" use:reveal={{ y: 16 }}>
-          <div class="flex flex-col gap-3">
-            <label class="relative block w-full md:max-w-md">
-              <span class="sr-only">Search posts</span>
-              <svg class="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" style="color:var(--text-3);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="7" />
-                <path d="M20 20l-3.6-3.6" stroke-linecap="round" />
-              </svg>
-              <input
-                type="search"
-                bind:value={searchTerm}
-                placeholder="Search {posts.length} posts…"
-                class="w-full rounded-xl py-2.5 pr-3 pl-10 text-[14px]"
-              />
-            </label>
-
-            <div class="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
-              {#each categories as category}
-                {@const active = selectedCategory === category}
-                {@const sw = swatch(category)}
-                <button
-                  on:click={() => (selectedCategory = category)}
-                  class="chip !py-1.5"
-                  style={active
-                    ? `background-color:${category === 'all' ? 'rgb(14 165 233 / .16)' : sw.bg};color:${category === 'all' ? 'var(--color-primary-500)' : sw.fg};border-color:${category === 'all' ? 'rgb(14 165 233 / .4)' : sw.ring};`
-                    : ''}
-                  aria-pressed={active}
-                >
-                  {category === 'all' ? 'All' : category}
-                </button>
-              {/each}
-            </div>
-          </div>
-          <p class="font-mono mt-3 px-1 text-[11px] tracking-wide" style="color:var(--text-3);">
-            {filteredPosts.length} {filteredPosts.length === 1 ? 'post' : 'posts'}
-            {#if selectedCategory !== 'all'}· {selectedCategory}{/if}
-            {#if searchTerm}· matching “{searchTerm}”{/if}
-          </p>
-        </div>
-
-        {#if filteredPosts.length === 0}
-          <div class="py-20 text-center" use:reveal>
-            <span class="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-2xl" style="background-image:linear-gradient(135deg,var(--color-primary-500),var(--color-accent-500));">
-              <svg class="h-7 w-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="7" />
-                <path d="M20 20l-3.6-3.6" stroke-linecap="round" />
-              </svg>
-            </span>
-            <h3 class="font-display mb-2 text-xl font-bold" style="color:var(--text-1);">Nothing matches</h3>
-            <p style="color:var(--text-2);">Try a different search or clear the category filter.</p>
-            <button class="btn btn-ghost spotlight mt-6" on:click={() => { searchTerm = ''; selectedCategory = 'all'; }}>
-              <span class="relative z-10">Show all posts</span>
-            </button>
-          </div>
-        {:else}
-          <div class="perspective grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            <!-- ---------- feature ---------- -->
-            {#if featured}
-              {@const cat = swatch(featured.meta?.category)}
-              <a
-                href={featured.path}
-                class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl md:col-span-2 lg:col-span-3"
-                use:tilt={{ max: 3, lift: 6, scale: 1.005 }}
-                use:reveal={{ y: 30, rotate: -12 }}
-              >
-                <div class="relative h-64 overflow-hidden sm:h-80 lg:h-[26rem]" style="background-color:var(--surface-1);">
-                  {#if featured.meta?.headerImage}
-                    <img
-                      src="/images/blog/headers/{featured.meta.headerImage}"
-                      alt=""
-                      class="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]"
-                      style="transition-timing-function:cubic-bezier(.16,1,.3,1);"
-                    />
-                  {/if}
-                  <div class="pointer-events-none absolute inset-0" style="background:linear-gradient(to top,rgb(5 8 15 / .94) 4%,rgb(5 8 15 / .4) 45%,transparent 75%);"></div>
-                  <div class="absolute inset-x-0 bottom-0 p-6 sm:p-8 lg:p-10">
-                    <div class="mb-3 flex flex-wrap items-center gap-2.5">
-                      <span class="font-mono rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-wide backdrop-blur-md" style="background-color:{cat.bg};color:{cat.fg};border:1px solid {cat.ring};">
-                        {featured.meta?.category ?? 'Blog'}
-                      </span>
-                      <span class="font-mono text-[11px] text-slate-300">{formatDate(featured.meta?.date)}</span>
-                      <span class="font-mono text-[11px] text-slate-500">· Latest</span>
-                    </div>
-                    <h2 class="font-display max-w-3xl text-2xl leading-tight font-bold text-white sm:text-3xl lg:text-[2.4rem]">
-                      {featured.meta?.title ?? 'Untitled'}
-                    </h2>
-                    <span class="font-display mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-primary-300">
-                      Read the post
-                      <svg class="h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5-5 5M6 12h12" />
-                      </svg>
+        <div class="perspective grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <!-- ---------- feature ---------- -->
+          {#if featured}
+            {@const cat = swatch(featured.meta?.category)}
+            <a
+              href={featured.path}
+              class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl md:col-span-2 lg:col-span-3"
+              use:tilt={{ max: 3, lift: 6, scale: 1.005 }}
+              use:reveal={{ y: 30, rotate: -12 }}
+            >
+              <div class="relative h-64 overflow-hidden sm:h-80 lg:h-[26rem]" style="background-color:var(--surface-1);">
+                {#if featured.meta?.headerImage}
+                  <img
+                    src="/images/blog/headers/{featured.meta.headerImage}"
+                    alt={featured.meta?.title ?? ''}
+                    class="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.05]"
+                    style="transition-timing-function:cubic-bezier(.16,1,.3,1);"
+                  />
+                {/if}
+                <div class="pointer-events-none absolute inset-0" style="background:linear-gradient(to top,rgb(5 8 15 / .94) 4%,rgb(5 8 15 / .4) 45%,transparent 75%);"></div>
+                <div class="absolute inset-x-0 bottom-0 p-6 sm:p-8 lg:p-10">
+                  <div class="mb-3 flex flex-wrap items-center gap-2.5">
+                    <span class="font-mono rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-wide backdrop-blur-md" style="background-color:{cat.bg};color:{cat.fg};border:1px solid {cat.ring};">
+                      {featured.meta?.category ?? 'Blog'}
                     </span>
+                    <span class="font-mono text-[11px] text-slate-300">{formatDate(featured.meta?.date)}</span>
+                    <span class="font-mono text-[11px] text-slate-500">· Latest</span>
                   </div>
-                </div>
-              </a>
-            {/if}
-
-            <!-- ---------- grid ---------- -->
-            {#each grid as post, i (post.path)}
-              {@const cat = swatch(post.meta?.category)}
-              <a
-                href={post.path}
-                class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl"
-                use:tilt={{ max: 7, lift: 8 }}
-                use:reveal={{ y: 28, delay: (i % 3) * 80, rotate: -16 }}
-              >
-                <div class="relative h-44 overflow-hidden" style="background-color:var(--surface-1);">
-                  {#if post.meta?.headerImage}
-                    <img
-                      src="/images/blog/headers/{post.meta.headerImage}"
-                      alt=""
-                      class="h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.07]"
-                      style="transition-timing-function:cubic-bezier(.16,1,.3,1);"
-                      loading="lazy"
-                    />
-                  {:else}
-                    <div class="grid h-full w-full place-items-center">
-                      <span class="grid h-12 w-12 place-items-center rounded-xl" style="background-image:linear-gradient(135deg,var(--color-primary-500),var(--color-accent-500));">
-                        <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13" />
-                        </svg>
-                      </span>
-                    </div>
-                  {/if}
-                  <div class="pointer-events-none absolute inset-0" style="background:linear-gradient(to top,rgb(5 8 15 / .7),transparent 62%);"></div>
-                  <span class="font-mono absolute bottom-3 left-3.5 rounded-full px-2.5 py-1 text-[10px] font-semibold backdrop-blur-md" style="background-color:{cat.bg};color:{cat.fg};border:1px solid {cat.ring};">
-                    {post.meta?.category ?? 'Blog'}
-                  </span>
-                </div>
-
-                <div class="flex flex-1 flex-col p-5">
-                  <div class="font-mono mb-2.5 text-[10.5px]" style="color:var(--text-3);">{formatDate(post.meta?.date)}</div>
-                  <h2 class="font-display clamp-3 text-[15.5px] leading-snug font-bold" style="color:var(--text-1);">
-                    {post.meta?.title ?? 'Untitled'}
+                  <h2 class="font-display max-w-3xl text-2xl leading-tight font-bold text-white sm:text-3xl lg:text-[2.4rem]">
+                    {featured.meta?.title ?? 'Untitled'}
                   </h2>
-                  <span class="mt-auto flex items-center gap-1.5 pt-4 font-mono text-[11px]" style="color:var(--color-primary-500);">
-                    Read
-                    <svg class="h-3 w-3 transition-transform duration-500 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+                  <span class="font-display mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-primary-300">
+                    Read the post
+                    <svg class="h-3.5 w-3.5 transition-transform duration-500 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5-5 5M6 12h12" />
                     </svg>
                   </span>
                 </div>
-              </a>
-            {/each}
-          </div>
-        {/if}
+              </div>
+            </a>
+          {/if}
+
+          <!-- ---------- grid ---------- -->
+          {#each grid as post, i (post.path)}
+            {@const cat = swatch(post.meta?.category)}
+            <a
+              href={post.path}
+              class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl"
+              use:tilt={{ max: 7, lift: 8 }}
+              use:reveal={{ y: 28, delay: (i % 3) * 80, rotate: -16 }}
+            >
+              <div class="relative h-44 overflow-hidden" style="background-color:var(--surface-1);">
+                {#if post.meta?.headerImage}
+                  <img
+                    src="/images/blog/headers/{post.meta.headerImage}"
+                    alt={post.meta?.title ?? ''}
+                    class="h-full w-full object-cover transition-transform duration-[900ms] group-hover:scale-[1.07]"
+                    style="transition-timing-function:cubic-bezier(.16,1,.3,1);"
+                    loading="lazy"
+                  />
+                {:else}
+                  <div class="grid h-full w-full place-items-center">
+                    <span class="grid h-12 w-12 place-items-center rounded-xl" style="background-image:linear-gradient(135deg,var(--color-primary-500),var(--color-accent-500));">
+                      <svg class="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13" />
+                      </svg>
+                    </span>
+                  </div>
+                {/if}
+                <div class="pointer-events-none absolute inset-0" style="background:linear-gradient(to top,rgb(5 8 15 / .7),transparent 62%);"></div>
+                <span class="font-mono absolute bottom-3 left-3.5 rounded-full px-2.5 py-1 text-[10px] font-semibold backdrop-blur-md" style="background-color:{cat.bg};color:{cat.fg};border:1px solid {cat.ring};">
+                  {post.meta?.category ?? 'Blog'}
+                </span>
+              </div>
+
+              <div class="flex flex-1 flex-col p-5">
+                <div class="font-mono mb-2.5 text-[10.5px]" style="color:var(--text-3);">{formatDate(post.meta?.date)}</div>
+                <h2 class="font-display clamp-3 text-[15.5px] leading-snug font-bold" style="color:var(--text-1);">
+                  {post.meta?.title ?? 'Untitled'}
+                </h2>
+                <span class="mt-auto flex items-center gap-1.5 pt-4 font-mono text-[11px]" style="color:var(--color-primary-500);">
+                  Read
+                  <svg class="h-3 w-3 transition-transform duration-500 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5-5 5M6 12h12" />
+                  </svg>
+                </span>
+              </div>
+            </a>
+          {/each}
+        </div>
       {/if}
 
       <div class="mt-16 flex justify-center">

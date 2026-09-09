@@ -1,0 +1,25 @@
+{
+  "_comment": "Legacy URLs (mostly from the WordPress site) -> current paths. Rendered as meta-refresh pages by scripts/generate-redirects.js because GitHub Pages has no server-side redirects.",
+  "redirects": [
+    { "from": "/the-importance-of-message-settlement-for-event-driven-architectures/", "to": "/blog/the-importance-of-message-settlement-for-event-driven-architectures" },
+    { "from": "/event-driven-zinc-search-logging/", "to": "/blog/event-driven-zinc-search-logging" },
+    { "from": "/using-graphql-to-query-the-state-of-your-event-mesh/", "to": "/blog/using-graphql-to-query-the-state-of-your-event-mesh" },
+    { "from": "/a-scalable-websocket-fanout-solution-for-your-high-performance-kafka-deployment/", "to": "/blog/a-scalable-websocket-fanout-solution-for-your-high-performance-kafka-deployment" },
+    { "from": "/how-to-use-rust-webassembly-javascript-and-pubsub-to-run-native-apps-in-your-browser/", "to": "/blog/how-to-use-rust-webassembly-javascript-and-pubsub-to-run-native-apps-in-your-browser" },
+    { "from": "/linking-vuex-state-machines-across-your-vue-client-applications-with-solace-pubsub/", "to": "/blog/linking-vuex-state-machines-across-your-vue-client-applications-with-solace-pubsub" },
+    { "from": "/build-a-proximity-detection-system-with-a-raspberry-pi-solace-pubsub-and-javascript/", "to": "/blog/build-a-proximity-detection-system-with-a-raspberry-pi-solace-pubsub-and-javascript" },
+    { "from": "/creating-an-openfin-event-mesh-across-the-hybrid-cloud/", "to": "/blog/creating-an-openfin-event-mesh-across-the-hybrid-cloud" },
+    { "from": "/openfin-apps-need-more-than-just-rest/", "to": "/blog/openfin-apps-need-more-than-just-rest" },
+    { "from": "/handling-openfin-inbound-events-from-the-hybrid-cloud/", "to": "/blog/handling-openfin-inbound-events-from-the-hybrid-cloud" },
+    { "from": "/rainbow-wallet-bringing-ethereum-to-the-masses/", "to": "/blog/rainbow-wallet-bringing-ethereum-to-the-masses" },
+    { "from": "/event-driven-elixir/", "to": "/blog/event-driven-elixir" },
+    { "from": "/solace-pubsub-queue-redelivery-delayer/", "to": "/blog/solace-pubsub-queue-redelivery-delayer" },
+    { "from": "/event-driven-machine-learning/", "to": "/blog/event-driven-machine-learning" },
+    { "from": "/why-the-pyth-network-needs-an-event-mesh/", "to": "/blog/why-the-pyth-network-needs-an-event-mesh" },
+    { "from": "/blog-2/", "to": "/blog" },
+    { "from": "/about-me/", "to": "/#about" },
+    { "from": "/resume/", "to": "/#experience" },
+    { "from": "/feed/", "to": "/rss.xml" },
+    { "from": "/blog/migrating-from-wordpress-to-a-svelte-powered-markdown-blog.md", "to": "/blog/migrating-from-wordpress-to-a-svelte-powered-markdown-blog" }
+  ]
+}

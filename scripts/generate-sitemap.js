@@ -121,7 +121,7 @@ const scanBlogPosts = () => {
           lastmod,
           priority,
           changefreq,
-          url: `${SITE_URL}/blog/${slug}/`
+          url: `${SITE_URL}/blog/${slug}`
         });
       }
     }
@@ -140,58 +140,23 @@ const generateSitemap = () => {
   
   console.log(`Found ${blogPosts.length} blog posts`);
   
+  /*
+    Only real, crawlable URLs belong here: no #fragments (search engines drop
+    them) and no trailing slashes (adapter-static emits blog/<slug>.html, and
+    GitHub Pages 404s the slash form). Index pages take the newest post's date
+    so lastmod only moves when content does.
+  */
+  const newest = blogPosts.length > 0 ? blogPosts[0].lastmod : currentDate;
   const staticUrls = [
     {
       loc: `${SITE_URL}/`,
-      lastmod: currentDate,
+      lastmod: newest,
       changefreq: 'weekly',
       priority: '1.0'
     },
     {
-      loc: `${SITE_URL}/#home`,
-      lastmod: currentDate,
-      changefreq: 'weekly',
-      priority: '0.9'
-    },
-    {
-      loc: `${SITE_URL}/#about`,
-      lastmod: currentDate,
-      changefreq: 'weekly',
-      priority: '0.9'
-    },
-    {
-      loc: `${SITE_URL}/#experience`,
-      lastmod: currentDate,
-      changefreq: 'weekly',
-      priority: '0.9'
-    },
-    {
-      loc: `${SITE_URL}/#skills`,
-      lastmod: currentDate,
-      changefreq: 'weekly',
-      priority: '0.9'
-    },
-    {
-      loc: `${SITE_URL}/#portfolio`,
-      lastmod: currentDate,
-      changefreq: 'weekly',
-      priority: '0.9'
-    },
-    {
-      loc: `${SITE_URL}/#credentials`,
-      lastmod: currentDate,
-      changefreq: 'weekly',
-      priority: '0.9'
-    },
-    {
-      loc: `${SITE_URL}/#contact`,
-      lastmod: currentDate,
-      changefreq: 'weekly',
-      priority: '0.9'
-    },
-    {
-      loc: `${SITE_URL}/blog/`,
-      lastmod: blogPosts.length > 0 ? blogPosts[0].lastmod : currentDate,
+      loc: `${SITE_URL}/blog`,
+      lastmod: newest,
       changefreq: 'weekly',
       priority: '0.8'
     }
@@ -199,7 +164,7 @@ const generateSitemap = () => {
   
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Main Page with Navigation Sections -->`;
+  <!-- Index pages -->`;
 
   // Add static URLs
   for (const url of staticUrls) {

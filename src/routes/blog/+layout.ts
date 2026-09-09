@@ -1,34 +1,25 @@
 import type { LayoutLoad } from './$types';
+import type { Post } from '$lib/posts';
 
-export const load: LayoutLoad = async ({ url, route, fetch }) => {
-  // Check if this is a specific blog post
-  const isBlogPost = route.id?.includes('/blog/') && route.id !== '/blog';
-  
-  if (isBlogPost) {
-    try {
-      // Extract blog post name from URL
-      const pathParts = url.pathname.split('/');
-      const postName = pathParts[pathParts.length - 1];
-      
-      // Try to get the blog post metadata from the API
-      const response = await fetch(`/blog/api/posts`);
-      if (response.ok) {
-        const posts = await response.json();
-        const currentPost = posts.find((post: any) => post.path === url.pathname);
-        
-        if (currentPost) {
-          return {
-            metadata: currentPost.meta,
-            isBlogPost: true
-          };
-        }
-      }
-    } catch (error) {
-      console.error('Error loading blog post metadata:', error);
-    }
+/*
+  Every blog route gets the post index (the listing renders from it), and a
+  post route additionally gets its own metadata. Matching uses route.id, which
+  is the route path independent of any base path or trailing slash.
+*/
+export const load: LayoutLoad = async ({ route, fetch }) => {
+  let posts: Post[] = [];
+  try {
+    const response = await fetch('/blog/api/posts');
+    if (response.ok) posts = await response.json();
+  } catch (error) {
+    console.error('Error loading blog posts:', error);
   }
-  
+
+  const current = route.id && route.id !== '/blog' ? posts.find((post) => post.path === route.id) : undefined;
+
   return {
-    isBlogPost: false
+    posts,
+    metadata: current?.meta,
+    isBlogPost: Boolean(current)
   };
 };

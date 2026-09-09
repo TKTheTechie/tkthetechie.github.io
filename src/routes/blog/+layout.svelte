@@ -23,11 +23,14 @@
 <div class="blog-content">
   {#if isBlogPost && metadata.title}
     <!-- Use BlogLayout for individual blog posts -->
-    <BlogLayout 
+    <BlogLayout
       title={metadata.title}
       date={metadata.date}
+      dateIso={metadata.dateIso || ''}
+      description={metadata.description || ''}
       category={metadata.category || 'Blog'}
       headerImage={metadata.headerImage || ''}
+      path={$page.url.pathname}
     >
       <slot />
     </BlogLayout>
