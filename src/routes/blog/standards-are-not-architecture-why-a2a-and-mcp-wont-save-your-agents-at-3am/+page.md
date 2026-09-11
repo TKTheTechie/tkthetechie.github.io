@@ -1,60 +1,66 @@
 ---
 author: Thomas Kunnumpurath
 title: "Standards Are Not Architecture: Why A2A and MCP Won't Save Your Agents at 3am"
-date: 9/4/2026
+date: 9/11/2026
 category: "AI/ML"
 headerImage: standards-are-not-architecture-why-a2a-and-mcp-wont-save-your-agents-at-3am.png
 layout: blog
 ---
 
-A2A hit v1.0 this year. MCP crossed a hundred million monthly downloads and moved into the Linux Foundation. And last quarter, I walked into a customer's war room where their multi-agent system had fallen over at 2am because one agent published a task completion event and nothing underneath guaranteed the three downstream agents actually received it.
+A2A hit v1.0 this year with signed Agent Cards and over 150 organizations behind it. MCP crossed a hundred million monthly downloads and landed in the Linux Foundation. And I still walked into a customer meeting this quarter — a major airline, agents coordinating crew scheduling and gate assignments — whose multi-agent system fell over in production because nothing underneath it guaranteed delivery.
 
-The postmortem was painful to watch — not because the team was incompetent, but because they'd done everything the ecosystem told them to do. They adopted MCP for tool integration. They used A2A for cross-agent communication. They had signed Agent Cards. They had clean schemas. And none of it mattered, because standards solved the syntax of agent interoperability while leaving the semantics and the operations completely unaddressed.
+The agents were fine. The models were fine. The protocols were fine. The problem was that nobody had asked what happens when Agent B is offline for ninety seconds while Agent A is still emitting events that determine whether a flight gets a gate crew.
 
-I've seen this movie before. I watched it in 2008 at Deutsche Bank, and again in 2016 from a middleware seat. The plot is always the same: the industry standardizes the interface, declares victory, and then spends the next five years learning that the hard problems were never about the interface.
+The answer, it turned out, was data loss. Silent, unrecoverable data loss.
 
-## The Gap Between Protocol and Production
+## The Syntax-Semantics Gap
 
-Here's what MCP and A2A actually give you: a common way for agents to discover each other's capabilities and exchange structured requests. That's genuinely valuable. Wrapping internal capabilities as MCP servers is probably the highest-return integration work most teams can do right now.
+MCP and A2A solved the syntax of agent interoperability. That's not a small thing — eighteen months ago we didn't even have a common way for agents to discover each other's capabilities, and now we have signed Agent Cards and a standardized tool-serving protocol that works across frameworks. Real progress.
 
-But here's what they don't give you: delivery guarantees, message ordering, backpressure, replay, audit trails, lineage tracking, or policy enforcement. MCP and A2A are stateless protocols. They assume the transport layer beneath them handles reliability. And in most deployments I've seen this year, that transport layer is... HTTP. Sometimes with retries. Sometimes without.
+But here's what the protocol specs don't give you: audit trails. Delivery guarantees. Backpressure when a downstream agent can't keep up. Replay when something fails at 3am and no human is watching. Policy enforcement that determines which agents can talk to which other agents about which topics.
 
-Independent security scans in 2026 found thousands of MCP servers exposed to the public internet with no authentication. That's not a protocol failure — it's what happens when adoption outruns the layer that's supposed to govern it. The protocol designers didn't ignore security; they assumed someone else would handle it. The same assumption is being made about delivery guarantees, and it will bite harder.
+These aren't edge cases. These are the exact requirements that separate a demo from a deployment, and I've watched this movie before.
 
-## What Microservices Already Taught Us
+When I ran enterprise messaging middleware at Deutsche Bank, we supported trading systems processing millions of messages per second. The protocols were never the hard part. TIBCO Rendezvous had a perfectly functional wire protocol. The hard part was everything around the protocol: guaranteed ordering across a WAN, topic-level access control, disaster recovery with zero message loss, and the operational tooling that let you diagnose at 2am why a specific message didn't reach a specific consumer in Tokyo.
 
-In 2016, I was running enterprise messaging middleware at Deutsche Bank when the microservices wave hit. The pattern was identical: teams adopted REST as the interface standard, declared their services decoupled, and then discovered that synchronous HTTP calls between thirty microservices created a distributed monolith that was harder to debug than the monolith it replaced.
-
-The fix wasn't abandoning REST. It was putting an event-driven backbone underneath it — something that could handle guaranteed delivery, fan-out, replay, and temporal decoupling. The services kept their REST interfaces for synchronous queries, but the critical state changes flowed through a broker that could survive a node failure without losing data.
-
-Multi-agent systems are making the same architectural mistake, just with better marketing. An agent that calls another agent over HTTP and waits for a response isn't decoupled. It's a distributed monolith with an AI label. The agent that publishes an event to a topic and trusts the infrastructure to deliver it — that agent can run at 3am without a human babysitting the call chain.
+Agent-to-agent communication in 2026 has the same gap. MCP and A2A define how agents talk. They don't define what happens when the conversation breaks.
 
 ## What I Found Testing LangGraph on AWS
 
-I spent a week earlier this year testing LangGraph and LangSmith deployment patterns on AWS — BYOC on EKS, Fargate configurations, Bedrock AgentCore integration — specifically looking for the point where an agent framework needs an event mesh underneath it.
+I spent a week this year deploying LangGraph and LangSmith across several AWS patterns — BYOC, EKS, Fargate, Bedrock AgentCore — specifically looking for the point where an agent orchestration framework needs an event mesh underneath it. I expected it to take a while to find the cracks. It didn't.
 
-I found it faster than I expected.
+The moment you have more than three agents with different lifecycle requirements — one agent that needs to restart without losing state, another that needs to scale horizontally under load, a third owned by a different team with its own deployment cadence — the orchestration framework starts creaking. LangGraph is excellent at defining agent graphs. It was not designed to be a message broker, a delivery guarantee layer, or a WAN-aware routing fabric. Why would it be? That's not its job.
 
-The breaking point isn't scale. LangGraph handles single-agent orchestration well enough. The breaking point is what happens when Agent A's output is consumed by Agents B, C, and D, each owned by different teams with different SLAs, and Agent C is temporarily down for redeployment. In a synchronous call chain, you get a failure. In a retry-based system, you get duplicate processing. In an event mesh with guaranteed delivery, persistent queues, and dynamic topic routing, Agent C picks up exactly where it left off when it comes back online.
+This is the same wall microservices hit around 2015. The framework (Spring Boot, Express, whatever) handled the application logic. But the moment you had fifty services that needed to communicate reliably across failure domains, you needed middleware. Not because the framework was bad, but because reliable distributed communication is a different problem than application orchestration.
 
-This is the same problem Solace solved for trading systems fifteen years ago. The agents are new. The infrastructure problem is not.
+With Solace Agent Mesh — now in its third generation with native A2A and MCP support and a Universal A2A Agent Host built on Google's ADK — I've watched customers adopt it for exactly this reason. Not because their agent framework doesn't work, but because their agent framework works right up until the moment an agent goes down and the framework has no opinion about what happens to the messages that were in flight.
 
-## The Honest Framework for What You Actually Need
+## The Advice You Wouldn't Expect From Me
 
-Here's advice you might not expect from a VP at a company that sells an agent mesh: most of you should not be building a multi-agent system yet.
+Here's the part where I'm supposed to tell you to build a full multi-agent mesh right now. I'm not going to do that.
 
-Adopt MCP now. Wrap your internal APIs, databases, and tools as MCP servers. This is high-return, low-risk work that makes your single-agent implementations dramatically more capable.
+The emerging consensus among people actually shipping — and I count myself in that group after a year of Solace Agent Mesh deployments across airlines, banking, manufacturing, and IoT — is this: adopt MCP aggressively. Wrapping your internal capabilities as MCP servers is the highest-return integration work available to most teams right now. It's straightforward, the ecosystem is mature, and you get immediate value.
 
-Adopt A2A only when you genuinely have agents crossing team, framework, or organizational boundaries. If all your agents are in the same codebase, running in the same framework, owned by the same team — you don't need an interoperability protocol. You need function calls.
+But adopt A2A and multi-agent orchestration only when you genuinely have agents crossing team, framework, or organizational boundaries. If your "multi-agent system" is three agents built by one team in one framework deployed in one region, you have a single-agent system wearing a trench coat. You're buying complexity without buying capability.
 
-Add an event mesh when any of these are true: agents produce events consumed by multiple downstream agents with different SLAs; agent communication crosses network boundaries or cloud regions; you need replay capability for debugging or audit; you need guaranteed delivery because a missed event means a missed trade, a missed flight connection, or a compliance violation; or you're running agents that must operate autonomously overnight without human supervision.
+I watched this exact pattern with microservices in 2016 from a middleware seat. Teams decomposed monoliths into fifty services because the conference slides said to, then spent two years building the operational infrastructure that a monolith gave them for free. The teams that won were the ones that decomposed along genuine organizational boundaries — different teams, different deployment cadences, different failure domains — and kept everything else simple.
 
-That last condition is the real litmus test. If your agent system requires a human to notice and fix failures, it's a demo. If it runs at 3am on a Saturday and you find out Monday morning that everything worked — that's production. And production requires infrastructure that the protocol layer alone does not provide.
+## The Three-Question Test
 
-## The Layer Nobody Wants to Talk About
+Before you add an event mesh beneath your agents, ask three questions:
 
-The agentic AI conversation in 2026 is dominated by models, frameworks, and protocols. The layer that actually determines whether your agents work in production — the delivery infrastructure, the audit trail, the backpressure mechanism, the replay capability — doesn't make for exciting keynotes.
+**1. What happens when an agent is unavailable for two minutes?** If the answer is "we lose messages and someone manually replays them," you need guaranteed delivery and you need it now. This is non-negotiable for any regulated industry — I've been through MiFID II and Dodd-Frank, and the regulators will eventually ask for the audit trail you didn't build.
 
-But I've spent twenty years on that layer. I ran it for a global bank processing millions of trades per second. I migrated it from TIBCO to Solace when the old infrastructure couldn't keep up. And I'm watching the same architectural gap open up in agentic AI that opened up in microservices a decade ago.
+**2. Do your agents cross trust or team boundaries?** If Agent A is built by your crew scheduling team and Agent B is built by your gate operations team, you need discovery, access control, and a topic namespace that both teams can reason about independently. A flat topic space will fail you here the same way Kafka's flat topic namespace fails at enterprise scale.
 
-The agents that survive production aren't the ones with the best models. They're the ones where someone asked the boring question: what happens when this message doesn't arrive? If your architecture doesn't have a confident answer to that, no protocol standard will save you at 3am.
+**3. Does your agent need the last fifty milliseconds of reality?** An LLM with stale context is a liability. If your agent is making operational decisions — adjusting prices, routing aircraft, managing risk — the interesting engineering question isn't which model to use. It's how that agent gets current state. That's a messaging problem.
+
+If you answered yes to any of these, the protocol layer alone won't save you. You need the operational layer beneath it: delivery guarantees, dynamic topic routing, WAN-aware replication, and the ability to replay any event for any agent at any time.
+
+## The Infrastructure Layer That Agents Will Demand
+
+The industry is going to learn what capital markets learned twenty years ago and what microservices learned ten years ago: the hardest part of distributed systems isn't the application logic or the communication protocol. It's the guarantees around the communication. What happens when things break. What happens when nobody's watching. What you can prove happened after the fact.
+
+Standards like MCP and A2A are necessary. They're not sufficient. The agents that actually run in production at 3am — the ones that handle crew scheduling disruptions, real-time risk calculations, manufacturing line adjustments — will be the ones with an infrastructure layer that treats message delivery as a guarantee, not a hope.
+
+That's not a Solace pitch. That's a lesson I learned the expensive way, at two in the morning, watching a trading system lose messages because someone assumed the protocol was the architecture.
