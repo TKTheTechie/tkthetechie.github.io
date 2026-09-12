@@ -67,19 +67,19 @@
     primary: {
       from: 'var(--color-primary-500)',
       to: 'var(--color-primary-300)',
-      tint: 'rgb(14 165 233 / .12)',
+      tint: 'rgb(93 120 35 / .12)',
       text: 'var(--color-primary-500)'
     },
     accent: {
       from: 'var(--color-accent-500)',
       to: 'var(--color-accent-300)',
-      tint: 'rgb(16 185 129 / .12)',
+      tint: 'rgb(92 129 61 / .12)',
       text: 'var(--color-accent-600)'
     },
     plasma: {
       from: 'var(--color-plasma-500)',
       to: 'var(--color-plasma-300)',
-      tint: 'rgb(139 92 246 / .12)',
+      tint: 'rgb(146 112 68 / .12)',
       text: 'var(--color-plasma-500)'
     }
   };
@@ -103,14 +103,14 @@
         eyebrow="Capabilities"
         subtitle="A skill set spanning technical leadership, architecture design, and business strategy, developed over 15+ years in the industry."
       >
-        Skills &amp; <span class="gradient-text">Expertise</span>
+        The tools.<br /><span class="gradient-text">The know-how.</span>
       </SectionHeading>
 
       <div class="perspective grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {#each skillCategories as category, i}
           {@const accent = ACCENTS[category.accent]}
           <article
-            class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl p-7"
+            class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-lg p-7"
             use:tilt={{ max: 6, lift: 7 }}
             use:reveal={{ delay: 60 + (i % 3) * 80 + Math.floor(i / 3) * 60, y: 34, rotate: -22 }}
           >

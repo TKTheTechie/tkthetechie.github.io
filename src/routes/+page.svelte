@@ -24,12 +24,14 @@
 />
 
 <Navigation />
-<Hero />
-<About />
-<ExperienceFromData />
-<Skills />
-<Portfolio />
-<Education />
-<Blog posts={data.posts} />
-<Contact />
+<div id="main-content" tabindex="-1">
+  <Hero />
+  <About />
+  <Portfolio />
+  <ExperienceFromData />
+  <Skills />
+  <Education />
+  <Blog posts={data.posts} />
+  <Contact />
+</div>
 <Footer />

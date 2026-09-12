@@ -1,332 +1,345 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, tick } from 'svelte';
+  import { page } from '$app/stores';
   import { darkMode } from '$lib/stores/theme';
   import { paletteOpen } from '$lib/stores/palette';
-  import { scrollToId } from '$lib/stores/scroll';
-
-  let isScrolled = false;
-  let isMobileMenuOpen = false;
-  let isDark = false;
-  let activeSection = 'home';
+  let scrolled = false;
+  let menuOpen = false;
+  let active = 'home';
   let progress = 0;
-  let onHome = true;
-
-  /** pixel geometry of the sliding active-pill */
-  let indicator = { left: 0, width: 0, ready: false };
-  /** the first placement snaps into position; only later moves slide */
-  let indicatorSettled = false;
-  let navList: HTMLElement;
-
-  darkMode.subscribe((value) => (isDark = value));
-
-  const navItems = [
-    { name: 'Home', id: 'home' },
-    { name: 'About', id: 'about' },
-    { name: 'Experience', id: 'experience' },
-    { name: 'Skills', id: 'skills' },
-    { name: 'Portfolio', id: 'portfolio' },
-    { name: 'Education', id: 'education' },
-    { name: 'Blog', id: 'blog' },
-    { name: 'Contact', id: 'contact' }
+  let menuButton: HTMLButtonElement;
+  let mobileMenu: HTMLDivElement;
+  const links = [
+    { label: 'About', id: 'about' },
+    { label: 'Work', id: 'portfolio' },
+    { label: 'Experience', id: 'experience' },
+    { label: 'Writing', id: 'blog' },
   ];
-
-  const moveIndicator = () => {
-    if (!navList) return;
-    const target = navList.querySelector<HTMLElement>(`[data-section="${activeSection}"]`);
-    if (!target) {
-      indicator = { ...indicator, ready: false };
-      return;
+  $: home = $page.url.pathname === '/';
+  $: prefix = home ? '' : '/';
+  async function toggleMenu() {
+    menuOpen = !menuOpen;
+    if (menuOpen) {
+      await tick();
+      mobileMenu.querySelector<HTMLAnchorElement>('a')?.focus();
     }
-    indicator = {
-      left: target.offsetLeft,
-      width: target.offsetWidth,
-      ready: true
-    };
-    if (!indicatorSettled) requestAnimationFrame(() => (indicatorSettled = true));
-  };
-
+  }
+  function escape(event: KeyboardEvent) {
+    if (event.key === 'Escape' && menuOpen) {
+      menuOpen = false;
+      menuButton.focus();
+    }
+  }
   onMount(() => {
-    onHome = window.location.pathname === '/' || window.location.pathname.endsWith('/index.html');
-
-    // Off the home page there are no sections to spy on, so highlight the
-    // route we're actually on instead of leaving "Home" lit.
-    if (!onHome) {
-      activeSection = window.location.pathname.startsWith('/blog') ? 'blog' : '';
-    }
-
-    const sections = navItems
-      .map((item) => document.getElementById(item.id))
-      .filter((el): el is HTMLElement => Boolean(el));
-
-    const onScroll = () => {
-      isScrolled = window.scrollY > 24;
-
-      const doc = document.documentElement;
-      const max = doc.scrollHeight - window.innerHeight;
+    darkMode.initSync();
+    const update = () => {
+      scrolled = window.scrollY > 24;
+      const max = document.documentElement.scrollHeight - innerHeight;
       progress = max > 0 ? Math.min(1, window.scrollY / max) : 0;
-
-      // Scroll spy: the section whose top is nearest just under the navbar wins.
-      let current = activeSection;
-      let best = Number.POSITIVE_INFINITY;
-      for (const section of sections) {
-        const top = section.getBoundingClientRect().top - 120;
-        const distance = Math.abs(top);
-        if (top <= 40 && distance < best) {
-          best = distance;
-          current = section.id;
-        }
+      let current = home ? 'home' : 'blog';
+      for (const section of document.querySelectorAll<HTMLElement>(
+        'section[id]',
+      )) {
+        if (section.getBoundingClientRect().top < 180) current = section.id;
       }
-      // near the very bottom, always highlight the last section
-      if (max > 0 && window.scrollY >= max - 8 && sections.length) {
-        current = sections[sections.length - 1].id;
-      }
-      if (current !== activeSection) {
-        activeSection = current;
-        moveIndicator();
-      }
+      active = current;
     };
-
-    onScroll();
-    moveIndicator();
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', moveIndicator);
-
-    /*
-      The pill is measured in pixels, so anything that changes label widths
-      after mount will leave it misaligned. The display font swapping in is
-      the usual culprit — watch the list itself rather than guessing.
-    */
-    const listObserver = new ResizeObserver(moveIndicator);
-    if (navList) listObserver.observe(navList);
-    requestAnimationFrame(moveIndicator);
-    if (document.fonts?.ready) document.fonts.ready.then(moveIndicator);
-
+    const resize = () => {
+      if (innerWidth >= 900) menuOpen = false;
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', resize);
+    update();
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', moveIndicator);
-      listObserver.disconnect();
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', resize);
     };
   });
-
-  const go = (id: string) => {
-    isMobileMenuOpen = false;
-    if (!onHome) {
-      window.location.href = `/#${id}`;
-      return;
-    }
-    scrollToId(id);
-  };
 </script>
 
-<svelte:head>
-  <meta name="theme-color" content={isDark ? '#05080f' : '#ffffff'} />
-</svelte:head>
-
-<!-- reading-progress hairline, pinned above the bar -->
-<div class="fixed top-0 left-0 right-0 z-[110] h-[2px]" aria-hidden="true">
-  <div
-    class="h-full origin-left"
-    style="
-      transform:scaleX({progress});
-      background-image:linear-gradient(90deg,var(--color-primary-500),var(--color-accent-400),var(--color-plasma-400));
-      transition:transform .12s linear;
-      box-shadow:0 0 12px rgba(14,165,233,.6);
-    "
-  ></div>
-</div>
-
-<nav
-  class="fixed top-0 right-0 left-0 z-[100] transition-all duration-500"
-  class:is-scrolled={isScrolled}
-  style="
-    background-color:{isScrolled ? 'var(--nav-bg)' : 'transparent'};
-    border-bottom:1px solid {isScrolled ? 'var(--nav-border)' : 'transparent'};
-    backdrop-filter:{isScrolled ? 'blur(18px) saturate(180%)' : 'none'};
-    -webkit-backdrop-filter:{isScrolled ? 'blur(18px) saturate(180%)' : 'none'};
-  "
+<svelte:window on:keydown={escape} />
+<svelte:head
+  ><meta
+    name="theme-color"
+    content={$darkMode ? '#121510' : '#f5f4ed'}
+  /></svelte:head
 >
-  <div class="container-max section-padding">
-    <div class="flex h-[68px] items-center justify-between gap-4">
-      <!-- ---------- logo ---------- -->
-      <a href="/" class="group flex shrink-0 items-center gap-2.5" aria-label="TKTheTechie home">
-        <span class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-[10px]">
-          <span
-            class="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
-            style="background-image:linear-gradient(135deg,var(--color-primary-500),var(--color-accent-500));"
-          ></span>
-          <span
-            class="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-            style="background-image:linear-gradient(135deg,var(--color-accent-400),var(--color-plasma-500));"
-          ></span>
-          <span class="font-display relative text-[13px] font-extrabold tracking-tight text-white">TK</span>
-        </span>
-        <span class="font-display text-[17px] font-bold tracking-tight" style="color:var(--nav-fg-strong);">
-          <span class="gradient-text">TheTechie</span>
-        </span>
-      </a>
-
-      <!-- ---------- desktop links ---------- -->
-      <div class="relative hidden items-center gap-1 lg:flex" bind:this={navList}>
-        <!-- sliding active pill -->
-        <span
-          class="pointer-events-none absolute top-1/2 h-8 rounded-full"
+<a class="skip-link" href="#main-content">Skip to content</a>
+<nav class:scrolled class:open={menuOpen} aria-label="Main navigation">
+  <div
+    class="progress"
+    style:transform="scaleX({progress})"
+    aria-hidden="true"
+  ></div>
+  <div class="container-max section-padding nav-inner">
+    <a class="brand" href="/" aria-label="TKTheTechie home"
+      ><span class="monogram">tk<span>.</span></span><span class="wordmark"
+        >thetechie</span
+      ></a
+    >
+    <div class="desktop-links">
+      {#each links as link}<a
+          href="{prefix}#{link.id}"
+          class:active={active === link.id}
+          aria-current={active === link.id ? 'location' : undefined}
+          >{link.label}</a
+        >{/each}
+    </div>
+    <div class="nav-actions">
+      <button
+        class="search"
+        on:click={() => paletteOpen.set(true)}
+        aria-label="Open command palette"
+        ><svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
           aria-hidden="true"
-          style="
-            left:{indicator.left}px;
-            width:{indicator.width}px;
-            opacity:{indicator.ready ? 1 : 0};
-            transform:translateY(-50%);
-            background-color:var(--nav-pill);
-            transition:{indicatorSettled ? 'left .55s cubic-bezier(.16,1,.3,1), width .55s cubic-bezier(.16,1,.3,1), opacity .3s ease' : 'none'};
-          "
-        ></span>
-
-        {#each navItems as item}
-          <button
-            data-section={item.id}
-            on:click={() => go(item.id)}
-            class="relative rounded-full px-3.5 py-1.5 text-[13.5px] font-semibold transition-colors duration-300"
-            style="color:{activeSection === item.id ? 'var(--nav-fg-active)' : 'var(--nav-fg)'};"
-            aria-current={activeSection === item.id ? 'page' : undefined}
-          >
-            {item.name}
-          </button>
-        {/each}
-      </div>
-
-      <!-- ---------- actions ---------- -->
-      <div class="flex shrink-0 items-center gap-2">
-        <!-- command palette trigger -->
-        <button
-          on:click={() => paletteOpen.set(true)}
-          class="hidden items-center gap-2 rounded-full py-1.5 pr-2 pl-3 text-[12px] font-medium transition-all duration-300 md:flex"
-          style="border:1px solid var(--nav-border-strong);color:var(--nav-fg);"
-          aria-label="Open command palette"
-        >
-          <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="7" />
-            <path d="M20 20l-3.6-3.6" stroke-linecap="round" />
-          </svg>
-          <span class="hidden lg:inline">Jump to…</span>
-          <kbd
-            class="rounded px-1.5 py-0.5 font-mono text-[10px]"
-            style="background-color:var(--nav-pill);color:var(--nav-fg-strong);"
-          >⌘K</kbd>
-        </button>
-
-        <!-- theme toggle -->
-        <button
-          on:click={() => darkMode.toggle()}
-          class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-full transition-all duration-300"
-          style="border:1px solid var(--nav-border-strong);color:var(--nav-fg-strong);"
-          aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-          title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-        >
-          <!-- the two icons cross-fade and counter-rotate -->
-          <svg
-            class="absolute h-[17px] w-[17px] transition-all duration-500"
-            style="opacity:{isDark ? 0 : 1};transform:rotate({isDark ? -90 : 0}deg) scale({isDark ? 0.4 : 1});"
-            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-          </svg>
-          <svg
-            class="absolute h-[17px] w-[17px] transition-all duration-500"
-            style="opacity:{isDark ? 1 : 0};transform:rotate({isDark ? 0 : 90}deg) scale({isDark ? 1 : 0.4});"
-            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-        </button>
-
-        <!-- mobile menu -->
-        <button
-          on:click={() => (isMobileMenuOpen = !isMobileMenuOpen)}
-          class="grid h-9 w-9 place-items-center rounded-full transition-all duration-300 lg:hidden"
-          style="border:1px solid var(--nav-border-strong);color:var(--nav-fg-strong);"
-          aria-label="Toggle menu"
-          aria-expanded={isMobileMenuOpen}
-        >
-          <span class="relative block h-3.5 w-4">
-            <span
-              class="absolute left-0 block h-[1.6px] w-full rounded-full bg-current transition-all duration-500"
-              style="top:{isMobileMenuOpen ? '6.4px' : '1px'};transform:rotate({isMobileMenuOpen ? 45 : 0}deg);"
-            ></span>
-            <span
-              class="absolute left-0 block h-[1.6px] w-full rounded-full bg-current transition-all duration-300"
-              style="top:6.4px;opacity:{isMobileMenuOpen ? 0 : 1};"
-            ></span>
-            <span
-              class="absolute left-0 block h-[1.6px] w-full rounded-full bg-current transition-all duration-500"
-              style="top:{isMobileMenuOpen ? '6.4px' : '12px'};transform:rotate({isMobileMenuOpen ? -45 : 0}deg);"
-            ></span>
-          </span>
-        </button>
-      </div>
+          ><circle cx="10" cy="10" r="6" /><path d="m15 15 5 5" /></svg
+        ><kbd>⌘K</kbd></button
+      >
+      <button
+        class="theme"
+        on:click={() => darkMode.toggle()}
+        aria-label={$darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+        ><svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+          >{#if $darkMode}<circle cx="12" cy="12" r="4" /><path
+              d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"
+            />{:else}<path
+              d="M20 14.3A8.5 8.5 0 0 1 9.7 4 8.5 8.5 0 1 0 20 14.3Z"
+            />{/if}</svg
+        ></button
+      >
+      <a class="connect" href="{prefix}#contact"
+        >Let’s talk <span aria-hidden="true">↗</span></a
+      >
+      <button
+        bind:this={menuButton}
+        class="menu-toggle"
+        on:click={toggleMenu}
+        aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+        aria-expanded={menuOpen}
+        aria-controls="mobile-navigation"
+        ><span>{menuOpen ? '✕' : '☰'}</span></button
+      >
     </div>
   </div>
-
-  <!-- ---------- mobile drawer ---------- -->
   <div
-    class="overflow-hidden lg:hidden"
-    style="
-      max-height:{isMobileMenuOpen ? '30rem' : '0'};
-      opacity:{isMobileMenuOpen ? 1 : 0};
-      background-color:var(--nav-bg-solid);
-      backdrop-filter:blur(18px) saturate(180%);
-      transition:max-height .6s cubic-bezier(.16,1,.3,1), opacity .35s ease;
-    "
+    bind:this={mobileMenu}
+    id="mobile-navigation"
+    class="mobile-menu"
+    inert={!menuOpen}
+    hidden={!menuOpen}
   >
-    <div class="container-max section-padding pt-2 pb-5">
-      <div class="grid gap-1" style="border-top:1px solid var(--nav-border);padding-top:.75rem;">
-        {#each navItems as item, i}
-          <button
-            on:click={() => go(item.id)}
-            class="flex items-center justify-between rounded-xl px-3 py-2.5 text-left text-[15px] font-semibold transition-all duration-500"
-            style="
-              color:{activeSection === item.id ? 'var(--nav-fg-active)' : 'var(--nav-fg)'};
-              background-color:{activeSection === item.id ? 'var(--nav-pill)' : 'transparent'};
-              transform:translateY({isMobileMenuOpen ? '0' : '10px'});
-              opacity:{isMobileMenuOpen ? 1 : 0};
-              transition-delay:{isMobileMenuOpen ? 40 + i * 35 : 0}ms;
-            "
-          >
-            {item.name}
-            <span class="font-mono text-[10px] opacity-50">0{i + 1}</span>
-          </button>
-        {/each}
-      </div>
-    </div>
+    {#each [...links, { label: 'Skills', id: 'skills' }, { label: 'Education', id: 'education' }, { label: 'Contact', id: 'contact' }] as link, i}<a
+        href="{prefix}#{link.id}"
+        on:click={() => (menuOpen = false)}
+        ><span class="menu-index">0{i + 1}</span>{link.label}<span
+          aria-hidden="true">↗</span
+        ></a
+      >{/each}
   </div>
 </nav>
 
 <style>
-  /*
-    The bar floats over a very dark hero at rest and over normal page surfaces
-    once scrolled, so its palette is expressed as variables that flip with the
-    scrolled state rather than with the theme alone.
-  */
   nav {
-    --nav-fg: rgb(203 213 225 / 0.82);
-    --nav-fg-strong: #fff;
-    --nav-fg-active: #fff;
-    --nav-pill: rgb(255 255 255 / 0.12);
-    --nav-border: rgb(255 255 255 / 0.1);
-    --nav-border-strong: rgb(255 255 255 / 0.14);
-    --nav-bg: rgb(5 8 15 / 0.72);
-    --nav-bg-solid: rgb(5 8 15 / 0.94);
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 100;
+    color: #e5eadc;
+    background: #121510f2;
+    border-bottom: 1px solid #ffffff18;
+    backdrop-filter: blur(16px);
+    transition:
+      background 0.25s,
+      color 0.25s;
+  }
+  nav.scrolled {
+    background: color-mix(in srgb, var(--surface-0) 94%, transparent);
+    color: var(--text-1);
+    border-color: var(--hairline);
+  }
+  .nav-inner {
+    display: flex;
+    height: 80px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+  }
+  .monogram {
+    font: 600 36px/0.8 var(--font-display);
+    letter-spacing: -0.12em;
+  }
+  .monogram > span {
+    color: #c4ed74;
+  }
+  .wordmark {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.04em;
   }
 
-  /* Once scrolled past the hero the bar adopts the page theme. */
-  :global(html:not(.dark)) nav.is-scrolled {
-    --nav-fg: #475569;
-    --nav-fg-strong: #0b1220;
-    --nav-fg-active: #0b1220;
-    --nav-pill: rgb(15 23 42 / 0.07);
-    --nav-border: rgb(15 23 42 / 0.08);
-    --nav-border-strong: rgb(15 23 42 / 0.12);
-    --nav-bg: rgb(255 255 255 / 0.78);
-    --nav-bg-solid: rgb(255 255 255 / 0.96);
+  .desktop-links {
+    display: flex;
+    gap: 32px;
+    font-size: 12px;
+  }
+  .desktop-links a {
+    position: relative;
+    padding: 15px 0;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .desktop-links a:hover,
+  .desktop-links a.active {
+    opacity: 1;
+  }
+  .desktop-links a.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 5px;
+    height: 2px;
+    background: currentColor;
+  }
+  .nav-actions {
+    display: flex;
+    gap: 13px;
+    align-items: center;
+  }
+  .nav-actions button {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-actions svg {
+    width: 17px;
+    height: 17px;
+  }
+  .nav-actions .search {
+    width: auto;
+    gap: 7px;
+  }
+  kbd {
+    font: 9px var(--font-mono);
+    opacity: 0.8;
+  }
+  .connect {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    border: 1px solid currentColor;
+    padding: 10px 16px;
+    font-size: 12px;
+    border-radius: 3px;
+  }
+  .connect:hover {
+    background: #d2f879;
+    color: #17200d;
+    border-color: #d2f879;
+  }
+  .connect > span {
+    font-size: 19px;
+    line-height: 1;
+  }
+  .nav-actions .menu-toggle {
+    display: none;
+  }
+  .progress {
+    height: 2px;
+    background: #a4c65c;
+    position: absolute;
+    inset: 0 0 auto;
+    transform-origin: left;
+  }
+  .mobile-menu {
+    padding: 10px 24px 24px;
+    max-height: calc(100dvh - 80px);
+    overflow-y: auto;
+    background: var(--surface-0);
+    color: var(--text-1);
+  }
+  .mobile-menu[hidden] {
+    display: none;
+  }
+  .mobile-menu a {
+    display: flex;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--hairline);
+    font: 500 24px var(--font-display);
+    gap: 18px;
+  }
+  .mobile-menu a > span:last-child {
+    margin-left: auto;
+  }
+  .menu-index {
+    font: 10px var(--font-mono);
+    color: var(--text-3);
+  }
+  .skip-link {
+    position: fixed;
+    top: -80px;
+    left: 16px;
+    z-index: 200;
+    background: #d2f879;
+    color: #17200d;
+    padding: 12px 20px;
+  }
+  .skip-link:focus {
+    top: 12px;
+  }
+  @media (max-width: 1050px) {
+    .desktop-links {
+      gap: 23px;
+    }
+    .nav-inner {
+      gap: 20px;
+    }
+    .wordmark {
+      display: none;
+    }
+  }
+  @media (max-width: 899px) {
+    .desktop-links {
+      display: none;
+    }
+    .nav-actions .menu-toggle {
+      display: flex;
+    }
+    .wordmark {
+      display: inline;
+    }
+    .nav-inner {
+      height: 72px;
+    }
+    .nav-actions {
+      gap: 8px;
+    }
+    .connect {
+      gap: 14px;
+    }
+    .nav-actions .search {
+      display: none;
+    }
+  }
+  @media (max-width: 380px) {
+    .wordmark {
+      display: none;
+    }
   }
 </style>

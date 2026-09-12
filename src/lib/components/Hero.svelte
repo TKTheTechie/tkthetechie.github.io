@@ -1,358 +1,494 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import MeshScene from '$lib/three/LazyMeshScene.svelte';
+  import OrbitalSculpture from '$lib/three/OrbitalSculpture.svelte';
   import { magnetic } from '$lib/actions/motion';
-  import { scrollToId } from '$lib/stores/scroll';
-
-  /** the portrait box — the WebGL mesh centres itself on this */
-  let portraitEl: HTMLDivElement;
-
-  const NAME_FIRST = 'Thomas';
-  const NAME_LAST = 'Kunnumpurath';
-
-  const ROLES = [
-    'Event-Driven Architecture',
-    'Cloud-Native Platforms',
-    'Engineering Leadership',
-    'Technical Evangelism'
-  ];
-
-  const PRIOR = ['Solace', 'Capital One', 'Deutsche Bank'];
-
-  /**
-   * background-clip:text can't survive per-character transforms, so instead of
-   * a CSS gradient we sample the ramp once per letter. Same look, but each
-   * glyph is a real colour we're free to animate.
-   */
-  const RAMP: Array<[number, number, number]> = [
-    [56, 189, 248],  // sky-400
-    [52, 211, 153],  // emerald-400
-    [125, 211, 252]  // sky-300
-  ];
-
-  const colourAt = (t: number) => {
-    const scaled = Math.min(0.9999, Math.max(0, t)) * (RAMP.length - 1);
-    const i = Math.floor(scaled);
-    const f = scaled - i;
-    const [r1, g1, b1] = RAMP[i];
-    const [r2, g2, b2] = RAMP[i + 1];
-    return `rgb(${Math.round(r1 + (r2 - r1) * f)},${Math.round(g1 + (g2 - g1) * f)},${Math.round(b1 + (b2 - b1) * f)})`;
-  };
-
-  const SOCIALS = [
-    {
-      name: 'LinkedIn',
-      href: 'https://www.linkedin.com/in/tkthetechie/',
-      d: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z'
-    },
-    {
-      name: 'GitHub',
-      href: 'https://github.com/TKTheTechie',
-      d: 'M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z'
-    },
-    {
-      name: 'X',
-      href: 'https://x.com/tkthetechie',
-      d: 'M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'
-    }
-  ];
-
-  /* ---- role typewriter ---------------------------------------------- */
-  let typed = '';
-  let roleIndex = 0;
-
-  onMount(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) {
-      typed = ROLES[0];
-      return;
-    }
-
-    let charIndex = 0;
-    let erasing = false;
-    let timer: ReturnType<typeof setTimeout>;
-
-    const tick = () => {
-      const word = ROLES[roleIndex];
-
-      if (!erasing) {
-        charIndex++;
-        typed = word.slice(0, charIndex);
-        if (charIndex === word.length) {
-          erasing = true;
-          timer = setTimeout(tick, 2100);
-          return;
-        }
-        timer = setTimeout(tick, 42 + Math.random() * 45);
-      } else {
-        charIndex -= 2;
-        if (charIndex <= 0) {
-          charIndex = 0;
-          erasing = false;
-          roleIndex = (roleIndex + 1) % ROLES.length;
-          timer = setTimeout(tick, 260);
-          return;
-        }
-        typed = word.slice(0, charIndex);
-        timer = setTimeout(tick, 22);
-      }
-    };
-
-    timer = setTimeout(tick, 1200);
-    return () => clearTimeout(timer);
-  });
-
-  const scrollTo = (id: string) => scrollToId(id);
+  let paused = false;
 </script>
 
-<!--
-  The hero is deliberately dark in both themes: the event mesh needs an
-  ink background to read, and it gives the page a strong opening chord.
--->
-<section
-  id="home"
-  class="relative isolate flex min-h-[100svh] items-center overflow-hidden"
-  style="background-color:#04070e;"
->
-  <!-- layer 1: base wash -->
-  <div
-    class="absolute inset-0 -z-30"
-    style="background:
-      radial-gradient(120% 90% at 78% 12%, #0b2b45 0%, transparent 58%),
-      radial-gradient(90% 80% at 12% 92%, #06281f 0%, transparent 60%),
-      linear-gradient(160deg, #04070e 0%, #060c18 45%, #04070e 100%);"
-  ></div>
-
-  <!-- layer 2: drifting colour fields -->
-  <div class="aurora -z-20">
-    <span
-      class="h-[38rem] w-[38rem] -left-40 -top-40"
-      style="background:radial-gradient(circle,#0ea5e9,transparent 62%);opacity:.34;animation-duration:30s;"
-    ></span>
-    <span
-      class="h-[32rem] w-[32rem] right-[-8rem] top-1/3"
-      style="background:radial-gradient(circle,#10b981,transparent 62%);opacity:.3;animation-duration:38s;animation-delay:-9s;"
-    ></span>
-    <span
-      class="h-[26rem] w-[26rem] left-1/3 bottom-[-9rem]"
-      style="background:radial-gradient(circle,#8b5cf6,transparent 62%);opacity:.22;animation-duration:44s;animation-delay:-18s;"
-    ></span>
-  </div>
-
-  <!-- layer 3: engineering grid -->
-  <div class="mesh-grid -z-20 opacity-40" style="--hairline:rgb(148 163 184 / 0.13);"></div>
-
-  <!--
-    layer 4: the mesh, in WebGL. It spans the whole hero so the particle
-    field and orbiting models have room, but the sphere itself is anchored
-    to the portrait box below.
-  -->
-  <div class="absolute inset-0 -z-10">
-    <MeshScene anchor={portraitEl} radiusScale={1.32} nodeCount={96} packetCount={28} satellites={6} particles={700} />
-  </div>
-
-  <!-- layer 5: vignette so text always wins -->
-  <div
-    class="pointer-events-none absolute inset-0 -z-10"
-    style="background:radial-gradient(80% 60% at 22% 50%, rgba(4,7,14,.92) 0%, rgba(4,7,14,.55) 45%, transparent 72%);"
-  ></div>
-  <div
-    class="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40"
-    style="background:linear-gradient(to top,#04070e,transparent);"
-  ></div>
-
-  <!-- ---------------------------------------------------------------- -->
-  <div class="container-max section-padding relative w-full pt-28 pb-24 lg:pt-32">
-    <div class="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8">
-      <!-- ============ copy ============ -->
-      <div class="max-w-2xl text-center lg:text-left">
-        <!-- status line -->
-        <div
-          class="animate-fade-in mb-7 inline-flex items-center gap-2.5 rounded-full border border-white/12 bg-white/[0.045] px-3.5 py-1.5 backdrop-blur-md"
-          style="animation-delay:.15s;"
-        >
-          <span class="relative flex h-1.5 w-1.5">
-            <span class="animate-pulse-ring absolute inline-flex h-full w-full rounded-full bg-accent-400"></span>
-            <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent-400"></span>
-          </span>
-          <span class="font-mono text-[11px] tracking-[0.16em] text-slate-300 uppercase">
-            VP Systems Engineering · Solace
-          </span>
-        </div>
-
-        <!-- name, per-character 3D rise -->
-        <h1
-          class="font-display mb-6 text-[clamp(2.35rem,7vw,4.6rem)] leading-[0.95] font-extrabold tracking-[-0.04em] text-white"
-          style="perspective:900px;"
-        >
-          <span class="sr-only">Thomas Kunnumpurath</span>
-          <span class="block" aria-hidden="true">
-            {#each NAME_FIRST.split('') as ch, i}
-              <span class="animate-rise inline-block" style="animation-delay:{260 + i * 42}ms;">{ch}</span>
-            {/each}
-          </span>
-          <span class="block" aria-hidden="true">
-            {#each NAME_LAST.split('') as ch, i}
-              <span
-                class="animate-rise inline-block"
-                style="animation-delay:{520 + i * 34}ms;color:{colourAt(i / (NAME_LAST.length - 1))};"
-              >{ch}</span>
-            {/each}
-          </span>
-        </h1>
-
-        <!-- rotating specialism -->
-        <p
-          class="animate-fade-in mb-7 flex min-h-[1.9rem] items-center justify-center gap-2 font-mono text-sm text-slate-400 sm:text-base lg:justify-start"
-          style="animation-delay:.9s;"
-        >
-          <span class="text-accent-400">&gt;</span>
-          <span class="text-slate-200">{typed}</span>
-          <span class="animate-caret inline-block h-[1.05em] w-[2px] translate-y-[0.14em] bg-primary-400"></span>
-        </p>
-
-        <p
-          class="animate-fade-in mx-auto mb-9 max-w-xl text-lg leading-relaxed text-slate-300/90 lg:mx-0"
-          style="animation-delay:1s;"
-        >
-          I lead a team of 15 engineers across the Americas, helping enterprises
-          move to real-time event-driven architectures — and I still write
-          code, ship open source, and give talks.
-        </p>
-
-        <!-- CTAs -->
-        <div
-          class="animate-fade-in flex flex-col justify-center gap-3.5 sm:flex-row lg:justify-start"
-          style="animation-delay:1.12s;"
-        >
-          <button class="btn btn-primary spotlight" use:magnetic={0.16} on:click={() => scrollTo('#experience')}>
-            <span class="relative z-10">View Experience</span>
-            <svg class="relative z-10 h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5-5 5M6 12h12" />
-            </svg>
-          </button>
-          <button
-            class="btn btn-ghost spotlight !border-white/15 !bg-white/[0.055] !text-white hover:!border-primary-400/60"
-            use:magnetic={0.16}
-            on:click={() => scrollTo('#contact')}
+<section id="home" class="hero">
+  <div class="container-max section-padding hero-inner">
+    <div class="hero-topline">
+      <span>THOMAS KUNNUMPURATH</span><span class="hero-role"
+        ><i></i> VP SYSTEMS ENGINEERING · SOLACE</span
+      >
+    </div>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker">
+          <span>ENGINEER. LEADER. BUILDER.</span><span aria-hidden="true"
+            >↗</span
           >
-            <span class="relative z-10">Get In Touch</span>
-          </button>
+        </p>
+        <h1>
+          Big ideas.<br />Real-world<br /><span class="impact"
+            >impact<span class="period">.</span></span
+          >
+        </h1>
+        <p class="hero-description">
+          I connect systems, scale teams, and turn complex technology into
+          things that make a difference.
+        </p>
+        <div class="hero-actions">
+          <a href="#portfolio" class="btn hero-primary" use:magnetic={0.12}
+            >Explore my work <span aria-hidden="true">↗</span></a
+          >
+          <a href="#contact" class="hero-secondary"
+            >Let’s connect <span aria-hidden="true">↗</span></a
+          >
         </div>
-
-        <!-- prior companies + socials -->
-        <div
-          class="animate-fade-in mt-12 flex flex-col items-center gap-6 sm:flex-row sm:items-end sm:justify-between lg:items-center"
-          style="animation-delay:1.3s;"
-        >
-         
-
-          <div class="flex items-center gap-2.5">
-            {#each SOCIALS as social}
-              <a
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={social.name}
-                class="group grid h-10 w-10 place-items-center rounded-xl border border-white/12 bg-white/[0.04] backdrop-blur-md transition-all duration-500 hover:-translate-y-1 hover:border-primary-400/60 hover:bg-white/10"
-              >
-                <svg
-                  class="h-[17px] w-[17px] fill-slate-400 transition-colors duration-300 group-hover:fill-white"
-                  viewBox="0 0 24 24"
-                >
-                  <path d={social.d} />
-                </svg>
-              </a>
-            {/each}
-          </div>
+        <div class="hero-person">
+          <img
+            src="/profile-pic.png"
+            alt="Thomas Kunnumpurath"
+            width="48"
+            height="48"
+            fetchpriority="high"
+          />
+          <p>
+            <strong>Thomas Kunnumpurath</strong><span
+              >Technical leader. Still hands on keys.</span
+            >
+          </p>
         </div>
       </div>
-
-      <!-- ============ portrait, sitting at the centre of the mesh ============ -->
-      <div class="relative order-first flex justify-center lg:order-last lg:justify-end">
-        <div
-          bind:this={portraitEl}
-          class="animate-fade-in relative aspect-square w-[min(78vw,20rem)] sm:w-[22rem] lg:w-[26rem]"
-          style="animation-delay:.35s;"
-        >
-          <!-- inner ring, framing the portrait inside the mesh -->
-          <div class="animate-spin-slow absolute inset-[4%] rounded-full border border-dashed border-white/10"></div>
-
-          <!-- conic halo -->
-          <div
-            class="absolute inset-[19%] rounded-full opacity-70 blur-xl"
-            style="background:conic-gradient(from 0deg,#0ea5e9,#10b981,#8b5cf6,#0ea5e9);animation:spin 14s linear infinite;"
-          ></div>
-
-          <!-- portrait -->
-          <div class="animate-float-slow absolute inset-[21%]">
-            <div class="relative h-full w-full rounded-full p-[2px]" style="background:linear-gradient(150deg,rgba(56,189,248,.9),rgba(52,211,153,.55),rgba(139,92,246,.75));">
-              <img
-                src="/profile-pic.png"
-                alt="Thomas Kunnumpurath"
-                class="h-full w-full rounded-full object-cover object-top"
-                style="background-color:#0b1220;"
-              />
-              <!-- inner rim light -->
-              <div class="pointer-events-none absolute inset-0 rounded-full" style="box-shadow:inset 0 1px 12px rgba(255,255,255,.22), inset 0 -14px 30px rgba(4,7,14,.55);"></div>
-            </div>
-          </div>
-
-          <!-- orbiting capability chips -->
-          {#each [{ label: 'Event Mesh', dur: '28s', delay: '0s', inset: '-6%', at: 20 }, { label: 'Agent Mesh', dur: '36s', delay: '-13s', inset: '5%', at: 92 }, { label: 'Cloud Native', dur: '32s', delay: '-24s', inset: '-1%', at: 164 }, { label: 'Low Latency', dur: '30s', delay: '-7s', inset: '3%', at: 236 }, { label: 'High Throughput', dur: '34s', delay: '-19s', inset: '-4%', at: 308 }] as chip}
-            <!--
-              Three nested layers on purpose: the outer ring spins, the middle
-              layer holds the static centring translate (an animation on the
-              same element would overwrite it), and the inner layer counter-
-              spins so the label stays upright as it orbits.
-            -->
-            <div
-              class="pointer-events-none absolute hidden sm:block"
-              style="inset:{chip.inset};rotate:{chip.at}deg;animation:spin {chip.dur} linear infinite;animation-delay:{chip.delay};"
-            >
-              <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <span
-                  class="block rounded-full border border-white/12 bg-[#070d19]/85 px-2.5 py-1 font-mono text-[10px] whitespace-nowrap text-slate-300 backdrop-blur-md"
-                  style="rotate:{-chip.at}deg;animation:spin {chip.dur} linear infinite reverse;animation-delay:{chip.delay};"
-                >
-                  {chip.label}
-                </span>
-              </div>
-            </div>
-          {/each}
+      <div class="hero-art">
+        <div class="art-coordinate" aria-hidden="true">
+          <span>01 / CONNECTED THINKING</span><span>+</span>
         </div>
-
-        <!-- mesh readout — describes exactly what you're looking at -->
-        <p
-          class="animate-fade-in absolute -bottom-2 left-1/2 hidden -translate-x-1/2 font-mono text-[10px] tracking-[0.14em] whitespace-nowrap text-slate-500 uppercase sm:block lg:right-0 lg:left-auto lg:translate-x-0"
-          style="animation-delay:1.5s;"
+        <OrbitalSculpture {paused} />
+        <span class="art-label label-top" aria-hidden="true"
+          ><i></i> PEOPLE</span
         >
-          live mesh · 96 nodes · 28 events in flight · webgl
-        </p>
+        <span class="art-label label-bottom" aria-hidden="true"
+          ><i></i> TECHNOLOGY</span
+        >
+        <div class="art-caption">
+          <span>Everything works better. Connected.</span><button
+            on:click={() => (paused = !paused)}
+            aria-label={paused ? 'Play 3D animation' : 'Pause 3D animation'}
+            aria-pressed={paused}>{paused ? '▶' : 'Ⅱ'}</button
+          >
+        </div>
       </div>
     </div>
+    <div class="hero-baseline">
+      <a href="#about">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></a
+      ><span>FROM ARCHITECTURE TO EXECUTION</span>
+    </div>
   </div>
-
-  <!-- scroll cue -->
-  <button
-    on:click={() => scrollTo('#about')}
-    class="animate-fade-in group absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2"
-    style="animation-delay:1.7s;"
-    aria-label="Scroll to about section"
-  >
-    <span class="font-mono text-[10px] tracking-[0.22em] text-slate-500 uppercase transition-colors group-hover:text-slate-300">
-      Scroll
-    </span>
-    <span class="relative h-9 w-[1px] overflow-hidden bg-white/12">
-      <span class="absolute inset-x-0 top-0 h-3 bg-gradient-to-b from-primary-400 to-transparent" style="animation:scrollCue 2s cubic-bezier(0.16,1,0.3,1) infinite;"></span>
-    </span>
-  </button>
 </section>
 
+<div class="company-band">
+  <div class="container-max section-padding company-inner">
+    <p>BUILT IN THE REAL WORLD.<br /><span>EXPERIENCE THAT COUNTS.</span></p>
+    <div class="companies">
+      <span class="solace-word">solace<span aria-hidden="true">◢</span></span
+      ><span class="capital-word">Capital One</span><span class="deutsche-word"
+        ><span class="bank-symbol" aria-hidden="true">╱</span> Deutsche Bank</span
+      >
+    </div>
+    <a href="#experience" aria-label="Explore my career experience">↗</a>
+  </div>
+</div>
+
 <style>
-  @keyframes scrollCue {
-    0%   { transform: translateY(-100%); opacity: 0; }
-    35%  { opacity: 1; }
-    100% { transform: translateY(300%); opacity: 0; }
+  .hero {
+    background: #121510;
+    color: #f5f5eb;
+    overflow: hidden;
+    position: relative;
+  }
+  .hero-inner {
+    padding-top: 116px;
+  }
+  .hero-topline {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #ffffff24;
+    font: 10px var(--font-mono);
+    letter-spacing: 0.13em;
+    color: #bdc3b3;
+  }
+  .hero-role {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .hero-role i,
+  .art-label i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #d2f879;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    align-items: center;
+    min-height: 650px;
+    gap: 16px;
+  }
+  .hero-copy {
+    padding: 42px 0 45px;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-kicker {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    color: #d2f879;
+    font: 10px var(--font-mono);
+    letter-spacing: 0.12em;
+    margin-bottom: 26px;
+    animation: slideUp 0.8s both;
+  }
+  .hero-kicker > span:last-child {
+    font-size: 20px;
+  }
+  h1 {
+    font-size: clamp(4.9rem, 7.6vw, 7rem);
+    font-weight: 500;
+    letter-spacing: -0.072em;
+    line-height: 0.94;
+    margin: 0 0 30px;
+    text-wrap: initial;
+    animation: slideUp 1s 0.1s both;
+  }
+  .impact {
+    color: #d2f879;
+  }
+  .period {
+    color: #f5f5eb;
+  }
+  .hero-description {
+    font-size: 16px;
+    line-height: 1.8;
+    max-width: 365px;
+    color: #bdc3b3;
+    animation: slideUp 1s 0.2s both;
+  }
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-top: 28px;
+    animation: slideUp 1s 0.3s both;
+  }
+  .hero-primary {
+    background: #d2f879;
+    color: #17200d;
+    border-radius: 4px;
+    padding: 16px 22px;
+    font-size: 13px;
+    box-shadow: none;
+    gap: 35px;
+  }
+  .hero-primary > span {
+    font-size: 21px;
+    line-height: 1;
+  }
+  .hero-secondary {
+    font-size: 13px;
+    border-bottom: 1px solid #68715c;
+    padding: 12px 0;
+    display: flex;
+    gap: 16px;
+    transition: color 0.2s;
+  }
+  .hero-secondary:hover {
+    color: #d2f879;
+  }
+  .hero-person {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 38px;
+    animation: slideUp 1s 0.4s both;
+  }
+  .hero-person img {
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    object-fit: cover;
+    object-position: top;
+    filter: saturate(0.65);
+    border: 1px solid #ffffff40;
+  }
+  .hero-person p {
+    display: grid;
+    gap: 5px;
+    font-size: 11px;
+  }
+  .hero-person strong {
+    font-weight: 500;
+  }
+  .hero-person p span {
+    color: #9ba38f;
+    font-size: 10px;
+  }
+  .hero-art {
+    position: relative;
+    height: 550px;
+    min-width: 0;
+    background: radial-gradient(ellipse at center, #b8de6520, transparent 67%);
+  }
+  .art-coordinate {
+    position: absolute;
+    left: 6%;
+    right: 0;
+    top: 2%;
+    display: flex;
+    justify-content: space-between;
+    color: #949d88;
+    font: 9px var(--font-mono);
+    letter-spacing: 0.12em;
+  }
+  .art-coordinate > span:last-child {
+    font-size: 20px;
+    line-height: 12px;
+  }
+  .art-label {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #d9dfd0;
+    font: 9px var(--font-mono);
+    letter-spacing: 0.1em;
+    border: 1px solid #ffffff26;
+    background: #171d16d9;
+    padding: 9px 12px;
+    border-radius: 3px;
+    pointer-events: none;
+  }
+  .label-top {
+    right: 3%;
+    top: 25%;
+  }
+  .label-bottom {
+    bottom: 23%;
+    left: 0;
+  }
+  .art-caption {
+    position: absolute;
+    bottom: 1%;
+    left: 6%;
+    right: 0;
+    border-top: 1px solid #ffffff24;
+    padding-top: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font: 10px var(--font-mono);
+    color: #a0aa93;
+    gap: 15px;
+  }
+  .art-caption button {
+    border: 1px solid #ffffff35;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    color: #d2f879;
+    flex-shrink: 0;
+  }
+  .hero-baseline {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #ffffff24;
+    padding: 24px 0;
+    font: 9px var(--font-mono);
+    letter-spacing: 0.14em;
+    color: #969f8a;
+  }
+  .hero-baseline a {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    color: #dce3d1;
+  }
+  .hero-baseline a span {
+    font-size: 19px;
+  }
+  .company-band {
+    background: var(--surface-0);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .company-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 38px;
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+  .company-inner > p {
+    font: 9px/1.8 var(--font-mono);
+    letter-spacing: 0.07em;
+    flex-shrink: 0;
+  }
+  .company-inner p span {
+    color: var(--text-3);
+  }
+  .companies {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    gap: 28px;
+    color: var(--text-1);
+  }
+  .solace-word {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.07em;
+  }
+  .solace-word span {
+    font-size: 20px;
+    margin-left: 3px;
+  }
+  .capital-word {
+    font-size: 25px;
+    font-style: italic;
+    font-weight: 650;
+    letter-spacing: -0.06em;
+  }
+  .deutsche-word {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+  }
+  .bank-symbol {
+    font-size: 25px;
+    border: 2px solid currentColor;
+    height: 25px;
+    width: 25px;
+    display: grid;
+    place-items: center;
+    line-height: 20px;
+  }
+  .company-inner > a {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border: 1px solid var(--hairline);
+    border-radius: 50%;
+    font-size: 20px;
+  }
+  @media (min-width: 1600px) {
+    .hero-grid {
+      min-height: 740px;
+    }
+  }
+  @media (max-width: 1000px) {
+    h1 {
+      font-size: clamp(4.4rem, 9vw, 6rem);
+    }
+    .hero-art {
+      height: 480px;
+    }
+    .hero-grid {
+      min-height: 620px;
+    }
+    .hero-role {
+      font-size: 8px;
+    }
+    .hero-topline {
+      font-size: 9px;
+    }
+    .company-inner {
+      gap: 20px;
+    }
+    .company-inner > a {
+      display: none;
+    }
+  }
+  @media (max-width: 700px) {
+    .hero-inner {
+      padding-top: 100px;
+    }
+    .hero-topline {
+      padding-bottom: 17px;
+    }
+    .hero-role {
+      display: none;
+    }
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+    .hero-copy {
+      padding: 34px 0 0;
+    }
+    h1 {
+      font-size: clamp(3.5rem, 18.5vw, 6.8rem);
+    }
+    .hero-description {
+      max-width: 380px;
+      font-size: 15px;
+    }
+    .hero-art {
+      height: 390px;
+      margin: 20px 0 28px;
+    }
+    .hero-person {
+      margin-top: 28px;
+    }
+    .hero-kicker {
+      margin-bottom: 22px;
+    }
+    .hero-baseline > span {
+      display: none;
+    }
+    .hero-actions {
+      gap: 22px;
+    }
+    .hero-primary {
+      gap: 22px;
+    }
+    .art-coordinate {
+      top: 0;
+      left: 0;
+    }
+    .art-caption {
+      left: 0;
+    }
+    .company-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+      padding-block: 26px;
+    }
+    .company-inner > p br {
+      display: none;
+    }
+    .company-inner > p span {
+      margin-left: 8px;
+    }
+    .companies {
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .solace-word {
+      font-size: 28px;
+    }
+    .capital-word {
+      font-size: 21px;
+    }
+    .deutsche-word {
+      font-size: 12px;
+      gap: 6px;
+    }
+    .bank-symbol {
+      width: 20px;
+      height: 20px;
+      font-size: 18px;
+    }
   }
 </style>

@@ -10,15 +10,15 @@
 
 <Navigation />
 
-<section class="section-dark relative flex min-h-screen items-center overflow-hidden">
+<section id="main-content" tabindex="-1" class="section-dark relative flex min-h-screen items-center overflow-hidden">
   <div class="mesh-grid opacity-25" aria-hidden="true"></div>
   <div class="container-max section-padding relative">
     <div class="mx-auto max-w-xl text-center">
       <p class="font-mono mb-4 text-[12px] tracking-wide text-slate-400">{$page.status}</p>
-      <h1 class="font-display mb-4 text-[clamp(2rem,5vw,3.4rem)] font-extrabold tracking-[-0.03em] text-white">
+      <h1 class="font-display mb-4 text-[clamp(2rem,5vw,3.4rem)] font-extrabold tracking-[-0.03em] text-primary">
         {$page.status === 404 ? 'Page not found' : 'Something went wrong'}
       </h1>
-      <p class="mb-8 text-slate-300/90">
+      <p class="mb-8 text-secondary">
         {$page.status === 404
           ? 'That page has moved or never existed. The blog index has every post.'
           : ($page.error?.message ?? 'Please try again.')}

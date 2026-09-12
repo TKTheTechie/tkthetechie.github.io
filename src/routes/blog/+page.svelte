@@ -59,7 +59,7 @@
     accents, assigned by name so a category keeps its colour across pages.
   */
   const SWATCHES = [
-    { bg: 'rgb(14 165 233 / .16)', fg: '#38bdf8', ring: 'rgb(14 165 233 / .32)' },
+    { bg: 'rgb(93 120 35 / .16)', fg: '#38bdf8', ring: 'rgb(93 120 35 / .32)' },
     { bg: 'rgb(16 185 129 / .16)', fg: '#34d399', ring: 'rgb(16 185 129 / .32)' },
     { bg: 'rgb(139 92 246 / .16)', fg: '#a78bfa', ring: 'rgb(139 92 246 / .32)' },
     { bg: 'rgb(249 115 22 / .16)', fg: '#fb923c', ring: 'rgb(249 115 22 / .32)' },
@@ -105,17 +105,17 @@
 />
 
 <!-- ---------------- masthead ---------------- -->
-<header class="relative isolate overflow-hidden pt-32 pb-16 md:pt-40 md:pb-20" style="background-color:#04070e;">
+<header class="relative isolate overflow-hidden pt-32 pb-16 md:pt-40 md:pb-20" style="background-color:#121510;">
   <div
     class="absolute inset-0 -z-20"
     style="background:
-      radial-gradient(90% 80% at 78% 4%, #0b2b45 0%, transparent 58%),
-      radial-gradient(70% 70% at 10% 100%, #06281f 0%, transparent 60%),
-      linear-gradient(165deg,#04070e,#060c18);"
+      radial-gradient(90% 80% at 78% 4%, #28351e 0%, transparent 58%),
+      radial-gradient(70% 70% at 10% 100%, #26331d 0%, transparent 60%),
+      linear-gradient(165deg,#121510,#191e16);"
   ></div>
   <div class="aurora -z-20" aria-hidden="true">
-    <span class="h-[30rem] w-[30rem] -top-32 left-1/4" style="background:radial-gradient(circle,#0ea5e9,transparent 62%);opacity:.22;"></span>
-    <span class="h-[26rem] w-[26rem] -right-20 top-0" style="background:radial-gradient(circle,#10b981,transparent 62%);opacity:.18;animation-delay:-12s;"></span>
+    <span class="h-[30rem] w-[30rem] -top-32 left-1/4" style="background:radial-gradient(circle,#5d7823,transparent 62%);opacity:.22;"></span>
+    <span class="h-[26rem] w-[26rem] -right-20 top-0" style="background:radial-gradient(circle,#5c813d,transparent 62%);opacity:.18;animation-delay:-12s;"></span>
   </div>
   <div class="mesh-grid -z-10 opacity-40" style="--hairline:rgb(148 163 184 / .12);" aria-hidden="true"></div>
 
@@ -127,10 +127,10 @@
         <span class="h-px w-6" style="background-image:linear-gradient(90deg,currentColor,transparent);"></span>
       </p>
       <h1
-        class="font-display text-[clamp(2.4rem,6vw,4.2rem)] leading-[1.02] font-extrabold tracking-[-0.035em] text-white"
+        class="font-display text-[clamp(2.4rem,6vw,4.2rem)] leading-[1.02] font-medium tracking-[-0.055em] text-white"
         use:reveal={{ y: 30, delay: 60, rotate: -42, blur: 4 }}
       >
-        Technical <span class="gradient-text">Blog</span>
+        Notes from <span class="gradient-text">the field.</span>
       </h1>
       <div
         class="mx-auto mt-6 h-[3px] w-20 rounded-full"
@@ -150,7 +150,7 @@
   <div class="container-max section-padding">
     <div class="mx-auto max-w-6xl">
       <!-- ---------- search + filter ---------- -->
-      <div class="glass-effect sticky top-[76px] z-20 mb-10 rounded-2xl p-3 md:p-4" use:reveal={{ y: 16 }}>
+      <div class="glass-effect sticky top-[76px] z-20 mb-10 rounded-lg p-3 md:p-4" use:reveal={{ y: 16 }}>
         <div class="flex flex-col gap-3">
           <label class="relative block w-full md:max-w-md">
             <span class="sr-only">Search posts</span>
@@ -169,12 +169,11 @@
           <div class="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
             {#each categories as category}
               {@const active = selectedCategory === category}
-              {@const sw = swatch(category)}
               <button
                 on:click={() => (selectedCategory = category)}
                 class="chip !py-1.5"
                 style={active
-                  ? `background-color:${category === 'all' ? 'rgb(14 165 233 / .16)' : sw.bg};color:${category === 'all' ? 'var(--color-primary-500)' : sw.fg};border-color:${category === 'all' ? 'rgb(14 165 233 / .4)' : sw.ring};`
+                  ? 'background-color:var(--text-1);color:var(--surface-0);border-color:var(--text-1);'
                   : ''}
                 aria-pressed={active}
               >
@@ -192,7 +191,7 @@
 
       {#if filteredPosts.length === 0}
         <div class="py-20 text-center" use:reveal>
-          <span class="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-2xl" style="background-image:linear-gradient(135deg,var(--color-primary-500),var(--color-accent-500));">
+          <span class="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-lg" style="background-image:linear-gradient(135deg,var(--color-primary-500),var(--color-accent-500));">
             <svg class="h-7 w-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="11" cy="11" r="7" />
               <path d="M20 20l-3.6-3.6" stroke-linecap="round" />
@@ -211,7 +210,7 @@
             {@const cat = swatch(featured.meta?.category)}
             <a
               href={featured.path}
-              class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl md:col-span-2 lg:col-span-3"
+              class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-lg md:col-span-2 lg:col-span-3"
               use:tilt={{ max: 3, lift: 6, scale: 1.005 }}
               use:reveal={{ y: 30, rotate: -12 }}
             >
@@ -252,7 +251,7 @@
             {@const cat = swatch(post.meta?.category)}
             <a
               href={post.path}
-              class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl"
+              class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-lg"
               use:tilt={{ max: 7, lift: 8 }}
               use:reveal={{ y: 28, delay: (i % 3) * 80, rotate: -16 }}
             >

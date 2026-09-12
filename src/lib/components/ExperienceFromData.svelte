@@ -56,7 +56,7 @@
   <div class="container-max section-padding relative">
     <div class="mx-auto max-w-6xl">
       <SectionHeading eyebrow="Career" subtitle={experienceData.subtitle}>
-        Professional <span class="gradient-text">Experience</span>
+        A career built<br />on <span class="gradient-text">real impact.</span>
       </SectionHeading>
 
       <!--
@@ -124,7 +124,7 @@
             <!-- card -->
             <div class="perspective ml-11 md:ml-0">
               <article
-                class="glass-effect spotlight experience-card relative overflow-hidden rounded-2xl p-7 md:p-8"
+                class="glass-effect spotlight experience-card relative overflow-hidden rounded-lg p-7 md:p-8"
                 use:tilt={{ max: 3, lift: 4, scale: 1.006 }}
                 use:reveal={{ y: 34, delay: 60, blur: 6, rotate: -10 }}
               >
@@ -134,7 +134,7 @@
                   </h3>
                   <span
                     class="font-mono rounded-full px-2.5 py-1 text-[11px] font-semibold tracking-wide md:hidden"
-                    style="background-color:rgb(14 165 233 / .12);color:var(--color-primary-600);border:1px solid rgb(14 165 233 / .25);"
+                    style="background-color:rgb(93 120 35 / .12);color:var(--color-primary-600);border:1px solid rgb(93 120 35 / .25);"
                   >
                     {exp.period}
                   </span>
@@ -157,7 +157,7 @@
                     <li class="flex items-start gap-3">
                       <span
                         class="mt-[7px] grid h-4 w-4 shrink-0 place-items-center rounded-full"
-                        style="background-color:rgb(16 185 129 / .14);"
+                        style="background-color:rgb(92 129 61 / .14);"
                       >
                         <svg class="h-2.5 w-2.5" style="color:var(--color-accent-600);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />

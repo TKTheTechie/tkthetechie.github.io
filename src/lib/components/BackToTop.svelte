@@ -33,6 +33,7 @@
   "
   aria-label="Back to top"
   aria-hidden={!visible}
+  tabindex={visible ? 0 : -1}
 >
   <!-- the ring doubles as a read-progress dial -->
   <svg class="absolute inset-0 h-12 w-12 -rotate-90" viewBox="0 0 48 48" aria-hidden="true">

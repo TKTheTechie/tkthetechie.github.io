@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import Navigation from '$lib/components/Navigation.svelte';
+  import Footer from '$lib/components/Footer.svelte';
   import BlogLayout from '$lib/layouts/BlogLayout.svelte';
   
   // Check if this is a specific blog post (not the main blog listing)
@@ -20,7 +21,7 @@
 <!-- Navigation for all blog pages -->
 <Navigation />
 
-<div class="blog-content">
+<div id="main-content" tabindex="-1" class="blog-content">
   {#if isBlogPost && metadata.title}
     <!-- Use BlogLayout for individual blog posts -->
     <BlogLayout
@@ -39,3 +40,4 @@
     <slot />
   {/if}
 </div>
+<Footer />

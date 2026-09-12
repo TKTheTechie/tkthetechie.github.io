@@ -50,12 +50,12 @@
         eyebrow="Credentials"
         subtitle="Academic achievements, professional certifications, industry recognition, and community involvement."
       >
-        Education &amp; <span class="gradient-text">Recognition</span>
+        Always learning.<br /><span class="gradient-text">Always contributing.</span>
       </SectionHeading>
 
       <!-- ---------------- degree, given hero treatment ---------------- -->
       <div
-        class="glass-effect spotlight relative mb-16 overflow-hidden rounded-3xl p-8 md:p-10"
+        class="glass-effect spotlight relative mb-16 overflow-hidden rounded-lg p-8 md:p-10"
         use:tilt={{ max: 3, lift: 5, scale: 1.005 }}
         use:reveal={{ y: 26 }}
       >
@@ -68,7 +68,7 @@
 
         <div class="relative flex flex-col gap-6 sm:flex-row sm:items-start">
           <span
-            class="grid h-16 w-16 shrink-0 place-items-center rounded-2xl"
+            class="grid h-16 w-16 shrink-0 place-items-center rounded-lg"
             style="background-image:linear-gradient(135deg,var(--color-primary-500),var(--color-accent-500));box-shadow:0 12px 30px -12px rgba(14,165,233,.7);"
           >
             <svg class="h-8 w-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
@@ -88,7 +88,7 @@
             <div class="mt-6 flex flex-wrap items-center gap-2.5">
               <span
                 class="font-mono rounded-full px-3 py-1.5 text-[11px] font-semibold"
-                style="background-image:linear-gradient(120deg,rgb(14 165 233 / .16),rgb(16 185 129 / .16));color:var(--color-primary-600);border:1px solid rgb(14 165 233 / .28);"
+                style="background-image:linear-gradient(120deg,rgb(93 120 35 / .16),rgb(92 129 61 / .16));color:var(--color-primary-600);border:1px solid rgb(93 120 35 / .28);"
               >
                 4.0 major GPA
               </span>
@@ -108,7 +108,7 @@
           <div class="perspective grid gap-4 {group.cols}">
             {#each group.items as item, i}
               <article
-                class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-2xl p-6"
+                class="glass-effect spotlight group relative flex flex-col overflow-hidden rounded-lg p-6"
                 use:tilt={{ max: 7, lift: 6 }}
                 use:reveal={{ delay: 60 + i * 80, y: 30, rotate: -22 }}
               >

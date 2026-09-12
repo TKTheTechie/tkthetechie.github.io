@@ -1,14 +1,16 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import type { ComponentType } from 'svelte';
   
   let experienceRef: HTMLElement;
   let isVisible = false;
-  let ExperienceContent: any = null;
+  let ExperienceContent: ComponentType | null = null;
   
-  onMount(async () => {
-    // Dynamically import the markdown content
-    const module = await import('../content/experience.md');
-    ExperienceContent = module.default;
+  onMount(() => {
+    let cancelled = false;
+    import('../content/experience.md').then(module => {
+      if (!cancelled) ExperienceContent = module.default;
+    });
     
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -19,7 +21,7 @@
     
     if (experienceRef) observer.observe(experienceRef);
     
-    return () => observer.disconnect();
+    return () => { cancelled = true; observer.disconnect(); };
   });
 </script>
 

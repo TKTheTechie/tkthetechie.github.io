@@ -14,21 +14,25 @@ export const setLenis = (instance: Lenis | null) => {
 
 export const getLenis = () => lenis;
 
-const NAV_OFFSET = -76;
+const behavior = (): ScrollBehavior =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ? 'auto'
+    : 'smooth';
 
 export function scrollToId(id: string) {
   const el = document.getElementById(id.replace(/^#/, ''));
   if (!el) return;
   if (lenis) {
-    lenis.scrollTo(el, { offset: NAV_OFFSET, duration: 1.45 });
+    // Lenis already reads the root scroll-padding-top used by native anchors.
+    lenis.scrollTo(el, { duration: 1.45 });
   } else {
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    el.scrollIntoView({ behavior: behavior(), block: 'start' });
   }
 }
 
 export function scrollToTop() {
   if (lenis) lenis.scrollTo(0, { duration: 1.3 });
-  else window.scrollTo({ top: 0, behavior: 'smooth' });
+  else window.scrollTo({ top: 0, behavior: behavior() });
 }
 
 /** Freeze page scroll (modals, palettes) without losing position. */

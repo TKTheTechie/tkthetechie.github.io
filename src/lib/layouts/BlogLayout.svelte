@@ -77,13 +77,13 @@
 
 <article style="background-color:var(--surface-0);">
   <!-- ---------------- masthead ---------------- -->
-  <header class="relative isolate overflow-hidden pt-28 pb-14 md:pt-36 md:pb-20" style="background-color:#04070e;">
+  <header class="relative isolate overflow-hidden pt-28 pb-14 md:pt-36 md:pb-20" style="background-color:#121510;">
     <div
       class="absolute inset-0 -z-20"
       style="background:
-        radial-gradient(90% 80% at 78% 4%, #0b2b45 0%, transparent 58%),
-        radial-gradient(70% 70% at 10% 100%, #06281f 0%, transparent 60%),
-        linear-gradient(165deg,#04070e,#060c18);"
+        radial-gradient(90% 80% at 78% 4%, #28351e 0%, transparent 58%),
+        radial-gradient(70% 70% at 10% 100%, #26331d 0%, transparent 60%),
+        linear-gradient(165deg,#121510,#191e16);"
     ></div>
     <div class="mesh-grid -z-10 opacity-40" style="--hairline:rgb(148 163 184 / .12);" aria-hidden="true"></div>
 
@@ -113,7 +113,7 @@
         </div>
 
         <h1
-          class="font-display text-[clamp(1.9rem,4.6vw,3.1rem)] leading-[1.1] font-extrabold tracking-[-0.03em] text-white"
+          class="font-display text-[clamp(1.9rem,4.6vw,3.1rem)] leading-[1.1] font-medium tracking-[-0.045em] text-white"
           use:reveal={{ y: 24, delay: 60 }}
         >
           {title}

@@ -10,7 +10,8 @@ const reduced = () =>
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const coarse = () =>
-  typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+  typeof window !== 'undefined' &&
+  window.matchMedia('(pointer: coarse)').matches;
 
 /* -------------------------------------------------------------------------- */
 /* reveal — one-shot scroll-in transition                                      */
@@ -50,7 +51,7 @@ export function reveal(node: HTMLElement, options: RevealOptions = {}) {
     return {
       update(next: RevealOptions) {
         opts = next;
-      }
+      },
     };
   }
 
@@ -68,7 +69,7 @@ export function reveal(node: HTMLElement, options: RevealOptions = {}) {
         }
       }
     },
-    { threshold: opts.threshold ?? 0.12, rootMargin: '0px 0px -8% 0px' }
+    { threshold: opts.threshold ?? 0.12, rootMargin: '0px 0px -8% 0px' },
   );
 
   observer.observe(node);
@@ -80,7 +81,7 @@ export function reveal(node: HTMLElement, options: RevealOptions = {}) {
     },
     destroy() {
       observer.disconnect();
-    }
+    },
   };
 }
 
@@ -98,10 +99,20 @@ export interface StaggerOptions extends Omit<RevealOptions, 'delay'> {
 }
 
 export function stagger(node: HTMLElement, options: StaggerOptions = {}) {
-  const { step = 70, offset = 0, y = 22, blur = 5, scale = 1, rotate = 0, select } = options;
+  const {
+    step = 70,
+    offset = 0,
+    y = 22,
+    blur = 5,
+    scale = 1,
+    rotate = 0,
+    select,
+  } = options;
 
   const items = Array.from(
-    select ? node.querySelectorAll<HTMLElement>(select) : (node.children as unknown as HTMLElement[])
+    select
+      ? node.querySelectorAll<HTMLElement>(select)
+      : (node.children as unknown as HTMLElement[]),
   ) as HTMLElement[];
 
   if (reduced()) {
@@ -127,7 +138,7 @@ export function stagger(node: HTMLElement, options: StaggerOptions = {}) {
         }
       }
     },
-    { threshold: 0.08, rootMargin: '0px 0px -6% 0px' }
+    { threshold: 0.08, rootMargin: '0px 0px -6% 0px' },
   );
 
   observer.observe(node);
@@ -135,7 +146,7 @@ export function stagger(node: HTMLElement, options: StaggerOptions = {}) {
   return {
     destroy() {
       observer.disconnect();
-    }
+    },
   };
 }
 
@@ -157,7 +168,13 @@ export interface TiltOptions {
 }
 
 export function tilt(node: HTMLElement, options: TiltOptions = {}) {
-  const { max = 7, lift = 8, scale = 1.02, perspective = 1000, rotate = true } = options;
+  const {
+    max = 7,
+    lift = 8,
+    scale = 1.02,
+    perspective = 1000,
+    rotate = true,
+  } = options;
 
   // Touch devices have no hover, and reduced-motion users opted out.
   if (reduced() || coarse()) return {};
@@ -213,15 +230,19 @@ export function tilt(node: HTMLElement, options: TiltOptions = {}) {
   node.addEventListener('pointerenter', onEnter);
   node.addEventListener('pointermove', onMove);
   node.addEventListener('pointerleave', onLeave);
-  window.addEventListener('scroll', () => (rect = null), { passive: true });
+  const invalidateRect = () => {
+    rect = null;
+  };
+  window.addEventListener('scroll', invalidateRect, { passive: true });
 
   return {
     destroy() {
       if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', invalidateRect);
       node.removeEventListener('pointerenter', onEnter);
       node.removeEventListener('pointermove', onMove);
       node.removeEventListener('pointerleave', onLeave);
-    }
+    },
   };
 }
 
@@ -241,8 +262,14 @@ export function magnetic(node: HTMLElement, strength = 0.28) {
       const rect = node.getBoundingClientRect();
       const dx = event.clientX - (rect.left + rect.width / 2);
       const dy = event.clientY - (rect.top + rect.height / 2);
-      node.style.setProperty('--mx', `${((event.clientX - rect.left) / rect.width) * 100}%`);
-      node.style.setProperty('--my', `${((event.clientY - rect.top) / rect.height) * 100}%`);
+      node.style.setProperty(
+        '--mx',
+        `${((event.clientX - rect.left) / rect.width) * 100}%`,
+      );
+      node.style.setProperty(
+        '--my',
+        `${((event.clientY - rect.top) / rect.height) * 100}%`,
+      );
       node.style.transform = `translate3d(${dx * strength}px, ${dy * strength - 3}px, 0)`;
     });
   };
@@ -253,7 +280,8 @@ export function magnetic(node: HTMLElement, strength = 0.28) {
     node.style.transform = '';
   };
 
-  node.style.transition = 'transform 0.55s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.45s ease';
+  node.style.transition =
+    'transform 0.55s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.45s ease';
   node.addEventListener('pointermove', onMove);
   node.addEventListener('pointerleave', onLeave);
 
@@ -262,7 +290,7 @@ export function magnetic(node: HTMLElement, strength = 0.28) {
       if (frame) cancelAnimationFrame(frame);
       node.removeEventListener('pointermove', onMove);
       node.removeEventListener('pointerleave', onLeave);
-    }
+    },
   };
 }
 
@@ -279,7 +307,9 @@ export function parallax(node: HTMLElement, speed = 0.12) {
     frame = 0;
     const rect = node.getBoundingClientRect();
     // 0 when the element is centred in the viewport, ±1 at the edges
-    const progress = (rect.top + rect.height / 2 - window.innerHeight / 2) / window.innerHeight;
+    const progress =
+      (rect.top + rect.height / 2 - window.innerHeight / 2) /
+      window.innerHeight;
     node.style.transform = `translate3d(0, ${progress * speed * 100}px, 0)`;
   };
 
@@ -296,7 +326,7 @@ export function parallax(node: HTMLElement, speed = 0.12) {
       if (frame) cancelAnimationFrame(frame);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
-    }
+    },
   };
 }
 
@@ -313,7 +343,13 @@ export interface CountOptions {
 }
 
 export function countTo(node: HTMLElement, options: CountOptions) {
-  const { value, duration = 1600, prefix = '', suffix = '', decimals = 0 } = options;
+  const {
+    value,
+    duration = 1600,
+    prefix = '',
+    suffix = '',
+    decimals = 0,
+  } = options;
 
   const render = (n: number) => {
     node.textContent = `${prefix}${n.toFixed(decimals)}${suffix}`;
@@ -348,7 +384,7 @@ export function countTo(node: HTMLElement, options: CountOptions) {
         }
       }
     },
-    { threshold: 0.5 }
+    { threshold: 0.5 },
   );
 
   observer.observe(node);
@@ -357,7 +393,7 @@ export function countTo(node: HTMLElement, options: CountOptions) {
     destroy() {
       if (raf) cancelAnimationFrame(raf);
       observer.disconnect();
-    }
+    },
   };
 }
 
@@ -374,8 +410,14 @@ export function spotlight(node: HTMLElement) {
     frame = requestAnimationFrame(() => {
       frame = 0;
       const rect = node.getBoundingClientRect();
-      node.style.setProperty('--mx', `${((event.clientX - rect.left) / rect.width) * 100}%`);
-      node.style.setProperty('--my', `${((event.clientY - rect.top) / rect.height) * 100}%`);
+      node.style.setProperty(
+        '--mx',
+        `${((event.clientX - rect.left) / rect.width) * 100}%`,
+      );
+      node.style.setProperty(
+        '--my',
+        `${((event.clientY - rect.top) / rect.height) * 100}%`,
+      );
     });
   };
 
@@ -384,6 +426,6 @@ export function spotlight(node: HTMLElement) {
     destroy() {
       if (frame) cancelAnimationFrame(frame);
       node.removeEventListener('pointermove', onMove);
-    }
+    },
   };
 }

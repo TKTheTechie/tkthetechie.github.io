@@ -35,7 +35,7 @@
         lerp: 0.085,
         wheelMultiplier: 0.95,
         smoothWheel: true,
-        anchors: false
+        anchors: { duration: 1.2 }
       });
       setLenis(lenis);
       const loop = (time: number) => {

@@ -4,10 +4,14 @@
   "description": "VP of Systems Engineering at Solace specializing in Event Driven Architecture, technical leadership, and open source contributions",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0ea5e9",
+  "background_color": "#121510",
+  "theme_color": "#121510",
   "orientation": "portrait-primary",
-  "categories": ["business", "productivity", "technology"],
+  "categories": [
+    "business",
+    "productivity",
+    "technology"
+  ],
   "lang": "en-US",
   "icons": [
     {
