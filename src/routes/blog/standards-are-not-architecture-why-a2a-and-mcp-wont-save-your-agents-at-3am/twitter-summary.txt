@@ -1,3 +1,3 @@
-A2A hit v1.0 with 150 orgs behind it. MCP has 100M+ downloads/month. I still walked into a customer this quarter whose multi-agent system fell over because nothing guaranteed delivery.
+A2A hit v1.0. MCP crossed 100M downloads/month. And I just watched a customer's multi-agent system fall over because neither protocol guarantees delivery.
 
-Standards solved syntax, not operations. https://tkthetechie.io/blog/standards-are-not-architecture-why-a2a-and-mcp-wont-save-your-agents-at-3am
+Standards solved the syntax. Nobody solved the operations. https://tkthetechie.io/blog/standards-are-not-architecture-why-a2a-and-mcp-wont-save-your-agents-at-3am
