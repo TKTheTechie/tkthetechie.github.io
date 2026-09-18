@@ -1,0 +1,1 @@
+Everyone's building #AIFactories in the cloud. My ESP32 project (and AWS IoT Core bills) showed me the real economic & sovereignty costs of ignoring the #EdgeAI event fabric. Don't ship all your data! 🧠 https://tkthetechie.io/blog/the-ai-factory-model-needs-an-edge-brain-why-my-esp32-proved-cloud-only-blind-spots
