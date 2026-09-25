@@ -1,0 +1,1 @@
+Your LLM is only as good as its last 50ms of context. If it's stale, your AI is a liability, not an asset. The real engineering challenge for operational AI isn't the model, it's the messaging that delivers reality in real-time. My take: https://tkthetechie.io/blog/your-llm-is-lying-to-you-why-real-time-context-is-ais-only-moat
