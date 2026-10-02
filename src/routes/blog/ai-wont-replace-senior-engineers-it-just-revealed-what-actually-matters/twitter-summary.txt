@@ -1,0 +1,1 @@
+AI won't replace senior engineers. It just revealed what truly matters: judgment & system design. My ESP32 demo in a day proves AI frees us from boilerplate to focus on the hard *engineering*. Details: https://tkthetechie.io/blog/ai-wont-replace-senior-engineers-it-just-revealed-what-actually-matters
