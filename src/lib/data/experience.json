@@ -10,6 +10,7 @@
       "period": "2018 - Present",
       "description": "Promoted to VP role with mandate to scale team, increase technical wins, contribute to product strategy, build product, lead partnership efforts and be a technical evangelist.",
       "achievements": [
+        "Identified Nisshi (https://nisshi.io), a Rust-based, Apache Kafka-compatible streaming technology, as a complementary fit for the Solace platform. Led the functional due diligence and brought the findings to our C-suite, which led to Solace acquiring Nisshi's assets. The technology is now part of the platform as Solace Streaming for Apache Kafka.",
         "Scaled the Systems Engineering organization 3x (5 to 15 headcount) while maintaining culture and delivery velocity. Established hiring frameworks and mentorship programs to upskill the team on modern architectures.",
         "Partnered with Sales leadership to open high-value verticals (Airlines, Manufacturing, SaaS), aligning technical pre-sales engineering with GTM strategy to exceed regional revenue targets.",
         "Played a key role, with both architecture guidance and hands on coding, in the delivery of critical connectors (Databricks, Snowflake, GraphQL, DAPR). These integrations expanded the platform's Total Addressable Market (TAM) and reduced customer friction.",
