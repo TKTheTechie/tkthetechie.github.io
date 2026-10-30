@@ -1,0 +1,1 @@
+Thousands of MCP servers exposed online? Standardized protocols (MCP/A2A) solved syntax, but left the agent world vulnerable. We need a governance layer, not just a wire. An event mesh provides audit, policy, & guarantees. Don't build on sand! #Age… https://tkthetechie.io/blog/the-hollow-standard-why-mcp-and-a2a-protocols-leave-your-agent-infrastructure-exposed
