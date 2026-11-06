@@ -1,0 +1,1 @@
+Diskless Kafka isn't just a KIP, it's a revolution. Stateless brokers, unlimited retention, slashed cloud bills. My deep dive into why this rewrite of streaming storage will redefine event infrastructure for the next decade. https://tkthetechie.io/blog/the-stateless-stream-why-diskless-kafka-just-rewrote-the-rules-of-event-infrastructure
